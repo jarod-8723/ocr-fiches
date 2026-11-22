@@ -1,29 +1,16 @@
-# MES NOTATIONS - profil d'écriture de Jarod
-# Envoyé à l'OCR avec chaque scan. Mis à jour avec les pages de calibrage (20/11/2026).
+# MES NOTATIONS - profil d'écriture (modèle à adapter)
+# Envoyé à l'OCR avec chaque scan. Remplis-le après les pages de calibrage (dossier calibrage/ du dépôt).
 # Format : ce que j'écris à la main  ->  comment le transcrire
+# Les lignes ci-dessous sont des exemples : remplace-les par TES ambiguïtés.
 
 # Abréviations (on garde ce qui est écrit)
-mot terminé par ° (quantificat°, fonct°, solut°)  ->  on garde le ° : quantificat°   (° = « ion »)
-
-# Le signe ° en maths
-° en haut d'un symbole mathématique (β°_j)  ->  exposant 0 : \beta_j^0
-° après un nombre (90°)                      ->  degré
+mot terminé par ° (fonct°, solut°)  ->  on garde le ° : fonct°   (° = « ion »)
 
 # Chiffres et lettres
-mon 2, surtout en exposant, ressemble à un λ (s², σ², R², -2 ln L)  ->  c'est un 2 ; un vrai λ est rare
-mon λ ressemble à un N ou un Λ                                      ->  \lambda
-le chapeau est un grand Λ posé au-dessus de la lettre               ->  \hat{\beta}
-mon y ressemble à un g (y = Xβ + ε)                                  ->  y
-mon t en indice ressemble à un T (y_t, ε_t, θ_{t+1})                ->  t
-mon α peut ressembler à un a, mon η à un m, mon Q à un α, mon B à un β
+mon 2 en exposant ressemble à un λ (s², σ²)  ->  c'est un 2 ; un vrai λ est rare
+mon y ressemble à un g                        ->  y
 
 # Symboles
-Σ (somme) ressemble à un ξ ou à une accolade, avec ses bornes   ->  \sum
-∫ est un trait presque droit, ∬ deux traits                      ->  \int, \iint
-V à double barre (variance) ressemble à ∇                         ->  \mathbb{V} ; ∇ seulement pour le gradient (∇_θ)
-N calligraphique (loi normale) ressemble à un W                   ->  \mathcal{N}
-L calligraphique (vraisemblance) peut ressembler à un d bouclé    ->  \mathcal{L}
-> et ≥ ressemblent à 7 et 7/                                       ->  >, \geq
-∩ et ∪ ressemblent à n et u (A n B)                               ->  \cap, \cup
-∈ peut ressembler à ε                                              ->  \in ; l'epsilon reste \varepsilon
-→ est un trait qui finit par un petit v ; => et <=>               ->  \to, \Rightarrow, \Leftrightarrow
+Σ (somme) ressemble à un ξ                   ->  \sum
+N calligraphique ressemble à un W            ->  \mathcal{N}
+∩ et ∪ ressemblent à n et u (A n B)          ->  \cap, \cup

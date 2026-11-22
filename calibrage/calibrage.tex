@@ -1,0 +1,205 @@
+\documentclass[11pt]{article}
+\usepackage{fiche}
+\matiere{Calibrage de l'écriture}
+\chapitre{OCR Fiches}
+\newcommand{\aecrire}[1]{\par\noindent\begin{minipage}{\linewidth}\raggedright #1\end{minipage}\par\vspace{2pt}{\color{fiche@roseclair}\rule{\linewidth}{.6pt}}\par\vspace{5pt}}
+\newcommand{\consigne}[1]{\par\noindent{\color{fiche@gris}\small\itshape\ding{46}~#1}\par\vspace{4pt}}
+\begin{document}
+\titre{\entoure{\ding{72}} \souligne{Calibrage de l'écriture}}
+
+Ces 8 pages servent à apprendre ton écriture à l'OCR. Tu les recopies à la main, l'OCR lit tes feuilles, et comme le texte d'origine est connu, chaque différence entre sa lecture et ce texte lui apprend comment tu traces chaque lettre, chaque chiffre et chaque symbole.
+
+\begin{methode}[Comment faire]
+\begin{itemize}
+\item Écris comme d'habitude : même stylo, même taille, même vitesse. Ne t'applique pas plus que sur une vraie fiche.
+\item Une page de ce document = une feuille blanche. Si ça déborde, continue sur une autre feuille.
+\item Scanne chaque feuille dans \texttt{Fiches/\_calibrage/} : \texttt{calibrage\_p1.jpg}, \texttt{calibrage\_p2.jpg}… (\texttt{calibrage\_p3b.jpg} pour une suite).
+\item Garde l'ordre des lignes. Si une ligne est trop longue pour ta feuille, continue à la ligne suivante.
+\item Les consignes en gris (\ding{46}) ne s'écrivent pas.
+\item Les formules s'écrivent comme en cours : recopie ce que tu vois, pas du code.
+\item Si tu te trompes, barre et continue : les ratures sont ignorées.
+\end{itemize}
+\end{methode}
+
+\begin{attention}
+Pas le temps de tout faire ? Commence par les pages 1, 4, 5 et 7, et refais la page 7 sur une feuille à carreaux.
+\end{attention}
+
+\begin{remarque}
+Le texte de référence est dans \texttt{calibrage.txt} : tu n'as rien à recopier au clavier. L'OCR compare sa lecture de tes feuilles à ce texte, en déduit tes ambiguïtés (« mon 2 ressemble à un $\lambda$ ») pour \texttt{mes\_notations.txt}, et tes feuilles deviennent des exemples parfaits pour les prochaines lectures.
+\end{remarque}
+
+
+\clearpage
+\titre{\entoure{1} \souligne{Lettres, chiffres, ponctuation}}
+
+\aecrire{a b c d e f g h i j k l m n o p q r s t u v w x y z}
+\aecrire{A B C D E F G H I J K L M N O P Q R S T U V W X Y Z}
+\aecrire{0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20}
+\aecrire{é è ê ë à â ù û ü ô î ï ç œ æ ÿ É È Ê À Ç Ô Œ}
+\aecrire{. , ; : ! ? ' " « » ( ) [ ] \{ \} - \_ / \textbackslash{} * \& \% \texteuro{} \$ \# @}
+\aecrire{Portez ce vieux whisky au juge blond qui fume.}
+\aecrire{Voyez le brick géant que j'examine près du wharf.}
+\aecrire{Noël, ce garçon naïf, a dû goûter à l'œuvre où Zoë mêle maïs, crème brûlée et pâté.}
+\aecrire{Hélène et Benoît ont reçu leur thèse : « très honorable », quelle fête !}
+\aecrire{Où est passée la clé ? Peut-être sous le capharnaüm du bureau...}
+\aecrire{Le curriculum vitæ de Raymond, né à L'Haÿ-les-Roses, tient sur une page, et cætera.}
+\aecrire{Les théorèmes de Gödel, Hölder, Möbius, Itô et Cramér n'ont rien à voir.}
+\aecrire{Jacques, Wassim et Xavier ont gagné 7 000 \texteuro{} au quiz de Kolmogorov.}
+\aecrire{Quelle quantité ? Quinze quarts de quintal, quoi !}
+\aecrire{Zut, zéro sur vingt au QCM de mathématiques financières.}
+
+\clearpage
+\titre{\entoure{2} \souligne{Mots courants et enchaînements de lettres}}
+
+\aecrire{le la les un une des du de et est en dans pour par sur avec sans sous entre}
+\aecrire{que qui quoi dont où donc car mais ou ni si alors comme aussi très bien}
+\aecrire{on ne pas plus moins tout tous toute toutes chaque même autre seulement}
+\aecrire{minimum maximum minimiser maximiser immédiatement commun nuance humain}
+\aecrire{attention addition illusion intéressant appareil essentiel erreur effet}
+\aecrire{question quantile quotient qualitatif quantitatif quasi quadratique}
+\aecrire{fonction relation condition hypothèse synthèse analyse phénomène}
+\aecrire{moyenne médiane variance écart type mode étendue quartile percentile}
+\aecrire{ensemble élément intervalle borne supérieure inférieure voisinage}
+\aecrire{dérivée intégrale primitive limite suite série somme produit racine}
+\aecrire{croissant décroissant monotone convexe concave continu dérivable}
+\aecrire{vrai faux nul négatif positif strictement environ approximativement}
+\aecrire{démontrer montrer vérifier supposer déduire conclure calculer estimer}
+\aecrire{cependant néanmoins toutefois ainsi c'est-à-dire autrement dit en effet}
+\aecrire{d'après selon sachant tel que pour tout il existe on en déduit que}
+\aecrire{aggravé allure année apprendre carré assez attente différence accès}
+
+\clearpage
+\titre{\entoure{3} \souligne{Vocabulaire de cours}}
+
+\aecrire{économétrie, hétéroscédasticité, homoscédasticité, autocorrélation}
+\aecrire{stationnarité, cointégration, multicolinéarité, endogénéité, exogénéité}
+\aecrire{moindres carrés ordinaires, moindres carrés généralisés, variables instrumentales}
+\aecrire{maximum de vraisemblance, méthode des moments, estimateur sans biais}
+\aecrire{convergent, efficace, asymptotiquement normal, borne de Cramér-Rao}
+\aecrire{intervalle de confiance, test d'hypothèse, statistique de test, région critique}
+\aecrire{risque de première espèce, risque de seconde espèce, puissance, p-value}
+\aecrire{loi normale, loi de Student, loi du khi-deux, loi de Fisher, loi de Poisson}
+\aecrire{espérance, variance, covariance, corrélation, densité, fonction de répartition}
+\aecrire{série temporelle, tendance, saisonnalité, bruit blanc, marche aléatoire, racine unitaire}
+\aecrire{modèles AR, MA, ARMA, ARIMA, GARCH, VAR ; tests de Dickey-Fuller et de Box-Pierce}
+\aecrire{données de panel, effets fixes, effets aléatoires, test de Hausman}
+\aecrire{tests de Durbin-Watson, Breusch-Pagan, White, Shapiro-Wilk, Kolmogorov-Smirnov}
+\aecrire{critères d'Akaike et de Schwarz ; théorème de Gauss-Markov ; formule de Bayes}
+\aecrire{apprentissage supervisé, non supervisé, surapprentissage, validation croisée}
+\aecrire{arbre de décision, forêt aléatoire, boosting, descente de gradient, fonction de perte}
+\aecrire{réseau de neurones, couche cachée, poids, biais, rétropropagation, taux d'apprentissage}
+\aecrire{ACP, AFC, ACM, classification ascendante hiérarchique, k-means}
+\aecrire{matrice de confusion, sensibilité, spécificité, précision, rappel, courbe ROC, AUC}
+\aecrire{scoring, probabilité de défaut, régression logistique, odds ratio, logit, probit}
+\aecrire{SAS : étape DATA, PROC SQL, PROC REG, macro ; R : dplyr, ggplot2 ; Python : pandas, numpy}
+\aecrire{LLM, transformer, attention, embedding, token, RAG, agent, prompt}
+\aecrire{Abréviations : cad, ssi, tq, qd, tjs, pcq, cf., ex., rq, déf., thm, prop., nb, ie, vs}
+\aecrire{max, min, sup, inf, lim, log, ln, exp, sin, cos, tan, det, tr, rg, Var, Cov, Corr, iid, IC, ddl, H0, H1}
+
+\clearpage
+\titre{\entoure{4} \souligne{Lettres grecques, symboles, signes qui se ressemblent}}
+
+\aecrire{$\alpha$ $\beta$ $\gamma$ $\delta$ $\varepsilon$ $\zeta$ $\eta$ $\theta$ $\iota$ $\kappa$ $\lambda$ $\mu$ $\nu$ $\xi$ $\pi$ $\rho$ $\sigma$ $\tau$ $\upsilon$ $\varphi$ $\chi$ $\psi$ $\omega$}
+\aecrire{$\Gamma$ $\Delta$ $\Theta$ $\Lambda$ $\Xi$ $\Pi$ $\Sigma$ $\Phi$ $\Psi$ $\Omega$}
+\aecrire{$\mathbb{R}\ \mathbb{N}\ \mathbb{Z}\ \mathbb{Q}\ \mathbb{C}\ \mathbb{E}\ \mathbb{V}\ \mathbb{P}\ \mathbf{1}$}
+\aecrire{$\mathcal{N}\ \mathcal{L}\ \mathcal{F}\ \mathcal{A}\ \mathcal{B}\ \mathcal{H}\ \mathcal{O}\ \mathcal{X}$}
+\aecrire{+ $-$ $\times$ $\div$ $\cdot$ $\pm$ = $\neq$ $\approx$ $\simeq$ $\equiv$ $\propto$ $<$ $>$ $\leq$ $\geq$ $\ll$ $\gg$}
+\aecrire{$\sum$ $\prod$ $\int$ $\iint$ $\oint$ $\partial$ $\nabla$ $\surd$ $\infty$ {\fontspec{Latin Modern Sans}‰} °}
+\aecrire{$\in$ $\notin$ $\subset$ $\subseteq$ $\not\subset$ $\cup$ $\cap$ $\setminus$ $\emptyset$ $\forall$ $\exists$ $\nexists$ $\neg$ $\wedge$ $\vee$}
+\aecrire{$\to$ $\leftarrow$ $\leftrightarrow$ $\Rightarrow$ $\Leftarrow$ $\Leftrightarrow$ $\mapsto$ $\uparrow$ $\downarrow$}
+\aecrire{$\bar{x}\ \hat{\beta}\ \tilde{x}\ \dot{x}\ x'\ x''\ X^{\top}\ X^{-1}\ \vec{u}\ \|x\|\ |x|$}
+\consigne{Écris chaque groupe côte à côte, en traçant chaque signe comme d'habitude}
+\aecrire{l 1 I | $\ell$}
+\aecrire{o 0 O ° $\theta$ $\sigma$}
+\aecrire{u v $\nu$ $\upsilon$ $\mu$}
+\aecrire{n $\eta$ h $\pi$}
+\aecrire{a $\alpha$ $\propto$ d $\partial$ $\delta$ 6 b}
+\aecrire{e $\varepsilon$ $\in$ c $\subset$ C}
+\aecrire{x $\times$ $\chi$ $\kappa$ k K}
+\aecrire{B 8 $\beta$}
+\aecrire{p $\rho$ P}
+\aecrire{w $\omega$ W}
+\aecrire{t + $\tau$ T}
+\aecrire{z 2 Z $\zeta$}
+\aecrire{s 5 S $\int$}
+\aecrire{g 9 q $\gamma$ y}
+\aecrire{$\cup$ U u $\cap$}
+\aecrire{- $-$}
+
+\clearpage
+\titre{\entoure{5} \souligne{Formules courtes}}
+
+\aecrire{$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$}
+\aecrire{$s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2$}
+\aecrire{$\mathbb{E}(aX + b) = a\,\mathbb{E}(X) + b$}
+\aecrire{$\mathbb{V}(aX + b) = a^2\,\mathbb{V}(X)$}
+\aecrire{$\mathrm{Cov}(X, Y) = \mathbb{E}(XY) - \mathbb{E}(X)\,\mathbb{E}(Y)$}
+\aecrire{$\rho_{X,Y} = \frac{\mathrm{Cov}(X, Y)}{\sigma_X \sigma_Y}$}
+\aecrire{$X \sim \mathcal{N}(\mu, \sigma^2) \Rightarrow \frac{X - \mu}{\sigma} \sim \mathcal{N}(0, 1)$}
+\aecrire{$P(A \mid B) = \frac{P(B \mid A)\,P(A)}{P(B)}$}
+\aecrire{$y = X\beta + \varepsilon$, avec $\mathbb{E}(\varepsilon \mid X) = 0$}
+\aecrire{$\hat{\beta} = (X'X)^{-1} X'y$}
+\aecrire{$\mathbb{V}(\hat{\beta} \mid X) = \sigma^2 (X'X)^{-1}$}
+\aecrire{$R^2 = 1 - \frac{SCR}{SCT}$ et $\bar{R}^2 = 1 - \frac{n-1}{n-k}(1 - R^2)$}
+\aecrire{$t = \frac{\hat{\beta}_j - \beta_j^0}{\widehat{se}(\hat{\beta}_j)} \sim t(n-k)$ sous $H_0$}
+\aecrire{$H_0 : \beta_1 = \beta_2 = 0$ contre $H_1 : \exists j,\ \beta_j \neq 0$}
+\aecrire{$y_t = \phi\, y_{t-1} + \varepsilon_t$, $|\phi| < 1$, $\varepsilon_t \sim BB(0, \sigma^2)$}
+\aecrire{$y_{it} = \alpha_i + x_{it}'\beta + u_{it}$}
+\aecrire{$\hat{\theta} = \arg\max_{\theta} \ln L(\theta)$}
+\aecrire{$\ln L(\theta) = \sum_{i=1}^{n} \ln f(x_i ; \theta)$}
+\aecrire{$\mathrm{AIC} = -2 \ln L + 2k$ et $\mathrm{BIC} = -2 \ln L + k \ln n$}
+\aecrire{$\sigma(z) = \frac{1}{1 + e^{-z}}$}
+\aecrire{$\mathrm{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$}
+\aecrire{$\forall \varepsilon > 0,\ \exists N \in \mathbb{N},\ \forall n \geq N,\ |u_n - \ell| < \varepsilon$}
+\aecrire{$A \subset B \Rightarrow A \cap B = A$ et $A \cup B = B$}
+\aecrire{$f : \mathbb{R} \to \mathbb{R},\ x \mapsto e^{-x^2}$}
+\aecrire{$x \in [0, 1[$ et $n \in \mathbb{N}^*$}
+
+\clearpage
+\titre{\entoure{6} \souligne{Formules longues}}
+
+\aecrire{\[ \int_{-\infty}^{+\infty} \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(x-\mu)^2}{2\sigma^2}}\, dx = 1 \]}
+\aecrire{\[ \sum_{k=0}^{+\infty} \frac{x^k}{k!} = e^x \qquad \prod_{i=1}^{n} f(x_i ; \theta) \]}
+\aecrire{\[ \binom{n}{k} = \frac{n!}{k!\,(n-k)!} \qquad P(X = k) = \binom{n}{k} p^k (1-p)^{n-k} \]}
+\aecrire{\[ \lim_{n \to +\infty} P\left(|\bar{X}_n - \mu| > \varepsilon\right) = 0 \]}
+\aecrire{\[ \sqrt{n}\,(\hat{\theta}_n - \theta) \xrightarrow{\mathcal{L}} \mathcal{N}(0, \Sigma) \]}
+\aecrire{\[ \begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix} \]}
+\aecrire{\[ F = \frac{(SCR_c - SCR_{nc})/q}{SCR_{nc}/(n-k)} \sim F(q, n-k) \]}
+\aecrire{\[ \Delta y_t = \alpha + \gamma\, y_{t-1} + \sum_{j=1}^{p} \delta_j\, \Delta y_{t-j} + u_t \]}
+\aecrire{\[ f(x) = \begin{cases} \lambda e^{-\lambda x} & \text{si } x \geq 0 \\ 0 & \text{sinon} \end{cases} \]}
+\aecrire{\[ \frac{\partial \mathcal{L}}{\partial \beta} = -2X'(y - X\beta) = 0 \iff X'X\beta = X'y \]}
+\aecrire{\[ \mathrm{softmax}(z)_k = \frac{e^{z_k}}{\sum_{j=1}^{K} e^{z_j}} \]}
+\aecrire{\[ \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^{\top}}{\sqrt{d_k}}\right) V \]}
+\aecrire{\[ \theta_{t+1} = \theta_t - \eta\, \nabla_{\theta} J(\theta_t) \]}
+\aecrire{\[ \|x\|_2 = \sqrt{\sum_{i=1}^{n} x_i^2} \qquad \mathbf{1}_{\{X > 0\}} \]}
+
+\clearpage
+\titre{\entoure{7} \souligne{Paragraphes comme sur une fiche}}
+
+\aecrire{Déf : un estimateur $\hat{\theta}$ de $\theta$ est sans biais ssi $\mathbb{E}(\hat{\theta}) = \theta$. Il est convergent si $\hat{\theta}_n \xrightarrow{p} \theta$ qd $n \to +\infty$.}
+\aecrire{Thm (Gauss-Markov) : sous les hypothèses H1 à H3, l'estimateur des MCO est BLUE, cad le meilleur estimateur linéaire sans biais.}
+\aecrire{Rq : si les erreurs sont hétéroscédastiques, les MCO restent sans biais mais ne sont plus efficaces $\Rightarrow$ on utilise des écarts-types robustes (White).}
+\aecrire{Méthode pour un test : 1) poser $H_0$ et $H_1$ ; 2) choisir la statistique ; 3) calculer la p-value ; 4) rejeter $H_0$ si $p < \alpha$, par ex. $\alpha = 0{,}05$.}
+\aecrire{Une série $(y_t)$ est stationnaire au sens faible si sa moyenne et sa variance sont constantes et si $\mathrm{Cov}(y_t, y_{t-h})$ ne dépend que de $h$.}
+\aecrire{Attention : une marche aléatoire $y_t = y_{t-1} + \varepsilon_t$ n'est pas stationnaire ; on la différencie : $\Delta y_t = \varepsilon_t$.}
+\aecrire{Le surapprentissage arrive qd le modèle colle trop aux données d'entraînement : l'erreur de validation remonte alors que l'erreur d'entraînement baisse.}
+\aecrire{Ex : avec 5 plis en validation croisée, on entraîne 5 fois sur 80 \% des données et on évalue sur les 20 \% restants.}
+
+\clearpage
+\titre{\entoure{8} \souligne{Nombres, dates, tableau}}
+
+\aecrire{0,05 ; 0,01 ; 0,001 ; 1,96 ; 2,576 ; 3,14159 ; 2,71828 ; 1,645}
+\aecrire{95 \% ; 99,9 \% ; 12,5 \% ; 1 000 ; 25 000 ; 1 250 000 ; 3,2 $\times$ 10$^{-3}$}
+\aecrire{n = 1 250 ; k = 7 ; t(28) = 2,05 ; F(2, 97) = 4,31 ; p-value = 0,0003}
+\aecrire{IC à 95 \% : [0,12 ; 0,48] ; R$^2$ = 0,847 ; RMSE = 12,3 ; AUC = 0,91}
+\aecrire{Le 12/03/2026 à 14 h 30 ; année 2025-2026 ; 1er semestre ; 3e chapitre ; n° 42}
+\consigne{Tableau : dessine-le avec des traits, comme sur tes fiches}
+\begin{center}\renewcommand{\arraystretch}{1.5}\begin{tabular}{|c|c|c|c|c|}\hline
+\textbf{Variable} & \textbf{Coef.} & \textbf{Écart-type} & \textbf{t} & \textbf{p-value} \\ \hline
+Constante & 1,25 & 0,31 & 4,03 & 0,0001 \\ \hline
+x1 & -0,48 & 0,12 & -4,00 & 0,0002 \\ \hline
+x2 & 0,07 & 0,05 & 1,40 & 0,165 \\ \hline
+\end{tabular}\end{center}
+
+\end{document}

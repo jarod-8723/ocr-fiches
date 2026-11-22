@@ -1,0 +1,153 @@
+# ==================== PAGE 1 : lettres, chiffres, ponctuation
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+é è ê ë à â ù û ü ô î ï ç œ æ ÿ É È Ê À Ç Ô Œ
+. , ; : ! ? ' " « » ( ) [ ] { } - _ / \ * & % € $ # @
+Portez ce vieux whisky au juge blond qui fume.
+Voyez le brick géant que j'examine près du wharf.
+Noël, ce garçon naïf, a dû goûter à l'œuvre où Zoë mêle maïs, crème brûlée et pâté.
+Hélène et Benoît ont reçu leur thèse : « très honorable », quelle fête !
+Où est passée la clé ? Peut-être sous le capharnaüm du bureau...
+Le curriculum vitæ de Raymond, né à L'Haÿ-les-Roses, tient sur une page, et cætera.
+Les théorèmes de Gödel, Hölder, Möbius, Itô et Cramér n'ont rien à voir.
+Jacques, Wassim et Xavier ont gagné 7 000 € au quiz de Kolmogorov.
+Quelle quantité ? Quinze quarts de quintal, quoi !
+Zut, zéro sur vingt au QCM de mathématiques financières.
+
+# ==================== PAGE 2 : mots courants et enchaînements de lettres
+le la les un une des du de et est en dans pour par sur avec sans sous entre
+que qui quoi dont où donc car mais ou ni si alors comme aussi très bien
+on ne pas plus moins tout tous toute toutes chaque même autre seulement
+minimum maximum minimiser maximiser immédiatement commun nuance humain
+attention addition illusion intéressant appareil essentiel erreur effet
+question quantile quotient qualitatif quantitatif quasi quadratique
+fonction relation condition hypothèse synthèse analyse phénomène
+moyenne médiane variance écart type mode étendue quartile percentile
+ensemble élément intervalle borne supérieure inférieure voisinage
+dérivée intégrale primitive limite suite série somme produit racine
+croissant décroissant monotone convexe concave continu dérivable
+vrai faux nul négatif positif strictement environ approximativement
+démontrer montrer vérifier supposer déduire conclure calculer estimer
+cependant néanmoins toutefois ainsi c'est-à-dire autrement dit en effet
+d'après selon sachant tel que pour tout il existe on en déduit que
+aggravé allure année apprendre carré assez attente différence accès
+
+# ==================== PAGE 3 : vocabulaire de cours
+économétrie, hétéroscédasticité, homoscédasticité, autocorrélation
+stationnarité, cointégration, multicolinéarité, endogénéité, exogénéité
+moindres carrés ordinaires, moindres carrés généralisés, variables instrumentales
+maximum de vraisemblance, méthode des moments, estimateur sans biais
+convergent, efficace, asymptotiquement normal, borne de Cramér-Rao
+intervalle de confiance, test d'hypothèse, statistique de test, région critique
+risque de première espèce, risque de seconde espèce, puissance, p-value
+loi normale, loi de Student, loi du khi-deux, loi de Fisher, loi de Poisson
+espérance, variance, covariance, corrélation, densité, fonction de répartition
+série temporelle, tendance, saisonnalité, bruit blanc, marche aléatoire, racine unitaire
+modèles AR, MA, ARMA, ARIMA, GARCH, VAR ; tests de Dickey-Fuller et de Box-Pierce
+données de panel, effets fixes, effets aléatoires, test de Hausman
+tests de Durbin-Watson, Breusch-Pagan, White, Shapiro-Wilk, Kolmogorov-Smirnov
+critères d'Akaike et de Schwarz ; théorème de Gauss-Markov ; formule de Bayes
+apprentissage supervisé, non supervisé, surapprentissage, validation croisée
+arbre de décision, forêt aléatoire, boosting, descente de gradient, fonction de perte
+réseau de neurones, couche cachée, poids, biais, rétropropagation, taux d'apprentissage
+ACP, AFC, ACM, classification ascendante hiérarchique, k-means
+matrice de confusion, sensibilité, spécificité, précision, rappel, courbe ROC, AUC
+scoring, probabilité de défaut, régression logistique, odds ratio, logit, probit
+SAS : étape DATA, PROC SQL, PROC REG, macro ; R : dplyr, ggplot2 ; Python : pandas, numpy
+LLM, transformer, attention, embedding, token, RAG, agent, prompt
+Abréviations : cad, ssi, tq, qd, tjs, pcq, cf., ex., rq, déf., thm, prop., nb, ie, vs
+max, min, sup, inf, lim, log, ln, exp, sin, cos, tan, det, tr, rg, Var, Cov, Corr, iid, IC, ddl, H0, H1
+
+# ==================== PAGE 4 : lettres grecques, symboles, signes qui se ressemblent
+α β γ δ ε ζ η θ ι κ λ μ ν ξ π ρ σ τ υ φ χ ψ ω
+Γ Δ Θ Λ Ξ Π Σ Φ Ψ Ω
+$\mathbb{R}\ \mathbb{N}\ \mathbb{Z}\ \mathbb{Q}\ \mathbb{C}\ \mathbb{E}\ \mathbb{V}\ \mathbb{P}\ \mathbb{1}$
+$\mathcal{N}\ \mathcal{L}\ \mathcal{F}\ \mathcal{A}\ \mathcal{B}\ \mathcal{H}\ \mathcal{O}\ \mathcal{X}$
++ − × ÷ · ± = ≠ ≈ ≃ ≡ ∝ < > ≤ ≥ ≪ ≫
+∑ ∏ ∫ ∬ ∮ ∂ ∇ √ ∞ ‰ °
+∈ ∉ ⊂ ⊆ ⊄ ∪ ∩ ∖ ∅ ∀ ∃ ∄ ¬ ∧ ∨
+→ ← ↔ ⇒ ⇐ ⇔ ↦ ↑ ↓
+$\bar{x}\ \hat{\beta}\ \tilde{x}\ \dot{x}\ x'\ x''\ X^{\top}\ X^{-1}\ \vec{u}\ \|x\|\ |x|$
+# Écris chaque groupe côte à côte, en traçant chaque signe comme d'habitude
+l 1 I | ℓ
+o 0 O ° θ σ
+u v ν υ μ
+n η h π
+a α ∝ d ∂ δ 6 b
+e ε ∈ c ⊂ C
+x × χ κ k K
+B 8 β
+p ρ P
+w ω W
+t + τ T
+z 2 Z ζ
+s 5 S ∫
+g 9 q γ y
+∪ U u ∩
+- −
+
+# ==================== PAGE 5 : formules courtes
+$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$
+$s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2$
+$\mathbb{E}(aX + b) = a\,\mathbb{E}(X) + b$
+$\mathbb{V}(aX + b) = a^2\,\mathbb{V}(X)$
+$\mathrm{Cov}(X, Y) = \mathbb{E}(XY) - \mathbb{E}(X)\,\mathbb{E}(Y)$
+$\rho_{X,Y} = \frac{\mathrm{Cov}(X, Y)}{\sigma_X \sigma_Y}$
+$X \sim \mathcal{N}(\mu, \sigma^2) \Rightarrow \frac{X - \mu}{\sigma} \sim \mathcal{N}(0, 1)$
+$P(A \mid B) = \frac{P(B \mid A)\,P(A)}{P(B)}$
+$y = X\beta + \varepsilon$, avec $\mathbb{E}(\varepsilon \mid X) = 0$
+$\hat{\beta} = (X'X)^{-1} X'y$
+$\mathbb{V}(\hat{\beta} \mid X) = \sigma^2 (X'X)^{-1}$
+$R^2 = 1 - \frac{SCR}{SCT}$ et $\bar{R}^2 = 1 - \frac{n-1}{n-k}(1 - R^2)$
+$t = \frac{\hat{\beta}_j - \beta_j^0}{\widehat{se}(\hat{\beta}_j)} \sim t(n-k)$ sous $H_0$
+$H_0 : \beta_1 = \beta_2 = 0$ contre $H_1 : \exists j,\ \beta_j \neq 0$
+$y_t = \phi\, y_{t-1} + \varepsilon_t$, $|\phi| < 1$, $\varepsilon_t \sim BB(0, \sigma^2)$
+$y_{it} = \alpha_i + x_{it}'\beta + u_{it}$
+$\hat{\theta} = \arg\max_{\theta} \ln L(\theta)$
+$\ln L(\theta) = \sum_{i=1}^{n} \ln f(x_i ; \theta)$
+$\mathrm{AIC} = -2 \ln L + 2k$ et $\mathrm{BIC} = -2 \ln L + k \ln n$
+$\sigma(z) = \frac{1}{1 + e^{-z}}$
+$\mathrm{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$
+$\forall \varepsilon > 0,\ \exists N \in \mathbb{N},\ \forall n \geq N,\ |u_n - \ell| < \varepsilon$
+$A \subset B \Rightarrow A \cap B = A$ et $A \cup B = B$
+$f : \mathbb{R} \to \mathbb{R},\ x \mapsto e^{-x^2}$
+$x \in [0, 1[$ et $n \in \mathbb{N}^*$
+
+# ==================== PAGE 6 : formules longues
+\[ \int_{-\infty}^{+\infty} \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(x-\mu)^2}{2\sigma^2}}\, dx = 1 \]
+\[ \sum_{k=0}^{+\infty} \frac{x^k}{k!} = e^x \qquad \prod_{i=1}^{n} f(x_i ; \theta) \]
+\[ \binom{n}{k} = \frac{n!}{k!\,(n-k)!} \qquad P(X = k) = \binom{n}{k} p^k (1-p)^{n-k} \]
+\[ \lim_{n \to +\infty} P\left(|\bar{X}_n - \mu| > \varepsilon\right) = 0 \]
+\[ \sqrt{n}\,(\hat{\theta}_n - \theta) \xrightarrow{\mathcal{L}} \mathcal{N}(0, \Sigma) \]
+\[ \begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix} \]
+\[ F = \frac{(SCR_c - SCR_{nc})/q}{SCR_{nc}/(n-k)} \sim F(q, n-k) \]
+\[ \Delta y_t = \alpha + \gamma\, y_{t-1} + \sum_{j=1}^{p} \delta_j\, \Delta y_{t-j} + u_t \]
+\[ f(x) = \begin{cases} \lambda e^{-\lambda x} & \text{si } x \geq 0 \\ 0 & \text{sinon} \end{cases} \]
+\[ \frac{\partial \mathcal{L}}{\partial \beta} = -2X'(y - X\beta) = 0 \iff X'X\beta = X'y \]
+\[ \mathrm{softmax}(z)_k = \frac{e^{z_k}}{\sum_{j=1}^{K} e^{z_j}} \]
+\[ \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^{\top}}{\sqrt{d_k}}\right) V \]
+\[ \theta_{t+1} = \theta_t - \eta\, \nabla_{\theta} J(\theta_t) \]
+\[ \|x\|_2 = \sqrt{\sum_{i=1}^{n} x_i^2} \qquad \mathbb{1}_{\{X > 0\}} \]
+
+# ==================== PAGE 7 : paragraphes comme sur une fiche
+Déf : un estimateur $\hat{\theta}$ de $\theta$ est sans biais ssi $\mathbb{E}(\hat{\theta}) = \theta$. Il est convergent si $\hat{\theta}_n \xrightarrow{p} \theta$ qd $n \to +\infty$.
+Thm (Gauss-Markov) : sous les hypothèses H1 à H3, l'estimateur des MCO est BLUE, cad le meilleur estimateur linéaire sans biais.
+Rq : si les erreurs sont hétéroscédastiques, les MCO restent sans biais mais ne sont plus efficaces ⇒ on utilise des écarts-types robustes (White).
+Méthode pour un test : 1) poser $H_0$ et $H_1$ ; 2) choisir la statistique ; 3) calculer la p-value ; 4) rejeter $H_0$ si $p < \alpha$, par ex. $\alpha = 0{,}05$.
+Une série $(y_t)$ est stationnaire au sens faible si sa moyenne et sa variance sont constantes et si $\mathrm{Cov}(y_t, y_{t-h})$ ne dépend que de $h$.
+Attention : une marche aléatoire $y_t = y_{t-1} + \varepsilon_t$ n'est pas stationnaire ; on la différencie : $\Delta y_t = \varepsilon_t$.
+Le surapprentissage arrive qd le modèle colle trop aux données d'entraînement : l'erreur de validation remonte alors que l'erreur d'entraînement baisse.
+Ex : avec 5 plis en validation croisée, on entraîne 5 fois sur 80 % des données et on évalue sur les 20 % restants.
+
+# ==================== PAGE 8 : nombres, dates, tableau
+0,05 ; 0,01 ; 0,001 ; 1,96 ; 2,576 ; 3,14159 ; 2,71828 ; 1,645
+95 % ; 99,9 % ; 12,5 % ; 1 000 ; 25 000 ; 1 250 000 ; 3,2 × 10⁻³
+n = 1 250 ; k = 7 ; t(28) = 2,05 ; F(2, 97) = 4,31 ; p-value = 0,0003
+IC à 95 % : [0,12 ; 0,48] ; R² = 0,847 ; RMSE = 12,3 ; AUC = 0,91
+Le 12/03/2026 à 14 h 30 ; année 2025-2026 ; 1er semestre ; 3e chapitre ; n° 42
+# Tableau : dessine-le avec des traits, comme sur tes fiches
+Variable | Coef. | Écart-type | t | p-value
+Constante | 1,25 | 0,31 | 4,03 | 0,0001
+x1 | -0,48 | 0,12 | -4,00 | 0,0002
+x2 | 0,07 | 0,05 | 1,40 | 0,165

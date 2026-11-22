@@ -33,6 +33,8 @@ IMAGES = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".tif", ".tiff"}
 SCANS = IMAGES | {".pdf"}
 SORTIE = "_ocr"
 CORRECTION = "_correction-fiches"
+CALIBRAGE = "_calibrage"          # feuilles de calibrage recopiées à la main (texte connu)
+LIBRES = (CORRECTION, CALIBRAGE)   # dossiers d'exemples : rangement libre, toujours « propres »
 BASE = "_base"                   # base de connaissance et suivis (dossier caché)
 JOURNAL = "journal_ocr.csv"      # taux d'erreur à chaque validation
 RUNS = "runs.jsonl"              # suivi des appels à Claude (tokens estimés) écrit par le tableau
@@ -133,7 +135,7 @@ def _deplacer(src: Path, dest: Path) -> None:
 
 def trouver_tex(matiere: Path, nom: str) -> Path | None:
     """Transcription d'une fiche. Les anciens emplacements (_ocr/Nom (i sur n).tex) sont rangés au passage."""
-    if matiere.name == CORRECTION:                 # exemples corrigés : rangement libre
+    if matiere.name in LIBRES:                     # exemples corrigés / calibrage : rangement libre
         for d in (matiere / SORTIE, matiere):
             t = fichier_dans(d, f"{nom}.tex")
             if t.is_file():
@@ -1013,7 +1015,7 @@ def base_connaissance(annees: list[dict], corr: list[dict]) -> dict[str, Any]:
     for f in corr:
         for k, pg in enumerate(f["pages"]):
             cands.append({"dossier": f["dossier"], "nom": f["nom"], "fichier": pg["fichier"], "page": pg["page"],
-                          "indice": k, "matiere": CORRECTION, "propre": True})
+                          "indice": k, "matiere": Path(f["dossier"]).name, "propre": True})
     sortie = []
     for c in cands:
         if not c.pop("propre"):
@@ -1130,8 +1132,24 @@ def arborescence(**_) -> dict[str, Any]:
         annees.append({"id": ident, "label": label.strip(), "nom": nom.strip(), "matieres": matieres})
     corr = RACINE / CORRECTION
     exemples = [f for f in fiches(corr, valide=True) if f["statut"] == "propre"] if corr.is_dir() else []
+    exemples += fiches_calibrage()
     return {"racine": str(RACINE), "existe": True, "annees": annees, "profil": profil(), "exemples": exemples,
             "runs": lire_runs(), "base": base_connaissance(annees, exemples)}
+
+
+def fiches_calibrage() -> list[dict]:
+    """Fiches/_calibrage : chaque scan qui a sa vérité terrain _ocr/<scan>.tex devient un exemple parfait."""
+    d = RACINE / CALIBRAGE
+    if not d.is_dir():
+        return []
+    sortie = []
+    for f in sorted(d.iterdir(), key=lambda p: p.name.lower()):
+        if f.is_file() and f.suffix.lower() in SCANS and trouver_tex(d, f.stem):
+            n = nb_pages_pdf(f) if f.suffix.lower() == ".pdf" else 1
+            sortie.append({"id": slug(f.stem), "nom": nfc(f.stem), "titre": f.stem.replace("_", " "), "statut": "propre",
+                           "dossier": rel(d), "pages": [{"fichier": rel(f), "page": i} for i in range(n)],
+                           "pdf": None, "doc": nfc(f.stem), "page_doc": 1, "n_doc": 1})
+    return sortie
 
 
 def lire_scan(fichier: str, page: int = 0, cote: int = COTE_MAX, **_) -> dict[str, Any]:
@@ -1170,8 +1188,12 @@ def lire_tex(dossier: str, nom: str, **_) -> dict[str, Any]:
         return {"existe": False, "corps": "", "statut": "scan"}
     contenu = tex.read_text(encoding="utf-8", errors="ignore")
     m = re.search(r"\\begin\{document\}\n?(.*?)\\end\{document\}", contenu, re.S)
-    statut = "propre" if dans_racine(dossier).name == CORRECTION else statut_tex(contenu)
-    return {"existe": True, "corps": defaire_mise_en_page((m[1] if m else contenu).strip()), "statut": statut}
+    libre = dans_racine(dossier).name in LIBRES
+    statut = "propre" if libre else statut_tex(contenu)
+    corps = defaire_mise_en_page((m[1] if m else contenu).strip())
+    if libre:        # les exemples suivent les règles de la consigne : \titre, jamais \section
+        corps = re.sub(r"\\section\*?\{", r"\\titre{", corps)
+    return {"existe": True, "corps": corps, "statut": statut}
 
 
 def enregistrer_tex(dossier: str, nom: str, corps: str, statut: str = "corr", source: str = "", meta: str = "",

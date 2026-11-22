@@ -2,7 +2,7 @@
 
 Mes fiches de révision manuscrites (M2 Économétrie et Statistique Appliquée) → transcription LaTeX → PDF propre, avec un modèle de vision (Claude) qui **apprend mon écriture au fil de mes corrections**, sans entraînement de poids.
 
-![Scan manuscrit et PDF généré](docs/images/avant-apres.jpg)
+![Page de calibrage recopiée à la main et PDF généré](docs/images/avant-apres.jpg)
 
 ## Pourquoi ce projet
 
@@ -16,26 +16,25 @@ Ce dépôt est la réponse. Les OCR classiques (Tesseract, et même les modèles
 
 ## Résultat
 
-Sur la demi-page ci-dessus, le PDF est produit sans retouche manuelle de la mise en page :
+L'image ci-dessus est une page de la [feuille de calibrage](calibrage/calibrage.pdf) recopiée à la main : fractions, intégrales, matrices, système `cases`, indices et exposants imbriqués sont recomposés en LaTeX. Sur mes vraies fiches, le pipeline gère aussi :
 
 - **titres numérotés et entourés**, soulignés comme sur la feuille ;
-- **maths recomposées** : accolades, système `cases`, fractions, formules encadrées ;
 - **le triangle « ⚠ » devient un encadré « Attention »** ;
 - **couleurs d'encre conservées** (rouge, bleu, rose) et mots soulignés ;
-- **le schéma n'est pas redessiné** : sa zone est repérée par le modèle, **découpée dans le scan** (fond blanchi, encres gardées) et replacée **avec le texte écrit à côté**, comme sur la feuille ;
+- **les schémas ne sont pas redessinés** : leur zone est repérée par le modèle, **découpée dans le scan** (fond blanchi, encres gardées) et replacée **avec le texte écrit à côté**, comme sur la feuille ;
 - abréviations personnelles gardées telles quelles (`Modélisat°`, `discriminat°`).
 
 Premières mesures (honnêtes, échantillon minuscule) : sur les pages validées avec le pipeline actuel, le **taux d'erreur par caractère (CER)** entre la sortie de l'OCR et la version que j'ai validée est de **0 % et 1,4 %**. Une page coûte en moyenne ≈ 13 000 jetons en entrée et ≈ 1 800 en sortie (lecture + relecture), soit environ 35 s.
 
-Les exemples complets (scans, LaTeX, PDF par page et PDF fusionné) sont dans [`exemples/Fiches`](exemples/Fiches).
+Mes fiches de cours ne sont pas publiées ici : elles reprennent le contenu des cours de mes enseignants. Le dépôt contient le code, la feuille de calibrage et un dossier `exemples/Fiches` vide à remplir avec tes propres scans.
 
 ## L'interface
 
 Un « tableau blanc » : une feuille par année, une par matière, puis l'atelier où l'on corrige la transcription à côté du scan, avec un aperçu rendu (MathJax) et le PDF final.
 
-| Accueil | Atelier (aperçu) |
+| Accueil | Une matière |
 |---|---|
-| ![](docs/images/tableau-accueil.jpg) | ![](docs/images/tableau-atelier-apercu.jpg) |
+| ![](docs/images/tableau-accueil.jpg) | ![](docs/images/tableau-matiere.jpg) |
 
 Deux panneaux de suivi : **Suivi des runs** (appels au modèle, jetons estimés, coût équivalent API) et **Qualité de l'OCR** (CER à chaque validation, par matière, erreurs les plus fréquentes).
 
@@ -45,6 +44,7 @@ Deux panneaux de suivi : **Suivi des runs** (appels au modèle, jetons estimés,
 flowchart LR
     S[Scan PDF / photo] --> P[1 page = 1 fiche]
     P --> L[Lecture<br/>modèle de vision]
+    T[Feuille de calibrage<br/>recopiée à la main] --> K
     K[(Base de connaissance<br/>profil · exemples validés · lexique d'erreurs)] --> L
     L --> R[Relecture<br/>comparaison avec l'image]
     R --> E[Réparation LaTeX<br/>structure + compilation d'essai]
@@ -57,10 +57,11 @@ flowchart LR
 
 ### « Entraîner » l'OCR sans entraîner de modèle
 
-Aucun poids n'est modifié. Le modèle apprend **en contexte** : à chaque page, la consigne contient tout ce que mes corrections ont appris. Quatre mécanismes, tous automatiques :
+Aucun poids n'est modifié. Le modèle apprend **en contexte** : à chaque page, la consigne contient tout ce que mes corrections ont appris. Cinq mécanismes, tous automatiques sauf le premier :
 
-1. **Profil d'écriture** (`mes_notations.txt`) : mes ambiguïtés connues, écrites une fois. Mon `2` en exposant ressemble à un `λ`, mon `Σ` à un `ξ`, `°` en fin de mot veut dire « -ion »…
-2. **Exemples validés (few-shot visuel)** : 2 pages que j'ai déjà corrigées sont jointes à la demande, image **et** LaTeX validé, pour que le modèle imite mes conventions (macros, mise en forme).
+0. **Calibrage** ([`calibrage/calibrage.pdf`](calibrage/calibrage.pdf)) : 8 pages à recopier à la main une fois (alphabet, accents, grec, symboles, groupes de signes qui se ressemblent comme `l 1 I | ℓ` ou `a α ∝ ∂ δ`, formules courtes et longues, paragraphes, nombres). Le texte étant connu, chaque feuille scannée est une **vérité terrain parfaite** : elle sert à écrire le profil, puis comme exemple dans la base. Voir [Calibrer sa propre écriture](#calibrer-sa-propre-écriture).
+1. **Profil d'écriture** (`mes_notations.txt`) : mes ambiguïtés connues, déduites du calibrage. Mon `2` en exposant ressemble à un `λ`, mon `Σ` à un `ξ`, `°` en fin de mot veut dire « -ion »…
+2. **Exemples validés (few-shot visuel)** : 2 pages déjà corrigées (fiches validées ou feuilles de calibrage) sont jointes à la demande, image **et** LaTeX validé, pour que le modèle imite mes conventions (macros, mise en forme).
 3. **Lexique d'erreurs appris** : à chaque validation, la sortie brute de l'OCR est comparée à ma version (diff par jetons LaTeX, `difflib`). Chaque petit remplacement est retenu **avec un jeton de contexte** de chaque côté (`^ 2 }` → `^ \lambda }` n'est pas la même règle que `σ ^ 2`). Les plus fréquents sont rappelés au modèle comme « erreurs que tu as déjà faites, vérifie ces cas ».
 4. **Sélection des exemples guidée par la mesure** : chaque validation enregistre le CER et les exemples utilisés. Un exemple jamais essayé passe en priorité (exploration), puis les exemples associés aux meilleurs CER. Un exemple qui, après 3 utilisations, fait nettement monter le CER (> 1,5 × la moyenne + 2 points) **est écarté automatiquement**. La base grossit sans dégrader la qualité.
 
@@ -95,7 +96,7 @@ L'application affiche **exactement la même interface** que la version claude.ai
 
 Par défaut, la lecture « précise » utilise `claude-opus-5-5` et la lecture standard `claude-sonnet-5-5` (variables `OCR_MODELE_PRECIS`, `OCR_MODELE`). `OCR_SIMULATION=1` permet de tester l'interface sans appel ni dépense. Sans Streamlit : `python app/serveur_web.py --fiches exemples/Fiches`.
 
-Le dossier par défaut est `exemples/Fiches` : on peut tout parcourir et retranscrire les pages d'exemple tout de suite.
+Le dossier par défaut est `exemples/Fiches` : il ne contient qu'un modèle de `mes_notations.txt`. Ajoute un dossier d'année (`M1 - Master`), un sous-dossier par matière, et dépose tes scans dedans.
 
 ### Option 2 : dans Claude Desktop (sans clé API)
 
@@ -103,11 +104,21 @@ C'est la version que j'utilise : le tableau est un artifact claude.ai, et `serve
 
 `serveur_fiches.py` ne fait que déclarer les 4 outils MCP. Il recharge `fiches_core.py` à chaud dès que ce fichier change : on met à jour la logique sans relancer Claude Desktop.
 
+## Calibrer sa propre écriture
+
+1. Imprime ou affiche [`calibrage/calibrage.pdf`](calibrage/calibrage.pdf) et recopie chaque page sur une feuille, avec ton stylo et ta vitesse habituels (les consignes en gris ne s'écrivent pas).
+2. Scanne les feuilles dans `Fiches/_calibrage/` : `calibrage_p1.jpg`, `calibrage_p2.jpg`… (une photo peut couvrir deux pages : `calibrage_p6-7.jpg`).
+3. Pour chaque scan, mets la transcription exacte de ce que tu as écrit dans `Fiches/_calibrage/_ocr/<scan>.tex`. Le plus rapide : faire lire la feuille par l'OCR une fois, puis corriger en comparant à [`calibrage/calibrage.txt`](calibrage/calibrage.txt) (garde tes éventuels oublis : la transcription doit coller à la feuille, pas au modèle).
+4. Note tes confusions récurrentes dans `Fiches/mes_notations.txt` (voir le modèle dans `exemples/Fiches`).
+
+C'est tout : chaque scan qui a son `.tex` devient automatiquement un exemple de la base de connaissance, au même titre qu'une fiche validée, et il est écarté tout seul s'il fait monter le taux d'erreur. `python calibrage/generer.py` régénère la feuille à partir de `calibrage.txt` si tu veux l'adapter à ton domaine.
+
 ## Organisation d'un dossier de fiches
 
 ```
 Fiches/
   mes_notations.txt                 profil d'écriture
+  _calibrage/                       feuilles de calibrage scannées + _ocr/<scan>.tex (vérité terrain)
   _base/                            base de connaissance : lexique.json, journal_ocr.csv, runs.jsonl
   M2 - Master ESA/
     Méthodes de scoring/
@@ -123,7 +134,8 @@ Fiches/
 serveur/   serveur MCP (serveur_fiches.py), logique (fiches_core.py), style LaTeX (latex/fiche.sty + polices)
 tableau/   l'interface (un seul fichier HTML)
 app/       serveur web local + application Streamlit
-exemples/  vraies fiches : scans, transcriptions, PDF
+calibrage/ feuille de calibrage à recopier (PDF, texte de référence, générateur)
+exemples/  dossier de fiches vide, avec un modèle de mes_notations.txt
 docs/      fonctionnement détaillé, images
 ```
 

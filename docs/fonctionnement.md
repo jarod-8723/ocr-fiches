@@ -41,7 +41,7 @@ L'« entraînement » est de l'**apprentissage en contexte** : aucun poids n'est
 
 ### 3.1 Profil d'écriture
 
-`Fiches/mes_notations.txt` est écrit à la main une fois, à partir de pages de calibrage. Il liste les ambiguïtés de l'auteur (« mon 2 en exposant ressemble à un λ ; un vrai λ est rare ») et ses abréviations (`°` = « -ion »).
+`Fiches/mes_notations.txt` est écrit à la main une fois, à partir des pages de calibrage ([`calibrage/calibrage.pdf`](../calibrage/calibrage.pdf) : 8 pages de texte connu, recopiées à la main et scannées dans `Fiches/_calibrage/`). Il liste les ambiguïtés de l'auteur (« mon 2 en exposant ressemble à un λ ; un vrai λ est rare ») et ses abréviations (`°` = « -ion »).
 
 ### 3.2 Lexique d'erreurs
 
@@ -61,7 +61,7 @@ Erreurs que tu as déjà faites sur cette écriture (…). Vérifie ces cas sur 
 
 ### 3.3 Exemples validés
 
-Toute page validée qui ne contient aucune ligne « À VÉRIFIER » devient un exemple possible, comme les documents déposés dans `Fiches/_correction-fiches/`. Deux exemples sont joints à chaque lecture : leur image **et** leur LaTeX validé (la bonne page, découpée aux repères `%% page:`, sans commentaires).
+Toute page validée qui ne contient aucune ligne « À VÉRIFIER » devient un exemple possible, comme les documents déposés dans `Fiches/_correction-fiches/` et chaque feuille de calibrage `Fiches/_calibrage/<scan>.jpg` qui a sa transcription exacte dans `_calibrage/_ocr/<scan>.tex` (vérité terrain : le texte recopié est connu, il n'y a rien à deviner). Deux exemples sont joints à chaque lecture : leur image **et** leur LaTeX validé (la bonne page, découpée aux repères `%% page:`, sans commentaires).
 
 ### 3.4 Sélection des exemples, sans dégrader la qualité
 
