@@ -2,7 +2,7 @@
 
 Mes fiches de révision manuscrites (M2 Économétrie et Statistique Appliquée) → transcription LaTeX → PDF propre, avec un modèle de vision (Claude) qui **apprend mon écriture au fil de mes corrections**, sans entraînement de poids.
 
-![Scan manuscrit et PDF généré](docs/images/avant-apres-scoring-p2.jpg)
+![Scan manuscrit et PDF généré](docs/images/avant-apres.jpg)
 
 ## Pourquoi ce projet
 
@@ -16,11 +16,14 @@ Ce dépôt est la réponse. Les OCR classiques (Tesseract, et même les modèles
 
 ## Résultat
 
-![SVM, page 1](docs/images/avant-apres-svm-p1.jpg)
+Sur la demi-page ci-dessus, le PDF est produit sans retouche manuelle de la mise en page :
 
-![SVM, page 2 : deux schémas découpés dans le scan](docs/images/avant-apres-svm-p2.jpg)
-
-Les schémas ne sont pas redessinés : leur zone est repérée par l'OCR, puis **découpée dans le scan** et replacée dans le PDF à la même taille et à la même place (fond blanchi, encres conservées). Les formules sont recomposées en LaTeX.
+- **titres numérotés et entourés**, soulignés comme sur la feuille ;
+- **maths recomposées** : accolades, système `cases`, fractions, formules encadrées ;
+- **le triangle « ⚠ » devient un encadré « Attention »** ;
+- **couleurs d'encre conservées** (rouge, bleu, rose) et mots soulignés ;
+- **le schéma n'est pas redessiné** : sa zone est repérée par le modèle, **découpée dans le scan** (fond blanchi, encres gardées) et replacée **avec le texte écrit à côté**, comme sur la feuille ;
+- abréviations personnelles gardées telles quelles (`Modélisat°`, `discriminat°`).
 
 Premières mesures (honnêtes, échantillon minuscule) : sur les pages validées avec le pipeline actuel, le **taux d'erreur par caractère (CER)** entre la sortie de l'OCR et la version que j'ai validée est de **0 % et 1,4 %**. Une page coûte en moyenne ≈ 13 000 jetons en entrée et ≈ 1 800 en sortie (lecture + relecture), soit environ 35 s.
 
