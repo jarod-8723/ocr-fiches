@@ -1,0 +1,88 @@
+\documentclass[11pt]{article}
+\usepackage{fiche}
+\matiere{Support Vecteur Machine}
+\chapitre{M2}
+\source{SVM.pdf}
+%% statut: propre
+
+\begin{document}
+%% page: SVM.pdf (p. 2)
+\titre{\couleur{rose}{\entoure{2} \souligne{Support Vector Machine}}}
+
+\begin{itemize}
+\item Rappel : C'est quoi le couple $(w, b)$ optimal ?
+
+\couleur{rouge}{$\hookrightarrow$ Celui qui optimise le critère de la marge optimale}
+
+\couleur{rouge}{\souligne{\# On veut un hyperplan le + loin des données possible}}
+\end{itemize}
+
+\dessin[5,15,22,24]{nuage de points (croix et ronds) séparés par un hyperplan hachuré, distance $d$ entre un point et l'hyperplan}
+
+\couleur{rouge}{\} $2 \cdot d$ = \souligne{marge}}
+
+\begin{itemize}
+\item Le vecteur support, c'est les observations qui sont sur la marge
+\begin{encadre}
+\[ SV = \left\{ x \in \mathbb{R}^p : d(H, x) = \frac{\text{marge}}{2} \right\} \]
+\end{encadre}
+
+\item La marge est donc défini comme étant :
+\begin{encadre}
+\[ \text{Marge} = M(w, b) = 2 \cdot d(x_{SV}, H) = 2 \cdot \frac{\overbrace{|h(x_{SV})|}^{\couleur{rouge}{=1}}}{\|w\|} = \entoure{$\dfrac{2}{\|w\|}$} \]
+\end{encadre}
+
+\couleur{vert}{$d = \text{Marge}/2 = \dfrac{1}{\|w\|}$}
+
+\item Grâce à ça, on peut maintenant classifier notre échantillon sur la variable cible
+\begin{encadre}
+\[ y_i = \left\{ \begin{array}{ll} 1 & \text{si } \dfrac{h(x_i)}{\|w\|} \geq m \\[2mm] -1 & \text{si } \dfrac{h(x_i)}{\|w\|} < -m \end{array} \right. \]
+\end{encadre}
+\end{itemize}
+
+\marge{\couleur{rose}{Rappel} \\ $\|x\| = \sqrt{\sum_{i=1}^{n} x_i^2}$ \\ $\langle x, y \rangle = \sum_{i=1}^{n} x_i y_i$ \\ $\|x\| = \sqrt{\langle x, x \rangle}$}
+
+\begin{itemize}
+\item On définit le vecteur normal (normalisé) $\tilde{w}$, la droite orthogonal à l'hyperplan séparateur $H$
+\begin{encadre}
+\[ \tilde{w} = \frac{w}{\|w\|}, \quad \|\tilde{w}\| = 1 \]
+\end{encadre}
+
+\couleur{vert}{$\tilde{w}$ c'est le vecteur normalisé qui donne une distance et qui définit de quel côté de l'hyperplan on \souligne{est}}
+
+\item On peut écrire la formule de $y_i$ selon le vecteur normalisé :
+
+$\langle \tilde{w}, x_i \rangle$ = écart/distance entre le vecteur normal et $x_i$
+\begin{encadre}
+\begin{align*}
+\langle \tilde{w}, x_i \rangle + \tilde{b} \geq 0 &\Rightarrow y_i = 1 \\
+\langle \tilde{w}, x_i \rangle \geq \tilde{c} &\Rightarrow y_i = 1
+\end{align*}
+\end{encadre}
+
+\couleur{rouge}{$\hookrightarrow$ Si on fait le point $x_i$ sur le vecteur $\tilde{w}$ et qui dépasse $\tilde{c}$ $\Rightarrow$ il est au-dessus de l'hyperplan $\Rightarrow y_i = 1$}
+\end{itemize}
+
+\marge{\couleur{rose}{\# $\tilde{b} \neq b$ \\ $\tilde{b} = -\tilde{c}$}}
+
+\dessin[69,54,93,62]{hyperplan séparateur, vecteur $\tilde{w}$ partant de l'origine, point A (bleu) et point B (rouge) projetés sur l'hyperplan}
+
+\couleur{rouge}{$d(\tilde{w}, A) = |\langle \tilde{w}, x_A \rangle + \tilde{b}|$ \\ $d(\tilde{w}, B) = |\langle \tilde{w}, x_B \rangle + \tilde{b}|$}
+
+\begin{itemize}
+\item Propriétés d'un hyperplan canonique :
+\begin{encadre}
+\[ m = \frac{1}{\|w\|} \]
+\end{encadre}
+\couleur{rouge}{\} m est \souligne{fixé} \\ $\hookrightarrow$ y'a qu'une seule solut° donc il est optimal}
+\[ \Rightarrow \]
+\begin{encadre}
+\[ \min_{x_i} |h(x_i)| = 1 \]
+\end{encadre}
+\couleur{rouge}{Vu que $x_{SV} = h(x_i) = \pm 1 \quad \forall x_i$}
+\end{itemize}
+
+\couleur{rouge}{$\hookrightarrow$ Si on dispose de $x_{SV}$, sachant que $h(x_{SV}) = 1$ \\ $\hookrightarrow$ avec $h(\cdot)$, le séparateur canonique}
+
+\couleur{vert}{Si $h(x_{SV}) \neq 1 = a$ \\ alors on récrit $h(x) = \dfrac{1}{a} \tilde{h}(x)$}
+\end{document}

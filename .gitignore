@@ -3,7 +3,7 @@ __pycache__/
 .env
 .streamlit/secrets.toml
 # tes propres fiches : garde-les hors du dépôt
-Fiches/
+/Fiches/
 # fichiers de travail LaTeX
 *.aux
 *.log
