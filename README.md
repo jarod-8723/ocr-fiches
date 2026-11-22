@@ -74,7 +74,7 @@ Chaque page validée laisse un triplet **(image du scan, sortie brute, LaTeX val
 Prérequis : Python 3.11+, une distribution LaTeX avec **XeLaTeX** (TinyTeX ou MiKTeX ; paquets : `tcolorbox`, `fontspec`, `pifont`, `pdfcol`, `listings`, `hyphenat`, `ulem`).
 
 ```bash
-git clone https://github.com/<toi>/ocr-fiches && cd ocr-fiches
+git clone https://github.com/jarod-8723/ocr-fiches && cd ocr-fiches
 pip install -r requirements.txt
 ```
 
