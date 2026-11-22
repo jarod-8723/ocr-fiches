@@ -1,4 +1,10 @@
-# ★ OCR Fiches — transcrire une écriture illisible en PDF LaTeX
+<p align="center">
+  <img src="docs/images/logo.png" alt="Logo ocr-fiches" width="180">
+</p>
+
+<h1 align="center">ocr-fiches</h1>
+
+<p align="center"><b>Transcrire une écriture illisible en PDF LaTeX</b></p>
 
 Mes fiches de révision manuscrites (M2 Économétrie et Statistique Appliquée) → transcription LaTeX → PDF propre, avec un modèle de vision (Claude) qui **apprend mon écriture au fil de mes corrections**, sans entraînement de poids.
 
