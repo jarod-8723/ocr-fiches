@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ocr-fiches": {
+      "command": "python",
+      "args": ["C:/chemin/vers/ocr-fiches/serveur/serveur_fiches.py"],
+      "env": {
+        "FICHES_RACINE": "C:/chemin/vers/Fiches"
+      }
+    }
+  }
+}

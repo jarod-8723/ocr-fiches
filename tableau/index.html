@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableau des fiches</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@300..800&family=STIX+Two+Text:ital,wght@1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght,BNCE,INFM,SPAC@300..800,-100..100,0..100,0..100&display=swap">
+<style>
+/* VOICE  quotidien d'étude : dessin enfantin, maths sérieuses
+   IDEA   le tableau blanc d'une salle de cours ; feuilles à petits carreaux tenues par des aimants
+   PICTURE le tableau entier : feuilles, aimants géométriques, gribouillis de maths au feutre
+   COLOUR mur rose #FFD3E6, tableau #FDFDFB, encre #2B2440, feutre rose #FF4F9A, étoile #FFC93C, carreaux #DCE6F6
+   TYPE   Shantell Sans variable (feutre, axes INFM et BNCE) + STIX Two Text italique (maths)
+   LAYOUT tableau plein écran, titre en haut à gauche, années en ligne ; téléphone : deux colonnes, zoom caméra sur les matières */
+:root{color-scheme:light dark;--mur:#FFD3E6;--mur:light-dark(#FFD3E6,#29142F);--pois:#FFBFDA;--pois:light-dark(#FFBFDA,#3B1E45);--encre:#2B2440;--gris:#6D6580;--rose:#FF4F9A;--jaune:#FFC93C;--carreau:#DCE6F6;--marge:#FF9DC5;--papier:#FFFDF9}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(var(--pois) 1.5px,transparent 1.7px) 0 0/24px 24px var(--mur);color:var(--encre);font:16px/1.4 "Shantell Sans","Segoe Print","Comic Sans MS",cursive;font-variation-settings:"INFM" 30;overflow:hidden;-webkit-tap-highlight-color:transparent}
+main{position:fixed;inset:0;overflow:hidden}
+#monde{position:absolute;inset:0;transform-origin:0 0}
+.cadre{position:absolute;border-radius:16px;background:linear-gradient(#F7F8FA,#C2C7D0);box-shadow:inset 0 2px 0 #fff,inset 0 -2px 0 rgba(43,36,64,.14),0 24px 44px -24px rgba(60,16,48,.6)}
+.surface{position:absolute;border-radius:7px;background:linear-gradient(112deg,transparent 28%,rgba(255,255,255,.95) 42%,transparent 58%),radial-gradient(120% 95% at 40% 28%,#fff 48%,#EDEDE9);box-shadow:inset 0 1px 6px rgba(43,36,64,.2)}
+.rebord{position:absolute;border-radius:5px 5px 12px 12px;background:linear-gradient(#FCFCFD,#BCC1CB 65%,#9EA4B0);box-shadow:0 12px 18px -12px rgba(50,16,40,.7)}
+.feutres{position:absolute;overflow:visible}
+.craie{position:absolute;overflow:hidden;pointer-events:none}
+.craie path,.ic path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.c-rose{stroke:var(--rose);stroke-width:2.6}
+.c-encre{stroke:var(--encre);stroke-width:2.3}
+.c-gros{stroke:var(--rose);stroke-width:5}
+.c-trace{stroke:#7E7790;stroke-width:20;opacity:.05}
+.ic .c-rose{stroke-width:3.6}
+.ic .c-encre{stroke-width:3.2}
+.craie .c-plein,.ic .c-plein{fill:var(--rose);stroke:none}
+.craie .c-jaune,.ic .c-jaune{fill:var(--jaune);stroke:none}
+.craie .c-clair,.ic .c-clair{fill:var(--rose);opacity:.3;stroke:none}
+.craie text{font-family:"STIX Two Text","Cambria Math","Times New Roman",serif;font-style:italic;fill:var(--encre)}
+.craie text.rose{fill:var(--rose)}
+.titre{position:absolute;left:0;top:0;margin:0;font-weight:760;font-variation-settings:"INFM" 100,"BNCE" 55;line-height:1;letter-spacing:-.01em;white-space:nowrap}
+.indice{position:absolute;left:0;top:0;margin:0;font-family:"STIX Two Text","Cambria Math","Times New Roman",serif;font-style:italic;color:var(--rose);white-space:nowrap;line-height:1.2}
+.note{position:absolute;left:0;top:0;margin:0;font-size:13px;line-height:1.35;color:var(--gris)}
+.note-btn{all:unset;display:inline-block;margin:4px 0 0 6px;padding:0 16px;height:44px;line-height:44px;border-radius:999px;background:var(--rose);color:#fff;font-size:14px;font-weight:700;cursor:pointer}
+.note-btn:focus-visible{outline:2px dashed var(--rose);outline-offset:3px}
+.titre,.indice,.note,.craie,.aimant-libre{transition:opacity .5s}
+body.niv1 .titre,body.niv1 .indice,body.niv1 .note,body.niv1 .craie,body.niv1 .aimant-libre{opacity:.3}
+.feuille{position:absolute;left:0;top:0;background-color:var(--papier);background-image:linear-gradient(90deg,transparent var(--mg),var(--marge) var(--mg),var(--marge) calc(var(--mg) + var(--gl)*2),transparent calc(var(--mg) + var(--gl)*2)),linear-gradient(var(--carreau) var(--gl),transparent var(--gl)),linear-gradient(90deg,var(--carreau) var(--gl),transparent var(--gl));background-size:100% 100%,var(--g) var(--g),var(--g) var(--g);border-radius:2px;box-shadow:0 1px 1px rgba(43,36,64,.12),0 16px 22px -14px rgba(43,36,64,.45);color:var(--encre)}
+.feuille::before,.feuille::after{content:"";position:absolute;left:calc(var(--mg)*.34);width:calc(var(--g)*.62);height:calc(var(--g)*.62);border-radius:50%;background:#E8E6E2;box-shadow:inset 0 1px 2px rgba(43,36,64,.4)}
+.feuille::before{top:22%}
+.feuille::after{bottom:22%}
+.feuille:focus-visible{outline:3px dashed var(--rose);outline-offset:5px}
+.annee,.matiere{transform:translate(var(--x),var(--y)) rotate(calc(var(--r)*var(--k,1))) translateY(var(--lev,0px))}
+.annee{z-index:3;cursor:pointer;transition:transform .35s cubic-bezier(.3,1.4,.5,1),box-shadow .3s,opacity .5s}
+.annee:hover,.annee:focus-visible{--k:.3;--lev:-8px;box-shadow:0 1px 1px rgba(43,36,64,.12),0 28px 30px -18px rgba(43,36,64,.55)}
+.an-lbl{position:absolute;left:26%;top:9%;font-size:calc(var(--u)*var(--lf,34));font-weight:780;line-height:1;font-variation-settings:"INFM" 100,"BNCE" 60;transform:rotate(-4deg)}
+.an-sou{position:absolute;left:23%;top:37%;width:54%;height:calc(var(--u)*7.5)}
+.an-nom{position:absolute;left:26%;right:6%;top:46%;font-size:max(13px,calc(var(--u)*8.4));font-weight:620;line-height:1.1}
+.an-dessin{position:absolute;left:30%;top:63%;width:44%;height:18%;overflow:visible}
+.an-meta{position:absolute;left:26%;right:5%;bottom:5%;font-size:max(12px,calc(var(--u)*6.2));color:var(--gris);line-height:1.2}
+.petite .an-dessin,.petite .an-meta{display:none}
+.et{color:var(--rose)}
+.nw{white-space:nowrap}
+.mx{font-family:"STIX Two Text","Cambria Math","Times New Roman",serif;font-style:italic}
+.tag{display:none;position:absolute;right:5%;top:5%;padding:4px 10px;border-radius:999px;background:var(--rose);color:#fff;font-size:14px;font-weight:700;transform:rotate(4deg);white-space:nowrap}
+.matiere{z-index:2;pointer-events:none;transition:transform .3s cubic-bezier(.3,1.4,.5,1),opacity .5s}
+.matiere.bouge{transition:transform .85s cubic-bezier(.25,.9,.3,1) var(--d,0ms),opacity .5s}
+.matiere.active{z-index:6}
+.matiere.ouverte{z-index:7}
+.matiere.etalee{pointer-events:auto;cursor:pointer}
+body.niv1:not(.niv2) .matiere.etalee:hover,body.niv1:not(.niv2) .matiere.etalee:focus-visible{--k:.2;--lev:-7px}
+.ma-nom{position:absolute;left:23%;right:5%;top:12%;font-size:calc(var(--su)*var(--fz,12));font-weight:720;line-height:1.02;font-variation-settings:"INFM" 90,"BNCE" 40;text-wrap:balance}
+.ma-nom,.ma-ico,.ma-meta{transition:opacity .35s}
+.matiere:not(.etalee) .ma-nom,.matiere:not(.etalee) .ma-ico,.matiere:not(.etalee) .ma-meta{opacity:0}
+.matiere.etalee.bouge .ma-nom,.matiere.etalee.bouge .ma-ico,.matiere.etalee.bouge .ma-meta{transition:opacity .4s calc(var(--d,0ms) + 380ms)}
+.ma-ico{position:absolute;left:31%;top:46%;width:42%;height:26%;overflow:visible}
+.ma-meta{position:absolute;left:24%;right:4%;bottom:6%;display:flex;flex-wrap:wrap;gap:.3em .5em;align-items:center;font-size:calc(var(--su)*8.4);color:var(--gris);line-height:1.15}
+.pastille{background:var(--rose);color:#fff;border-radius:999px;padding:.08em .55em;font-weight:700;white-space:nowrap}
+body.niv1 .annee{pointer-events:none}
+body.niv1 main{cursor:zoom-out}
+.matiere.etalee .aimant{pointer-events:auto}
+body.niv1 .annee:not(.active),body.niv1 .aimant-an:not(.active){opacity:.12}
+body.niv1 .matiere:not(.active){opacity:0}
+body.niv2 .matiere.active:not(.ouverte){opacity:.2}
+.aimant{position:absolute;left:0;top:0;display:block;pointer-events:none}
+.aimant svg{display:block;width:100%;height:100%;overflow:visible}
+.aimant-an{z-index:4;transform:translate(var(--x),var(--y));transition:opacity .35s}
+.aimant-an.parti{opacity:0;transition:opacity .35s .45s}
+.aimant-libre{z-index:1}
+.matiere .aimant,#ouvert .aimant{left:50%;width:calc(var(--su)*22);height:calc(var(--su)*22);transform:translate(-50%,-56%)}
+#ouvert .aimant{z-index:2}
+.matiere .aimant{opacity:0;transition:opacity .15s}
+.matiere.etalee .aimant{opacity:1}
+.matiere.etalee .aimant svg{animation:clac .45s cubic-bezier(.2,1.4,.4,1) var(--da,0ms) both}
+.aimant-an.clac svg{animation:clac .45s cubic-bezier(.2,1.4,.4,1) both}
+.aimant-an.pop svg{animation:pop .3s ease-out}
+@keyframes clac{0%{opacity:0;transform:translateY(-55%) scale(1.8)}60%{opacity:1;transform:translateY(6%) scale(.9)}100%{opacity:1;transform:none}}
+@keyframes pop{45%{transform:scale(1.22) rotate(-10deg)}}
+#sol{position:fixed;inset:0;z-index:26;pointer-events:none;perspective:1100px}
+#sol .feuille{transform-origin:50% 50%}
+#sol .au-sol{pointer-events:auto;cursor:pointer}
+#sol .au-sol .tag{display:block}
+#voile{position:fixed;inset:0;z-index:24;cursor:zoom-out;background:rgba(252,252,250,.72);animation:fondu .3s ease-out}
+@keyframes fondu{from{opacity:0}}
+#ouvert{position:fixed;z-index:25;opacity:0;transition:opacity .22s;box-shadow:0 30px 60px -34px rgba(43,36,64,.7)}
+#ouvert.vu{opacity:1}
+#ouvert .defile{position:absolute;inset:0;overflow:auto;overscroll-behavior:contain;padding:calc(var(--g)*1.7) calc(var(--g)*.8) calc(var(--g)*1.2) calc(var(--mg) + var(--g)*.6)}
+#ouvert h2{margin:0;font-size:clamp(28px,calc(var(--g)*2),46px);font-weight:760;line-height:1.05;letter-spacing:-.01em;font-variation-settings:"INFM" 100,"BNCE" 45;text-wrap:balance;outline:none}
+.ou-meta{margin:8px 0 14px;font-size:15px;color:var(--gris)}
+.ou-liste{list-style:none;margin:0;padding:0}
+.ou-liste li{opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*55ms + 140ms)}
+#ouvert.vu .ou-liste li{opacity:1;transform:none}
+.ou-liste button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:baseline;gap:4px 8px;width:100%;min-height:44px;padding:10px 6px;border-radius:8px;font-size:17px;line-height:1.25;cursor:pointer}
+.ou-liste button:hover{background:rgba(255,79,154,.08)}
+.ou-liste button:focus-visible{outline:2px dashed var(--rose);outline-offset:1px}
+.ou-t{display:flex;align-items:baseline;gap:6px}
+.ou-pts{flex:1;min-width:1em;border-bottom:2px dotted #C9C1D6;transform:translateY(-4px)}
+.ou-p{color:var(--gris);font-size:15px;white-space:nowrap}
+.st{font-size:13px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.st-propre{border:1.5px solid var(--encre)}
+.st-corr{background:var(--rose);color:#fff}
+.st-scan{color:var(--gris);border:1.5px dashed var(--gris)}
+.ou-note{margin:18px 0 0;font-size:15px;color:var(--gris)}
+#fil{position:fixed;left:max(12px,env(safe-area-inset-left));top:max(12px,env(safe-area-inset-top));z-index:30;max-width:calc(100% - 24px);visibility:hidden;transform:translateY(-160%) rotate(-1.5deg);transition:transform .5s cubic-bezier(.3,1.3,.5,1),visibility 0s .5s}
+body.niv1 #fil{visibility:visible;transform:rotate(-1.5deg);transition:transform .5s cubic-bezier(.3,1.3,.5,1) .6s,visibility 0s .6s}
+#fil ol{display:flex;align-items:center;margin:0;padding:0 20px;list-style:none;background:repeating-linear-gradient(-45deg,#FF5BA2 0 10px,#FF7AB3 10px 20px);clip-path:polygon(0 7px,7px 0,calc(100% - 7px) 0,100% 7px,calc(100% - 5px) 50%,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),5px 50%)}
+#fil li{display:flex;align-items:center;flex:none}
+#fil li:last-child{flex:0 1 auto;min-width:0}
+#fil button{all:unset;display:block;height:44px;line-height:44px;padding:0 6px;color:#fff;font-size:17px;font-weight:700;font-variation-settings:"INFM" 80,"BNCE" 30;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#fil button[aria-current]{cursor:default}
+#fil button:focus-visible{outline:2px dashed #fff;outline-offset:-6px}
+#fil .sep{color:#FFE9A8;font-size:14px;padding:0 1px}
+#toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));z-index:70;width:max-content;max-width:calc(100% - 32px);transform:translate(-50%,180%);background:var(--encre);color:#fff;padding:12px 18px;border-radius:14px;font-size:15px;transition:transform .35s cubic-bezier(.3,1.3,.5,1)}
+#toast.vu{transform:translate(-50%,0)}
+@media(max-width:520px){#fil ol.trois li:nth-child(-n+2){display:none}}
+#ouvert{container-type:inline-size}
+@container (max-width:470px){.ou-liste button{grid-template-columns:auto minmax(0,1fr) auto}.ou-liste .st{grid-column:2/4;justify-self:start}}
+.fige,.fige *{transition:none!important}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important;transition-delay:0ms!important}}
+
+/* ---------- Atelier : scan, OCR, correction ---------- */
+#atelier{position:fixed;inset:0;z-index:60;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));background:radial-gradient(var(--pois) 1.5px,transparent 1.7px) 0 0/24px 24px var(--mur);opacity:0;transition:opacity .25s}
+#atelier.vu{opacity:1}
+.at-tete{display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap}
+.at-tete h2{margin:0;font-size:clamp(26px,3.2vw,40px);font-weight:760;line-height:1.05;letter-spacing:-.01em;font-variation-settings:"INFM" 100,"BNCE" 45;outline:none}
+.at-info{margin:0;color:var(--gris);font-size:15px}
+.at-retour{all:unset;box-sizing:border-box;height:44px;padding:0 20px;color:#fff;font-weight:700;font-size:16px;cursor:pointer;background:repeating-linear-gradient(-45deg,#FF5BA2 0 10px,#FF7AB3 10px 20px);clip-path:polygon(0 7px,7px 0,calc(100% - 7px) 0,100% 7px,calc(100% - 5px) 50%,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),5px 50%);transform:rotate(-1.5deg);white-space:nowrap}
+.at-retour:focus-visible,.btn:focus-visible,.at-onglets button:focus-visible,.at-vues button:focus-visible{outline:2px dashed var(--rose);outline-offset:3px}
+.at-corps{display:grid;grid-template-columns:minmax(0,var(--g1,1fr)) 22px minmax(0,var(--g2,1.15fr));gap:0;min-height:0}
+.at-poignee{position:relative;cursor:col-resize;touch-action:none;border-radius:999px;outline:none}
+.at-poignee::before{content:"";position:absolute;left:50%;top:50%;width:6px;height:64px;transform:translate(-50%,-50%);border-radius:999px;background:var(--rose);box-shadow:0 0 0 3px rgba(255,255,255,.85);transition:height .15s}
+.at-poignee:hover::before,.at-poignee:focus-visible::before,.at-poignee.on::before{height:120px}
+.at-taille{display:flex;gap:6px}
+.at-taille button{all:unset;box-sizing:border-box;min-width:44px;height:36px;padding:0 12px;border-radius:999px;border:2px solid var(--encre);font-weight:700;font-size:14px;text-align:center;cursor:pointer;white-space:nowrap}
+.at-taille button:focus-visible{outline:2px dashed var(--rose);outline-offset:3px}
+.at-taille button[aria-pressed=true]{background:var(--encre);color:#fff}
+.at-scan{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr);gap:8px;min-height:0;padding:12px;border-radius:10px;background:#FDFDFB;color:var(--encre);box-shadow:inset 0 1px 6px rgba(43,36,64,.18),0 16px 30px -22px rgba(60,16,48,.6)}
+.at-scan::before{content:"";position:absolute;left:50%;top:-10px;width:120px;height:24px;transform:translateX(-50%) rotate(-3deg);background:repeating-linear-gradient(-45deg,rgba(255,91,162,.85) 0 8px,rgba(255,138,192,.85) 8px 16px);z-index:2}
+.at-barre{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:32px}
+.at-onglets{display:flex;gap:6px;flex-wrap:wrap}
+.at-onglets button,.at-vues button{all:unset;box-sizing:border-box;min-width:44px;height:36px;padding:0 12px;border-radius:999px;border:2px solid var(--encre);font-weight:700;font-size:14px;text-align:center;cursor:pointer;white-space:nowrap}
+.at-onglets button[aria-pressed=true],.at-vues button[aria-pressed=true]{background:var(--encre);color:#fff}
+.at-onglets .err{border-color:var(--rose);color:var(--rose)}
+.at-image{position:relative;overflow:auto;min-height:0;border-radius:6px;background:#F1F0EC}
+.at-image img{display:block;width:100%;height:auto;cursor:zoom-in}
+.at-image.zoom img{width:200%;cursor:zoom-out}
+.at-vide{display:grid;place-items:center;align-content:center;gap:12px;min-height:100%;padding:20px;text-align:center;color:var(--gris);font-size:16px}
+.at-import{display:inline-block;position:relative}
+.at-import input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.at-import input:focus-visible+span{outline:2px dashed var(--rose);outline-offset:3px}
+.at-copie{--g:22px;--mg:44px;--gl:1px;position:relative;display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0;padding:12px 12px 12px calc(var(--mg) + 10px)}
+.at-copie .at-barre{justify-content:space-between}
+.at-vues{display:flex;gap:6px}
+.at-reglages{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.at-prec{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--gris)}
+.at-prec select{font:inherit;font-size:16px;color:var(--encre);background:#fff;border:2px solid var(--encre);border-radius:10px;height:36px;padding:0 8px}
+#at-tex{width:100%;height:100%;min-height:0;resize:none;border:0;outline:none;background:transparent;color:var(--encre);font:calc(14px * var(--zt,1))/1.6 "JetBrains Mono",ui-monospace,Consolas,monospace;padding:6px 4px;tab-size:2}
+#at-tex:focus-visible{box-shadow:inset 0 0 0 2px rgba(255,79,154,.5);border-radius:6px}
+#at-tex[readonly]{color:#5E5770}
+.at-apercu{overflow:auto;min-height:0;padding:4px 6px 20px;font-size:calc(17px * var(--zt,1));line-height:1.5}
+.at-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.at-etat{flex:1 1 260px;margin:0;font-size:15px;min-height:22px}
+.at-etat.err{color:#C42067;font-weight:700}
+.btn{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 18px;border-radius:999px;font-weight:700;font-size:16px;cursor:pointer;white-space:nowrap;transition:transform .15s}
+.btn:hover:not(:disabled){transform:translateY(-2px) rotate(-1deg)}
+.btn-rose{background:var(--rose);color:#fff}
+.btn-encre{background:var(--encre);color:#fff}
+.btn-trait{border:2px solid var(--encre);color:var(--encre);background:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.r-titre{margin:4px 0 10px;font-size:28px;line-height:1.1;text-decoration:underline wavy var(--rose) 3px;text-underline-offset:8px}
+.r-sec{margin:16px 0 6px;font-size:21px}
+.r-sec::before{content:"★ ";color:var(--rose)}
+.r-ssec{margin:12px 0 4px;font-size:18px}
+.r-ssec::before{content:"☆ ";color:var(--rose)}
+.r-b{position:relative;margin:16px 0 10px;padding:16px 12px 8px;border:2px solid var(--rose);border-radius:255px 12px 225px 12px/12px 225px 12px 255px;background:#FFEEF6}
+.r-lab{position:absolute;left:10px;top:-13px;padding:1px 10px;background:var(--rose);color:#fff;font-size:14px;font-weight:700;transform:rotate(2deg)}
+.r-thm{border-color:var(--encre);border-width:3px}
+.r-thm .r-lab,.r-meth .r-lab{background:var(--encre)}
+.r-prop{background:#fff}
+.r-meth{background:#fff;border-style:dashed;border-color:var(--encre)}
+.r-att{border-color:#E5383B;border-width:3px}
+.r-att .r-lab{background:#E5383B}
+.r-ex,.r-rq,.r-demo{border:0;border-left:4px solid var(--roseclair,#FFB3D6);border-radius:0;background:none;padding:8px 10px}
+.r-ex .r-lab,.r-rq .r-lab,.r-demo .r-lab{position:static;display:inline;padding:0;margin-right:6px;background:none;color:var(--rose);transform:none}
+.r-rq,.r-demo{font-size:15px;border-left-color:var(--gris)}
+.r-rq .r-lab,.r-demo .r-lab{color:var(--gris)}
+.r-enc{padding:8px 12px}
+.r-ent{padding:0 4px;border:2px solid var(--rose);border-radius:40% 60% 50% 50%/60% 40% 60% 40%}
+.r-dessin{margin:10px 0;padding:14px;border:2px dashed #FFB3D6;border-radius:10px;background:#FFEEF6;color:var(--gris);font-style:italic;text-align:center}
+.r-img-ok{padding:6px;background:#fff;border-style:solid}.r-img-ok img{display:block;margin:0 auto;height:auto}
+.r-cote{display:flex;gap:14px;align-items:flex-start;margin:10px 0}.r-cote>.r-dessin{flex:0 0 38%;margin:0}.r-cote-d{flex-direction:row-reverse}.r-cote-t{flex:1;min-width:0}
+.r-ill{color:var(--rose)}
+.r-marge{text-align:right;color:var(--gris);font-style:italic;font-size:15px}
+.r-saut{margin:18px 0 8px;padding-top:6px;border-top:2px dashed var(--carreau);color:var(--gris);font-size:13px}
+.r-inc{color:#C42067;font-size:14px}
+.r-par{display:block;height:8px}
+.at-aide{margin:0 0 8px;font-size:13px;color:var(--gris)}
+.bl{border-radius:8px;padding:2px 6px;margin:0 -6px;cursor:text;outline:2px dashed transparent;outline-offset:1px;transition:outline-color .15s,background .15s}
+.bl:hover{outline-color:rgba(255,79,154,.55);background:rgba(255,201,60,.12)}
+.bl:focus-visible{outline-color:var(--rose)}
+.bl.edit{background:#fff;outline:2px solid var(--rose);cursor:auto}
+.bl-ta{display:block;width:100%;min-height:48px;box-sizing:border-box;resize:none;border:0;outline:none;background:transparent;color:var(--encre);font:calc(14px * var(--zt,1))/1.6 "JetBrains Mono",ui-monospace,Consolas,monospace;padding:4px;tab-size:2}
+.at-vide-bloc{color:var(--gris);margin:4px 0}
+.at-corps.pdf-seul{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
+.at-corps.pdf-seul .at-scan,.at-corps.pdf-seul .at-poignee,.at-corps.pdf-seul .at-taille,.at-corps.pdf-seul .at-reglages{display:none}
+.at-corps.pdf-seul .at-copie{padding-right:calc(var(--mg) + 10px)}
+.at-corps.pdf-seul .at-pdf-pages{max-width:880px;margin:0 auto;width:100%}
+.at-corps.pdf-seul .at-pdfbar{max-width:880px;margin:0 auto}
+.at-pdf{overflow:auto;min-height:0;padding:0 4px 16px}
+.at-pdfbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;padding:6px 2px 10px;font-size:14px;color:var(--gris)}
+.at-pdfbar span{flex:1 1 200px}
+.at-mini{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:999px;border:2px solid var(--encre);font-weight:700;font-size:14px;cursor:pointer;color:var(--encre);background:#fff}
+.at-mini.rose{border-color:var(--rose);color:var(--rose)}
+.at-mini:focus-visible{outline:2px dashed var(--rose);outline-offset:3px}
+.at-pdf-pages{display:grid;gap:14px}
+.at-pdf-page{background:#fff;border-radius:4px;box-shadow:0 2px 10px rgba(43,36,64,.22);min-height:120px;display:grid;place-items:center;color:var(--gris);font-size:14px}
+.at-pdf-page img{display:block;width:100%;height:auto;border-radius:4px}
+.at-propose{flex:1 1 100%;order:-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 14px;border-radius:14px;background:#fff;border:2px dashed var(--rose);font-weight:700}
+.at-propose span{flex:1 1 220px}
+.at-tete h2{color:light-dark(#2B2440,#FFE9F4)}
+.at-info{color:light-dark(#6D6580,#E3CFEF)}
+.at-etat{color:light-dark(#2B2440,#FFE9F4)}
+.at-etat.err{color:light-dark(#C42067,#FF9CC8)}
+.at-propose{color:#2B2440}
+.at-apercu mark{background:#FFB3D6;color:inherit;padding:0 2px}
+.at-apercu table{border-collapse:collapse;margin:8px 0}
+.at-apercu td{border:1.5px solid var(--encre);padding:3px 8px}
+.at-apercu ul,.at-apercu ol{margin:4px 0;padding-left:22px}
+.at-apercu .mb{margin:6px 0;overflow-x:auto;overflow-y:hidden}
+@media(max-width:760px){.at-poignee{display:none}.at-corps{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,40%) minmax(0,1fr)}.at-copie{--mg:26px}.at-tete h2{font-size:24px}}
+
+/* Suivi des runs */
+#suivi-btn{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:40;transform:rotate(1.5deg);box-shadow:0 10px 16px -10px rgba(60,16,48,.6)}
+#qualite-btn{position:fixed;right:calc(max(12px,env(safe-area-inset-right)) + 170px);top:max(12px,env(safe-area-inset-top));z-index:40;transform:rotate(-1deg)}
+.su-voile{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:max(14px,env(safe-area-inset-top)) 14px;background:rgba(43,36,64,.35)}
+.le-page{margin:0 0 14px;padding:8px;background:#fff;border:1px solid #E2E4EA;color:var(--gris);font-size:14px}.le-page img{display:block;width:100%;height:auto}
+.ou-docs{margin:10px 0 0}.ou-final{all:unset;box-sizing:border-box;display:block;width:100%;margin:6px 0;padding:10px 12px;border:2.5px solid var(--rose);border-radius:12px 9px 13px 8px;font-size:16px;font-weight:650;cursor:pointer}.ou-final span{display:block;font-size:13px;font-weight:500;color:var(--gris)}.ou-final:hover{background:rgba(255,79,154,.08)}.ou-final:focus-visible{outline:2px dashed var(--rose);outline-offset:2px}.ou-doc{margin:6px 0;font-size:14px;color:var(--gris)}.ou-doc.err{color:#D12C58}
+.qu-courbe{width:100%;height:auto;display:block;margin:4px 0 8px}
+@media(max-width:640px){#qualite-btn{top:auto;bottom:max(12px,env(safe-area-inset-bottom));right:max(12px,env(safe-area-inset-right))}}
+#suivi{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:max(14px,env(safe-area-inset-top)) 14px;background:rgba(43,36,64,.35)}
+.su-feuille{position:relative;width:min(980px,100%);max-height:100%;overflow:auto;padding:26px 28px 22px 46px;background-color:var(--papier);background-image:linear-gradient(90deg,transparent 30px,var(--marge) 30px,var(--marge) 32px,transparent 32px),linear-gradient(var(--carreau) 1px,transparent 1px),linear-gradient(90deg,var(--carreau) 1px,transparent 1px);background-size:100% 100%,22px 22px,22px 22px;border-radius:3px;box-shadow:0 24px 44px -20px rgba(43,36,64,.7);color:var(--encre);transform:rotate(-.4deg)}
+.su-tete{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.su-tete h2{margin:0;font-size:30px;font-weight:780;font-variation-settings:"INFM" 100,"BNCE" 50;flex:1}
+.su-tete h2 span{color:var(--rose)}
+.su-tuiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:0 0 16px}
+.su-tuile{padding:12px 14px;border:2.5px solid var(--encre);border-radius:14px 10px 16px 9px;background:var(--papier)}
+.su-tuile:first-child{border-color:var(--rose)}
+.su-tuile h3{margin:0 0 4px;font-size:15px;color:var(--gris);font-weight:600}
+.su-gros{font-size:30px;font-weight:780;line-height:1.1;font-variant-numeric:tabular-nums}
+.su-gros small{font-size:15px;font-weight:600;color:var(--gris)}
+.su-tuile p{margin:4px 0 0;font-size:14px;font-variant-numeric:tabular-nums}
+.su-note{margin:0 0 16px;padding:10px 14px;border-left:4px solid var(--jaune);background:color-mix(in srgb,var(--jaune) 14%,transparent);font-size:14px;line-height:1.45}
+.su-feuille h3.su-h{margin:18px 0 8px;font-size:19px;font-weight:720}
+.su-barres{display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;align-items:center;font-size:14px}
+.su-barre{height:14px;border-radius:7px;background:var(--rose);min-width:3px}
+.su-barres .n{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.su-table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.su-table th{text-align:left;font-weight:650;color:var(--gris);border-bottom:2px solid var(--encre);padding:6px 8px}
+.su-table td{padding:6px 8px;border-bottom:1px dashed color-mix(in srgb,var(--encre) 30%,transparent);vertical-align:top}
+.su-table td.num,.su-table th.num{text-align:right;white-space:nowrap}
+.su-ok{color:#1E8A52}.su-ko{color:#D12C58}.su-av{color:#B7791F}
+.su-pied{margin:14px 0 0;font-size:13px;color:var(--gris);line-height:1.45}
+.su-vide{padding:20px 0;color:var(--gris)}
+@media(max-width:640px){.su-feuille{padding:18px 14px 16px 38px}.su-table .opt{display:none}}
+</style>
+</head>
+<body class="fige">
+<svg id="defs" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"></svg>
+<main><div id="monde"></div></main>
+<div id="voile" hidden></div>
+<section id="ouvert" class="feuille" hidden aria-labelledby="ou-titre"><span class="aimant"></span><div class="defile"><h2 id="ou-titre" tabindex="-1"></h2><p class="ou-meta"></p><ul class="ou-liste"></ul><div class="ou-docs"></div><p class="ou-note"></p></div></section>
+<div id="sol"></div>
+<nav id="fil" aria-label="Fil d'Ariane"><ol></ol></nav>
+<div id="toast" role="status" aria-live="polite"></div>
+<button type="button" id="suivi-btn" class="btn btn-rose" aria-haspopup="dialog">Suivi des runs</button>
+<button type="button" id="qualite-btn" class="btn btn-encre" aria-haspopup="dialog">Qualité de l’OCR</button>
+<section id="qualite" class="su-voile" hidden role="dialog" aria-modal="true" aria-labelledby="qu-titre"><div class="su-feuille"><div class="su-tete"><h2 id="qu-titre" tabindex="-1">Qualité de l’OCR <span>★</span></h2><button type="button" class="btn btn-encre" id="qu-fermer">Fermer</button></div><div id="qu-corps"></div></div></section>
+<section id="lecteur" class="su-voile" hidden role="dialog" aria-modal="true" aria-labelledby="le-titre"><div class="su-feuille"><div class="su-tete"><h2 id="le-titre" tabindex="-1"></h2><button type="button" class="btn btn-encre" id="le-fermer">Fermer</button></div><div id="le-pages"></div></div></section>
+<section id="suivi" hidden role="dialog" aria-modal="true" aria-labelledby="su-titre"><div class="su-feuille"><div class="su-tete"><h2 id="su-titre" tabindex="-1">Suivi des runs <span>★</span></h2><button type="button" class="btn btn-encre" id="su-fermer">Fermer</button></div><div id="su-corps"></div></div></section>
+
+
+<section id="atelier" hidden aria-labelledby="at-titre">
+  <header class="at-tete"><button type="button" class="at-retour" id="at-retour">← Retour aux fiches</button><h2 id="at-titre" tabindex="-1"></h2><p class="at-info"></p></header>
+  <div class="at-corps">
+    <div class="at-scan"><div class="at-barre"><div class="at-onglets" aria-label="Pages scannées"></div></div><div class="at-image"></div></div>
+    <div class="at-poignee" id="at-poignee" role="separator" aria-orientation="vertical" aria-label="Largeur du scan et de la transcription" tabindex="0"></div>
+    <div class="at-copie feuille">
+      <div class="at-barre"><div class="at-vues"><button type="button" id="at-v-pdf" aria-pressed="false" hidden>PDF</button><button type="button" id="at-v-code" aria-pressed="true">LaTeX</button><button type="button" id="at-v-apercu" aria-pressed="false">Aperçu</button></div><div class="at-taille"><button type="button" id="at-moins" aria-label="Réduire le texte">A−</button><button type="button" id="at-plus" aria-label="Agrandir le texte">A+</button><button type="button" id="at-large" aria-pressed="false" title="Donne plus de place à la transcription">Agrandir</button></div><div class="at-reglages"></div></div>
+      <textarea id="at-tex" spellcheck="false" aria-label="Transcription LaTeX" placeholder="La transcription apparaîtra ici. Clique sur « Transcrire »."></textarea>
+      <div class="at-apercu" hidden></div>
+      <div class="at-pdf" hidden></div>
+    </div>
+  </div>
+  <footer class="at-actions"><div class="at-propose" id="at-propose" hidden><span>Fiche validée ★ Créer le PDF maintenant ?</span><button type="button" class="btn btn-rose" id="at-propose-oui">Créer le PDF</button><button type="button" class="btn btn-trait" id="at-propose-non">Plus tard</button></div><p class="at-etat" role="status" aria-live="polite"></p><button type="button" class="btn btn-rose" id="at-ocr">Transcrire</button><button type="button" class="btn btn-trait" id="at-save">Enregistrer</button><button type="button" class="btn btn-encre" id="at-ok">Valider ★</button><button type="button" class="btn btn-trait" id="at-pdf-btn" hidden>Faire le PDF</button><button type="button" class="btn btn-trait" id="at-copier">Copier le LaTeX</button></footer>
+</section>
+<script>
+{
+const $ = s => document.querySelector(s);
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const attendre = ms => new Promise(r => setTimeout(r, RM ? 0 : ms));
+const borne = (a, v, b) => Math.max(a, Math.min(b, v));
+const f1 = v => (+v).toFixed(1);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const pl = (n, mot) => `${n} ${mot}${n > 1 ? 's' : ''}`;
+
+/* Aucune donnée d'exemple : le tableau n'affiche que tes dossiers */
+const EXEMPLES = [];
+let ANNEES = EXEMPLES;
+const STATUTS = {propre:['propre','st-propre'], corr:['à corriger','st-corr'], scan:['scan seul','st-scan']};
+const COUL = {rose:'#FF4F9A', bonbon:'#FF8FC0', jaune:'#FFC93C', lilas:'#A98BFF', ciel:'#5BB8F5', menthe:'#3FC7A0'};
+const LIBRES = [['triangle','jaune'],['carre','menthe'],['rond','lilas']];
+
+/* ---------- Trait de feutre : traits tremblés, hasard fixe ---------- */
+let graine = 7;
+const alea = () => (graine = graine * 16807 % 2147483647) / 2147483647;
+const sem = t => { graine = [...t].reduce((a, c) => (a * 31 + c.charCodeAt(0)) & 0x7fffffff, 7) || 7; };
+const j = a => (alea() - .5) * 2 * a;
+const seg = (x1, y1, x2, y2, a) => `M${f1(x1 + j(a))} ${f1(y1 + j(a))}Q${f1((x1 + x2) / 2 + j(a * 1.8))} ${f1((y1 + y2) / 2 + j(a * 1.8))} ${f1(x2 + j(a))} ${f1(y2 + j(a))}`;
+const ligne = (x1, y1, x2, y2, a = 1.1) => seg(x1, y1, x2, y2, a) + seg(x1, y1, x2, y2, a * .8);
+const poly = (p, ferme, a = 1.1) => { const q = ferme ? [...p, p[0]] : p; let d = ''; for (let i = 0; i < q.length - 1; i++) d += ligne(q[i][0], q[i][1], q[i + 1][0], q[i + 1][1], a); return d; };
+const lisse = p => { let d = `M${f1(p[0][0])} ${f1(p[0][1])}`; for (let i = 0; i < p.length - 1; i++) { const a = p[i - 1] || p[i], b = p[i], c = p[i + 1], e = p[i + 2] || c; d += `C${f1(b[0] + (c[0] - a[0]) / 6)} ${f1(b[1] + (c[1] - a[1]) / 6)} ${f1(c[0] - (e[0] - b[0]) / 6)} ${f1(c[1] - (e[1] - b[1]) / 6)} ${f1(c[0])} ${f1(c[1])}`; } return d; };
+const rond = (cx, cy, rx, ry = rx, a = 1.2) => { const p = [], d0 = alea() * 6.3; for (let i = 0; i <= 22; i++) { const t = d0 + i / 20 * 6.283; p.push([cx + (rx + j(a)) * Math.cos(t), cy + (ry + j(a)) * Math.sin(t)]); } return lisse(p); };
+const courbe = (fn, x0, x1, n = 18, a = .5) => lisse(Array.from({length: n + 1}, (_, i) => { const x = x0 + (x1 - x0) * i / n; return [x + j(a), fn(x) + j(a)]; }));
+const etoileP = (cx, cy, r, k = 5, ri = .45) => Array.from({length: 2 * k}, (_, i) => { const t = -Math.PI / 2 + i * Math.PI / k, q = i % 2 ? r * ri : r; return [cx + q * Math.cos(t), cy + q * Math.sin(t)]; });
+const remp = p => 'M' + p.map(([x, y]) => f1(x + j(.6)) + ' ' + f1(y + j(.6))).join('L') + 'Z';
+const P = (d, c) => `<path class="${c}" d="${d}"/>`;
+
+/* ---------- Aimants géométriques ---------- */
+const pts = a => a.map(([x, y]) => f1(x) + ',' + f1(y)).join(' ');
+const FA = {
+  rond: '<circle cx="50" cy="50" r="38"/>',
+  carre: '<rect x="15" y="15" width="70" height="70" rx="16"/>',
+  hexagone: `<polygon points="${pts(Array.from({length: 6}, (_, i) => [50 + 40 * Math.cos(Math.PI / 6 + i * Math.PI / 3), 50 + 40 * Math.sin(Math.PI / 6 + i * Math.PI / 3)]))}" stroke-width="8" stroke-linejoin="round"/>`,
+  triangle: '<polygon points="50,16 86,80 14,80" stroke-width="14" stroke-linejoin="round"/>',
+  etoile: `<polygon points="${pts(etoileP(50, 53, 44, 5, .5))}" stroke-width="9" stroke-linejoin="round"/>`,
+};
+const mix = (a, b, t) => '#' + [1, 3, 5].map(i => Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t).toString(16).padStart(2, '0')).join('');
+$('#defs').innerHTML = '<defs>' + Object.entries(COUL).map(([n, c]) => `<radialGradient id="g-${n}" cx=".34" cy=".3" r=".85"><stop offset="0" stop-color="${mix(c, '#ffffff', .5)}"/><stop offset=".5" stop-color="${c}"/><stop offset="1" stop-color="${mix(c, '#2B2440', .32)}"/></radialGradient>`).join('') + '</defs>';
+const aimantSVG = ([f, c]) => `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><g fill="rgba(43,36,64,.24)" stroke="rgba(43,36,64,.24)" transform="translate(3 7)">${FA[f]}</g><g fill="url(#g-${c})" stroke="url(#g-${c})">${FA[f]}</g><ellipse cx="37" cy="34" rx="12" ry="6" fill="#fff" opacity=".6" transform="rotate(-28 37 34)"/></svg>`;
+
+/* ---------- Petits dessins des matières (100 x 100) ---------- */
+const ICONES = {
+  des: () => P(poly([[22, 22], [78, 22], [78, 78], [22, 78]], 1), 'c-encre') + [[36, 36], [50, 50], [64, 64]].map(([x, y]) => P(rond(x, y, 4.5, 4.5, .4), 'c-plein')).join(''),
+  cloche: () => P(ligne(6, 86, 94, 86), 'c-encre') + P(courbe(x => 86 - 66 * Math.exp(-(((x - 50) / 15) ** 2)), 10, 90, 24, .4), 'c-rose'),
+  croix: () => P(poly([[12, 8], [12, 88], [94, 88]]), 'c-encre') + P(ligne(22, 24, 86, 76), 'c-rose') + P(ligne(22, 76, 86, 24), 'c-encre'),
+  matrice: () => P(lisse([[32, 12], [20, 15], [18, 50], [20, 85], [32, 88]]), 'c-encre') + P(lisse([[68, 12], [80, 15], [82, 50], [80, 85], [68, 88]]), 'c-encre') + [34, 50, 66].map((x, a) => [32, 50, 68].map((y, b) => P(rond(x, y, 3.2, 3.2, .3), a === b ? 'c-plein' : 'c-jaune')).join('')).join(''),
+  droite: () => P(poly([[10, 6], [10, 90], [94, 90]]), 'c-encre') + [[24, 72], [33, 60], [42, 66], [51, 50], [60, 54], [70, 38], [80, 32]].map(([x, y]) => P(rond(x, y, 3, 3, .3), 'c-plein')).join('') + P(ligne(16, 80, 90, 24), 'c-rose'),
+  onde: () => P(poly([[8, 8], [8, 90], [94, 90]]), 'c-encre') + P(poly([[14, 62], [24, 40], [33, 56], [43, 28], [53, 50], [62, 36], [72, 62], [82, 40], [92, 48]], 0, .6), 'c-rose'),
+  nuage: () => `<g transform="rotate(-32 50 52)">${P(rond(50, 52, 38, 17, 1), 'c-encre')}${[[28, 52], [38, 46], [44, 57], [52, 49], [58, 56], [66, 47], [74, 53]].map(([x, y]) => P(rond(x, y, 2.8, 2.8, .3), 'c-plein')).join('')}${P(ligne(6, 52, 94, 52) + ligne(94, 52, 85, 46) + ligne(94, 52, 85, 58), 'c-rose')}</g>`,
+  code: () => P(lisse([[36, 12], [26, 16], [28, 44], [16, 50], [28, 56], [26, 84], [36, 88]]), 'c-encre') + P(lisse([[64, 12], [74, 16], [72, 44], [84, 50], [72, 56], [74, 84], [64, 88]]), 'c-encre') + P(ligne(42, 50, 58, 50), 'c-rose'),
+  arbre: () => { const n = [[50, 14], [28, 48], [72, 48], [16, 84], [40, 84], [60, 84], [84, 84]]; return P(poly([n[1], n[0], n[2]]), 'c-encre') + P(poly([n[3], n[1], n[4]]), 'c-encre') + P(poly([n[5], n[2], n[6]]), 'c-encre') + n.map(([x, y], i) => P(rond(x, y, 6, 6, .5), i > 2 ? 'c-plein' : 'c-jaune')).join(''); },
+  etincelle: () => P(remp(etoileP(44, 54, 38, 4, .26)), 'c-clair') + P(poly(etoileP(44, 54, 38, 4, .26), 1), 'c-rose') + P(poly(etoileP(82, 18, 12, 4, .3), 1), 'c-encre'),
+  grille: () => [20, 40, 60, 80].map(v => P(ligne(v, 14, v, 86), 'c-encre') + P(ligne(14, v, 86, v), 'c-encre')).join('') + [[20, 20], [40, 40], [60, 20], [40, 60]].map(([x, y]) => P(remp([[x + 3, y + 3], [x + 17, y + 3], [x + 17, y + 17], [x + 3, y + 17]]), 'c-clair')).join(''),
+  jauge: () => P(lisse(Array.from({length: 13}, (_, i) => { const t = Math.PI + i * Math.PI / 12; return [50 + 40 * Math.cos(t), 78 + 40 * Math.sin(t)]; })), 'c-encre') + [0, .25, .5, .75, 1].map(k => { const t = Math.PI * (1 + k); return P(ligne(50 + 31 * Math.cos(t), 78 + 31 * Math.sin(t), 50 + 40 * Math.cos(t), 78 + 40 * Math.sin(t), .3), 'c-encre'); }).join('') + P(ligne(50, 78, 76, 50), 'c-rose') + P(rond(50, 78, 4.5, 4.5, .3), 'c-plein'),
+};
+const FORMES_AN = {
+  triangle: () => P(poly([[16, 58], [80, 58], [16, 6]], 1), 'c-encre') + P(poly([[16, 48], [26, 48], [26, 58]]), 'c-rose') + P(remp(etoileP(88, 12, 7)), 'c-jaune'),
+  cercle: () => P(rond(46, 32, 27, 27), 'c-encre') + P(ligne(46, 32, 71, 20), 'c-rose') + P(rond(46, 32, 2.4, 2.4, .2), 'c-plein') + P(remp(etoileP(88, 12, 7)), 'c-jaune'),
+  etoile: () => P(poly(etoileP(46, 34, 30), 1), 'c-rose') + P(remp(etoileP(88, 12, 7)), 'c-jaune'),
+};
+const feutre = (x, c, rot) => `<g transform="translate(${x} 24) rotate(${rot})"><rect x="-58" y="-9" width="96" height="18" rx="8" fill="#F5F5F7" stroke="#C7CAD2"/><rect x="-30" y="-9" width="12" height="18" fill="${c}" opacity=".85"/><rect x="36" y="-9.5" width="30" height="19" rx="8" fill="${c}"/><path d="M-58 -5L-66 -2L-66 2L-58 5Z" fill="${c}"/></g>`;
+const FEUTRES = feutre(70, '#FF4F9A', -3) + feutre(176, '#2B2440', 2) + '<g transform="translate(276 22) rotate(-4)"><rect x="-34" y="-12" width="68" height="24" rx="5" fill="#5E5770"/><rect x="-34" y="4" width="68" height="8" rx="3" fill="#E9E4EF"/></g>';
+
+/* ---------- Construction du tableau ---------- */
+const nbF = A => A.matieres.reduce((s, M) => s + M.fiches.length, 0);
+const monde = $('#monde');
+function construire() {
+  let h = `<div class="cadre"><div class="surface"></div></div><div class="rebord"></div><svg class="feutres" viewBox="0 0 330 44" aria-hidden="true">${FEUTRES}</svg><svg class="craie" aria-hidden="true"></svg><h1 class="titre">Mes fiches</h1><p class="indice"></p><p class="note"></p>`;
+  h += (ANNEES.length ? LIBRES : []).map((a, i) => `<span class="aimant aimant-libre" id="libre-${i}">${aimantSVG(a)}</span>`).join('');
+  ANNEES.forEach(A => {
+    A.matieres.forEach(M => {
+      sem(A.id + M.id); const corr = M.fiches.filter(f => f.statut === 'corr').length;
+      h += `<div class="feuille matiere" id="ma-${A.id}-${M.id}" role="button" tabindex="-1" aria-hidden="true" aria-label="${esc(M.nom)} : ${pl(M.fiches.length, 'fiche')}"><span class="aimant">${aimantSVG(M.aimant)}</span><div class="ma-nom" style="--fz:${Math.min(12.5, 72 / (Math.max(...M.nom.split(' ').map(w => w.length)) * .72)).toFixed(2)}">${esc(M.nom)}</div><svg class="ma-ico ic" viewBox="0 0 100 100" aria-hidden="true">${ICONES[M.icone]()}</svg><div class="ma-meta"><span>${pl(M.fiches.length, 'fiche')}</span>${corr ? `<span class="pastille">${corr} à corriger</span>` : ''}</div></div>`;
+    });
+    sem(A.id);
+    h += `<div class="feuille annee" id="an-${A.id}" role="button" tabindex="0" aria-label="${esc(A.label)}${A.nom ? ', ' + esc(A.nom) : ''} : ${pl(A.matieres.length, 'matière')}, ${pl(nbF(A), 'fiche')}"><span class="tag" aria-hidden="true">↑ raccrocher</span><div class="an-lbl" style="--lf:${Math.min(34, 34 * 2.6 / Math.max(2.6, A.label.length)).toFixed(1)}">${esc(A.label)}</div><svg class="an-sou ic" viewBox="0 0 100 14" aria-hidden="true">${P(lisse([[4, 9], [30, 6 + j(1)], [62, 8 + j(1)], [96, 5]]), 'c-gros')}</svg><div class="an-nom">${esc(A.nom)}</div><svg class="an-dessin ic" viewBox="0 0 100 64" aria-hidden="true">${FORMES_AN[A.forme]()}</svg><div class="an-meta">${pl(A.matieres.length, 'matière')} <span class="et">★</span> <span class="nw"><span class="mx">Σ</span> = ${pl(nbF(A), 'fiche')}</span></div></div><span class="aimant aimant-an" id="ai-${A.id}">${aimantSVG(A.aimant)}</span>`;
+  });
+  monde.innerHTML = h;
+  ANNEES.forEach(A => { A.el = $('#an-' + A.id); A.ai = $('#ai-' + A.id); A.matieres.forEach(M => { M.el = $(`#ma-${A.id}-${M.id}`); }); });
+}
+
+/* ---------- Mise en page (coordonnées du tableau = écran sans zoom) ---------- */
+let W, H, L;
+const ID = {s: 1, tx: 0, ty: 0};
+const st = {niv: 0, an: null, ma: null, occupe: false, cam: ID, hash: ''};
+const fixe = (el, x, y, w, hh) => { const s = el.style; s.left = f1(x) + 'px'; s.top = f1(y) + 'px'; if (w != null) { s.width = f1(w) + 'px'; s.height = f1(hh) + 'px'; } };
+const vars = (el, o) => { for (const k in o) el.style.setProperty('--' + k, o[k]); };
+const papier = (el, w) => { const g = w / 18; vars(el, {g: f1(g) + 'px', mg: f1(w * .2) + 'px', gl: Math.max(.55, g / 17).toFixed(2) + 'px'}); };
+const placer = (el, p) => vars(el, {x: f1(p.cx - p.w / 2) + 'px', y: f1(p.cy - p.h / 2) + 'px', r: f1(p.r) + 'deg'});
+
+function calculer() {
+  W = innerWidth; H = innerHeight;
+  const m = borne(10, Math.min(W, H) * .028, 30), t = borne(14, H * .03, 24), fr = borne(7, Math.min(W, H) * .013, 13);
+  const cadre = {x: m, y: m, w: W - 2 * m, h: H - 2 * m - t * .6};
+  const S = {x: cadre.x + fr, y: cadre.y + fr, w: cadre.w - 2 * fr, h: cadre.h - 2 * fr};
+  const ft = borne(30, Math.min(S.w * .05, S.h * .085), 66);
+  L = {t, fr, cadre, S, etroit: W < 640, pad: borne(14, S.w * .03, 40), ft, fi: borne(16, ft * .4, 26)};
+}
+
+function etaler(A) {
+  const {sw, sh, cadre: C} = L, k = A.matieres.length, p = A.pos;
+  if (!k) { A.bbox = null; return; }
+  const cols = W / H < .9 ? Math.min(2, k) : (k <= 4 ? k : Math.ceil(k / 2)), rows = Math.ceil(k / cols);
+  const gx = sw * .24, gy = sh * .22, bw = cols * sw + (cols - 1) * gx, hb = rows * sh + (rows - 1) * gy + sw * .12;
+  const {s, top, ah} = echelle(bw, hb, 3.4);
+  const xa = C.x + W / (2 * s), xb = C.x + C.w - W / (2 * s), ya = C.y + (top + ah / 2) / s, yb = C.y + C.h - (H - top - ah / 2) / s;
+  const cx = xa <= xb ? borne(xa, p.cx, xb) : C.x + C.w / 2, cy = ya <= yb ? borne(ya, p.cy + p.h * .05, yb) : C.y + C.h / 2;
+  A.bbox = {x: cx - bw / 2, y: cy - hb / 2, w: bw, h: hb};
+  const y0 = A.bbox.y + sw * .12;
+  A.matieres.forEach((M, i) => {
+    sem('e' + A.id + M.id); const r = Math.floor(i / cols), c = i % cols, nr = r === rows - 1 ? k - cols * (rows - 1) : cols;
+    M.etal = {cx: cx - (nr * sw + (nr - 1) * gx) / 2 + c * (sw + gx) + sw / 2 + j(4), cy: y0 + r * (sh + gy) + sh / 2 + j(4), w: sw, h: sh, r: j(2.6)};
+  });
+}
+
+function appliquer() {
+  const {cadre, S, t, pad, ft, fi, etroit} = L;
+  fixe($('.cadre'), cadre.x, cadre.y, cadre.w, cadre.h);
+  fixe($('.surface'), L.fr, L.fr, S.w, S.h);
+  fixe($('.rebord'), cadre.x + cadre.w * .06, cadre.y + cadre.h - t * .45, cadre.w * .88, t);
+  const fh = Math.min(t * 1.5, cadre.w * .4 * 44 / 330), fw = fh * 330 / 44; fixe($('.feutres'), cadre.x + cadre.w * .94 - fw - t, cadre.y + cadre.h - t * .45 - fh * .62, fw, fh);
+  const ti = $('.titre'); ti.style.fontSize = f1(ft) + 'px'; const tx = S.x + pad, ty = S.y + pad * .75; fixe(ti, tx, ty);
+  const tw = ti.offsetWidth, th = ti.offsetHeight;
+  const ind = $('.indice'); ind.style.fontSize = f1(fi) + 'px'; ind.textContent = ANNEES.length ? `Soit x ∈ {${ANNEES.map(A => A.label).join(', ')}}. Clique sur x.` : 'Soit x ∈ ∅.';
+  const iw = ind.offsetWidth, ih = ind.offsetHeight;
+  let ix = tx + tw + ft * .6, iy = ty + th * .55 - ih * .5;
+  if (ix + iw > S.x + S.w - pad) { ix = tx; iy = ty + th + ft * .25; }
+  fixe(ind, ix, iy);
+  const no = $('.note'); no.style.maxWidth = f1(S.w - 2 * pad) + 'px';
+  no.innerHTML = esc(NOTE.texte) + (NOTE.bouton ? ' <button type="button" class="note-btn">Lire mes dossiers</button>' : '');
+  const nh = no.offsetHeight, ny = S.y + S.h - pad * .5 - nh; fixe(no, S.x + pad, ny);
+  L.rTitre = {x: tx, y: ty, w: tw, h: th}; L.rInd = {x: ix, y: iy, w: iw, h: ih}; L.rNote = {x: S.x + pad, y: ny, w: no.offsetWidth, h: nh};
+  const n = ANNEES.length, cols = etroit ? Math.min(2, n) : Math.min(n, 5), rows = Math.ceil(n / cols);
+  const haut = Math.max(ty + th, iy + ih) + ft * (etroit ? .8 : 1.15), bas = Math.min(S.y + S.h - pad - 22, ny - 10);
+  const aw = S.w - 2 * pad, ah = bas - haut, gk = etroit ? .22 : .36, pk = etroit ? .2 : .5;
+  const yw = Math.max(70, Math.min(aw / (cols + (cols - 1) * gk + pk), ah / (rows * 1.36 * 1.17 + (rows - 1) * .3), 250));
+  const yh = yw * 1.36, gx = yw * gk, gy = yh * .3, totH = rows * yh + (rows - 1) * gy + yh * .14, y0 = haut + Math.max(0, (ah - totH) / 2);
+  Object.assign(L, {yw, yh, sw: yw * .64, sh: yw * .64 * 1.34, vis: borne(56, yh * .86 * .36, 120)});
+  ANNEES.forEach((A, i) => {
+    const r = Math.floor(i / cols), c = i % cols, nr = r === rows - 1 ? n - cols * (rows - 1) : cols;
+    const x = S.x + (S.w - (nr * yw + (nr - 1) * gx)) / 2 + c * (yw + gx); sem(A.id);
+    const p = A.pos = {w: yw, h: yh, r: j(3.2)}; p.cx = x + yw / 2 + j(yw * .04); p.cy = y0 + r * (yh + gy) + yh / 2 + j(yh * .025); p.x = p.cx - yw / 2; p.y = p.cy - yh / 2;
+    fixe(A.el, 0, 0, yw, yh); placer(A.el, p); vars(A.el, {u: (yw / 100).toFixed(3) + 'px'}); papier(A.el, yw); A.el.classList.toggle('petite', yw < 190);
+    const am = yw * .2; fixe(A.ai, 0, 0, am, am); vars(A.ai, {x: f1(p.cx - am / 2 + j(2)) + 'px', y: f1(p.y - am * .56) + 'px'});
+    const k = A.matieres.length, v = Math.min(k, 4);
+    A.matieres.forEach((M, i2) => {
+      sem(A.id + M.id); const q = v > 1 ? (Math.min(i2, v - 1) - (v - 1) / 2) / ((v - 1) / 2) : 0;
+      M.pile = {cx: p.cx + q * yw * .3 + j(3), cy: p.cy + yh * .3 + Math.abs(q) * yh * .02, w: L.sw, h: L.sh, r: q * 12 + j(2)};
+      fixe(M.el, 0, 0, L.sw, L.sh); vars(M.el, {su: (L.sw / 100).toFixed(3) + 'px'}); papier(M.el, L.sw);
+      if (!(st.niv && st.an === A)) placer(M.el, M.pile);
+    });
+    etaler(A);
+  });
+  dessinerCraie();
+}
+
+function dessinerCraie() {
+  const {S, pad} = L, svg = $('.craie');
+  fixe(svg, S.x, S.y, S.w, S.h); svg.setAttribute('viewBox', `0 0 ${f1(S.w)} ${f1(S.h)}`);
+  const loc = r => ({x: r.x - S.x, y: r.y - S.y, w: r.w, h: r.h});
+  const obst = [loc(L.rTitre), loc(L.rInd), loc(L.rNote)];
+  ANNEES.forEach(A => { const p = A.pos; obst.push(loc({x: p.x - p.w * .22, y: p.y - p.w * .16, w: p.w * 1.44, h: p.h * 1.3})); });
+  const libre = (r, mg = 12) => r.x >= 4 && r.y >= 4 && r.x + r.w <= S.w - 4 && r.y + r.h <= S.h - 4 && obst.every(o => r.x + r.w + mg < o.x || o.x + o.w + mg < r.x || r.y + r.h + mg < o.y || o.y + o.h + mg < r.y);
+  sem('craie'); let d = '';
+  for (let i = 0; i < 4; i++) { const x = alea() * S.w * .8, y = alea() * S.h, w = S.w * (.14 + alea() * .18); d += P(lisse(Array.from({length: 6}, (_, k) => [x + k * w / 5, y + Math.sin(k * 1.4 + i) * 10])), 'c-trace'); }
+  const T0 = loc(L.rTitre), ft = L.ft;
+  d += P(lisse([[T0.x, T0.y + T0.h * 1.04], [T0.x + T0.w * .35, T0.y + T0.h], [T0.x + T0.w * .7, T0.y + T0.h * 1.06], [T0.x + T0.w * 1.02, T0.y + T0.h * .99]]), 'c-gros');
+  d += P(remp(etoileP(T0.x + T0.w + ft * .28, T0.y + ft * .08, ft * .16)), 'c-plein') + P(remp(etoileP(T0.x - ft * .05, T0.y - ft * .1, ft * .1)), 'c-jaune');
+  const I = loc(L.rInd), cible = ANNEES.map(A => loc(A.pos)).sort((a, b) => Math.abs(a.x + a.w / 2 - I.x - I.w * .4) - Math.abs(b.x + b.w / 2 - I.x - I.w * .4))[0];
+  if (!cible) { svg.innerHTML = d; return; }
+  const x1 = I.x + I.w * .35, y1 = I.y + I.h + 8, x2 = cible.x + cible.w * .3, y2 = cible.y - cible.w * .22;
+  if (y2 - y1 > 34) {
+    const mx = x1 + (x2 - x1) * .2 - 20, my = y1 + (y2 - y1) * .5, an = Math.atan2(y2 - my, x2 - mx);
+    d += P(lisse([[x1, y1], [mx, my], [x2, y2]]), 'c-rose') + P(ligne(x2, y2, x2 - 12 * Math.cos(an - .5), y2 - 12 * Math.sin(an - .5)) + ligne(x2, y2, x2 - 12 * Math.cos(an + .5), y2 - 12 * Math.sin(an + .5)), 'c-rose');
+    obst.push({x: Math.min(x1, x2, mx) - 10, y: y1, w: Math.abs(x2 - x1) + 50, h: y2 - y1});
+  }
+  const u = borne(64, Math.min(S.w, S.h) * .16, 165), fs = borne(14, u * .15, 22);
+  const tx = (x, y, s, cl = '', an = 'end') => `<text x="${f1(x)}" y="${f1(y)}" font-size="${f1(fs)}" class="${cl}" text-anchor="${an}">${s}</text>`;
+  const G = [
+    {w: u * 1.3, h: u * .82, ou: ['dh', 'gm'], f: (x, y, w, hh) => P(ligne(x, y + hh * .85, x + w, y + hh * .85), 'c-encre') + P(courbe(X => y + hh * .85 - hh * .62 * Math.exp(-(((X - x - w * .4) / (w * .14)) ** 2)), x + w * .04, x + w * .78, 24, .4), 'c-rose') + tx(x + w, y + fs * .9, 'N(μ, σ²)')},
+    {w: u * 1.15, h: u * .9, ou: ['gb', 'gm'], f: (x, y, w, hh) => P(poly([[x + w * .06, y + hh * .88], [x + w * .62, y + hh * .88], [x + w * .06, y + hh * .24]], 1), 'c-encre') + P(poly([[x + w * .06, y + hh * .76], [x + w * .15, y + hh * .76], [x + w * .15, y + hh * .88]]), 'c-rose') + tx(x + w, y + hh * .42, 'a² + b² = c²', 'rose')},
+    {w: u * 1.35, h: u * .78, ou: ['db', 'dm'], f: (x, y, w, hh) => P(ligne(x + w * .04, y + hh * .04, x + w * .04, y + hh * .96), 'c-encre') + P(ligne(x, y + hh * .62, x + w, y + hh * .62), 'c-encre') + P(courbe(X => y + hh * .62 - hh * .3 * Math.sin((X - x - w * .04) / (w * .14)), x + w * .04, x + w * .96, 30, .3), 'c-rose') + tx(x + w, y + fs, 'f(x) = sin x')},
+    {w: u * .95, h: u, ou: ['gm', 'dm'], f: (x, y, w, hh) => P(rond(x + w * .5, y + hh * .42, w * .34), 'c-encre') + P(ligne(x + w * .5, y + hh * .42, x + w * .82, y + hh * .3), 'c-rose') + tx(x + w * .5, y + hh * .98, 'A = πr²', '', 'middle')},
+    {w: u * 1.5, h: fs * 2.4, ou: ['ch', 'cb'], f: (x, y, w, hh) => `<text x="${f1(x)}" y="${f1(y + fs * 1.4)}" font-size="${f1(fs * 1.3)}">e<tspan baseline-shift="super" font-size="70%">iπ</tspan> + 1 = 0</text>` + P(lisse([[x, y + hh * .9], [x + w * .5, y + hh * .8], [x + w * .85, y + hh * .92]]), 'c-rose')},
+    {w: u * .8, h: u * .8, ou: ['dm', 'gh'], f: (x, y, w, hh) => { const a = [[x + w * .1, y + hh * .35], [x + w * .6, y + hh * .35], [x + w * .6, y + hh * .9], [x + w * .1, y + hh * .9]], b = a.map(([X, Y]) => [X + w * .28, Y - hh * .25]); return P(poly(a, 1), 'c-rose') + P(poly(b, 1), 'c-encre') + a.map((q, i) => P(ligne(q[0], q[1], b[i][0], b[i][1]), 'c-encre')).join(''); }},
+  ];
+  const pos = (o, w, hh) => ({x: o[0] === 'g' ? pad * .7 : o[0] === 'd' ? S.w - w - pad * .7 : (S.w - w) / 2, y: o[1] === 'h' ? pad * .6 : o[1] === 'b' ? S.h - hh - pad * .9 - 20 : (S.h - hh) / 2, w, h: hh});
+  G.forEach((g, gi) => { for (const o of g.ou) { const r = pos(o, g.w, g.h); if (libre(r)) { obst.push(r); sem('g' + gi); d += g.f(r.x, r.y, r.w, r.h); break; } } });
+  sem('libres');
+  LIBRES.forEach((a, i) => {
+    const el = $('#libre-' + i); if (!el) return; const am = L.yw * .17; let r = null;
+    for (let k = 0; k < 40 && !r; k++) { const c = {x: pad + alea() * (S.w - 2 * pad - am), y: pad + alea() * (S.h - 2 * pad - am), w: am, h: am}; if (libre(c, 24)) r = c; }
+    el.hidden = !r; if (r) { obst.push(r); fixe(el, S.x + r.x, S.y + r.y, am, am); }
+  });
+  let n = 0;
+  for (let k = 0; k < 70 && n < (L.etroit ? 5 : 11); k++) {
+    const s = borne(5, Math.min(S.w, S.h) * .012, 11) * (.7 + alea() * .8), c = {x: alea() * (S.w - 40) + 20, y: alea() * (S.h - 40) + 20, w: s * 2, h: s * 2};
+    if (libre(c, 8)) { obst.push(c); n++; const e = etoileP(c.x + s, c.y + s, s); d += n % 3 ? P(poly(e, 1, .4), 'c-rose') : P(remp(e), n % 2 ? 'c-plein' : 'c-jaune'); }
+  }
+  svg.innerHTML = d;
+}
+
+/* ---------- Caméra, chute, remontée ---------- */
+const monde2 = monde.style;
+function echelle(w, hh, maxS) { const px = borne(16, W * .04, 56), top = 70, ah = H - top - L.vis - 16; return {s: Math.min((W - 2 * px) / w, ah / hh, maxS), top, ah}; }
+function cadrer(R, maxS) {
+  const {s, top, ah} = echelle(R.w, R.h, maxS), C = L.cadre, lo = W - s * (C.x + C.w), hi = -s * C.x;
+  let tx = W / 2 - s * (R.x + R.w / 2); if (lo <= hi) tx = borne(lo, tx, hi);
+  return {s, tx, ty: top + ah / 2 - s * (R.y + R.h / 2)};
+}
+function camera(c, dur) {
+  st.cam = c; const anim = dur > 0 && !RM;
+  monde2.transition = anim ? `transform ${dur}ms cubic-bezier(.62,.04,.26,1)` : 'none';
+  monde2.transform = `translate(${f1(c.tx)}px,${f1(c.ty)}px) scale(${c.s.toFixed(4)})`;
+  return attendre(anim ? dur : 0);
+}
+const rectM = p => ({x: p.cx - p.w / 2, y: p.cy - p.h / 2 - p.w * .12, w: p.w, h: p.h + p.w * .12});
+const T = (x, y, r, rx = 0, ry = 0, s = 1) => `translate(${f1(x)}px,${f1(y)}px) rotate(${f1(r)}deg) rotateX(${f1(rx)}deg) rotateY(${f1(ry)}deg) scale(${(+s).toFixed(3)})`;
+function repos(A) { const p = A.pos, k = .86, cx = borne(p.w * k * .62 + 10, p.cx, W - p.w * k * .62 - 10); return {x: cx - p.w / 2, y: H - L.vis - p.h * (1 - k) / 2, r: cx < W / 2 ? -7 : 7, s: k}; }
+function cloner(A) {
+  const c = A.el.cloneNode(true);
+  c.classList.remove('annee', 'active'); c.classList.add('chute'); c.removeAttribute('id');
+  c.setAttribute('aria-label', `Raccrocher ${A.label} au tableau`); c.tabIndex = 0;
+  c.style.width = f1(A.pos.w) + 'px'; c.style.height = f1(A.pos.h) + 'px'; c.style.visibility = '';
+  $('#sol').append(c); return A.clone = c;
+}
+function tomber(A, instant) {
+  const c = cloner(A), p = A.pos, R = repos(A), fin = T(R.x, R.y, R.r, 0, 0, R.s);
+  A.el.style.visibility = 'hidden';
+  if (instant || RM) { c.style.transform = fin; c.classList.add('au-sol'); return Promise.resolve(); }
+  c.style.transform = T(p.x, p.y, p.r);
+  const dx = R.x - p.x, dy = R.y - p.y, a = borne(30, p.w * .32, 90), h2 = p.h / 2, sg = R.r < 0 ? 1 : -1;
+  const K = [[0, 0, 0, p.r, 0, 0, 1], [.07, -.14 * h2 * sg, 2, p.r + 8 * sg, 0, 0, 1], [.14, .07 * h2 * sg, p.h * .03, p.r - 4 * sg, 0, 0, 1], [.25, dx * .06 + a * .7 * sg, dy * .12, 15 * sg, 20, 0, 1], [.38, dx * .24 - a * sg, dy * .31, -17 * sg, -12, 26, .985], [.52, dx * .45 + a * .9 * sg, dy * .51, 18 * sg, 24, -12, .965], [.66, dx * .66 - a * .65 * sg, dy * .7, -13 * sg, -16, 18, .94], [.8, dx * .86 + a * .35 * sg, dy * .87, 8 * sg, 10, -6, .91], [.92, dx, dy + 8, R.r * 1.4, 0, 0, R.s], [1, dx, dy, R.r, 0, 0, R.s]];
+  const an = c.animate(K.map(([o, x, y, r, rx, ry, s]) => ({offset: o, transform: T(p.x + x, p.y + y, r, rx, ry, s), easing: 'ease-in-out'})), {duration: 1650, fill: 'forwards'});
+  return an.finished.then(() => { c.style.transform = fin; an.cancel(); c.classList.add('au-sol'); });
+}
+function remonter(A, instant) {
+  const c = A.clone, p = A.pos, R = repos(A);
+  const fin = () => { c && c.remove(); A.clone = null; A.el.style.visibility = ''; };
+  if (!c || instant || RM) { fin(); return Promise.resolve(); }
+  c.classList.remove('au-sol');
+  const K = [[0, R.x, R.y, R.r, R.s], [.45, (R.x + p.x) / 2, p.y + (R.y - p.y) * .4 - 40, R.r * .3 - 5, .95], [.82, p.x + 3, p.y - 10, p.r - 4, 1.01], [1, p.x, p.y, p.r, 1]];
+  const an = c.animate(K.map(([o, x, y, r, s]) => ({offset: o, transform: T(x, y, r, 0, 0, s)})), {duration: 1000, easing: 'cubic-bezier(.3,.6,.3,1)', fill: 'forwards'});
+  return an.finished.then(fin);
+}
+const relancer = (el, cl) => { el.classList.remove(cl); void el.offsetWidth; el.classList.add(cl); el.addEventListener('animationend', () => el.classList.remove(cl), {once: true}); };
+
+/* ---------- Navigation ---------- */
+function majHash() { const v = st.niv === 2 ? `${st.an.id}-${st.ma.id}` : st.niv ? st.an.id : ''; st.hash = v; if (decodeURIComponent(location.hash.slice(1)) !== v) location.hash = v; }
+function lireHash(v) { const A = ANNEES.find(a => v === a.id || v.startsWith(a.id + '-')); return {A, M: A && A.matieres.find(m => v === `${A.id}-${m.id}`)}; }
+function majFil() {
+  const it = [['Mes fiches', 0]]; if (st.an) it.push([st.an.label, 1]); if (st.ma) it.push([st.ma.nom, 2]);
+  $('#fil ol').classList.toggle('trois', it.length === 3);
+  $('#fil ol').innerHTML = it.map(([t, n], i) => `${i ? '<li class="sep" aria-hidden="true">★</li>' : ''}<li><button type="button" data-n="${n}"${i === it.length - 1 ? ' aria-current="page"' : ''}>${esc(t)}</button></li>`).join('');
+}
+async function ouvrirAnnee(A, instant) {
+  if (!A.matieres.length) { if (!instant) toast(`Aucune matière dans ${A.label} : crée un sous-dossier par matière.`); return; }
+  if (st.occupe || st.niv) return; st.occupe = true; st.niv = 1; st.an = A; majHash(); majFil();
+  ANNEES.forEach(B => B.el.tabIndex = -1);
+  A.el.classList.add('active'); A.ai.classList.add('active'); A.matieres.forEach(M => M.el.classList.add('active'));
+  document.body.classList.add('niv1');
+  if (!instant) relancer(A.ai, 'pop');
+  const chute = tomber(A, instant);
+  if (!instant) await attendre(230);
+  A.matieres.forEach((M, i) => { M.el.classList.add('bouge'); vars(M.el, {d: (instant ? 0 : i * 70) + 'ms', da: (instant ? 0 : 860 + i * 90) + 'ms'}); placer(M.el, M.etal); M.el.classList.add('etalee'); M.el.tabIndex = 0; M.el.removeAttribute('aria-hidden'); });
+  A.ai.classList.add('parti');
+  await Promise.all([camera(cadrer(A.bbox, 3.4), instant ? 0 : 1150), chute]);
+  A.matieres.forEach(M => M.el.classList.remove('bouge'));
+  majFil(); if (!instant) A.matieres[0].el.focus({preventScroll: true});
+  st.occupe = false;
+}
+async function fermerAnnee(instant) {
+  if (st.occupe || st.niv !== 1) return; st.occupe = true; const A = st.an;
+  document.body.classList.remove('niv1');
+  A.matieres.forEach((M, i) => { M.el.classList.remove('etalee'); M.el.classList.add('bouge'); M.el.tabIndex = -1; M.el.setAttribute('aria-hidden', 'true'); vars(M.el, {d: (instant ? 0 : i * 40) + 'ms'}); placer(M.el, M.pile); });
+  await Promise.all([camera(ID, instant ? 0 : 1000), remonter(A, instant)]);
+  A.matieres.forEach(M => M.el.classList.remove('bouge', 'active'));
+  A.el.classList.remove('active'); A.ai.classList.remove('active', 'parti'); if (!instant) relancer(A.ai, 'clac');
+  ANNEES.forEach(B => B.el.tabIndex = 0);
+  st.niv = 0; st.an = null; majHash(); majFil(); if (!instant) A.el.focus({preventScroll: true});
+  st.occupe = false;
+  if (attente) { const [l, n] = attente; attente = null; charger(l, n); }
+}
+let jeton = 0;
+function posOuvert(M) {
+  const o = $('#ouvert'), c = st.cam, p = M.etal, s = c.s, am = s * p.w * .22, ai = o.querySelector('.aimant');
+  fixe(o, c.tx + s * (p.cx - p.w / 2), c.ty + s * (p.cy - p.h / 2), s * p.w, s * p.h); papier(o, s * p.w);
+  ai.style.width = ai.style.height = f1(am) + 'px';
+}
+function montrerOuvert(M) {
+  const o = $('#ouvert'), F = M.fiches;
+  jeton++;
+  o.querySelector('.aimant').innerHTML = aimantSVG(M.aimant);
+  o.querySelector('h2').textContent = M.nom;
+  majListe(M);
+  o.querySelector('.ou-note').textContent = !F.length ? "∅ Aucune fiche pour l'instant : les fiches scannées arriveront ici." : F[0].dossier ? 'Clique sur une fiche pour la transcrire et la corriger.' : "Fiches d'exemple : ouvre-en une pour essayer l'OCR sur une photo.";
+  posOuvert(M); o.querySelector('.defile').scrollTop = 0;
+  $('#voile').hidden = false; o.hidden = false; void o.offsetWidth; o.classList.add('vu');
+  o.querySelector('h2').focus({preventScroll: true});
+}
+/* PDF complet de chaque document (fusionné tout seul quand toutes ses pages sont validées) */
+function majDocs(M) {
+  const z = $('#ouvert .ou-docs'); if (!z) return;
+  z.innerHTML = (M.documents || []).filter(d => d.pages > 1 || d.final).map(d => {
+    if (d.final) return `<button type="button" class="ou-final" data-f="${esc(d.final.fichier)}" data-n="${d.final.pages}" data-t="${esc(d.doc)}">PDF complet : ${esc(d.doc)} <span>${pl(d.final.pages, 'page')}${d.final.a_jour ? '' : ' ★ mise à jour en cours'}</span></button>`;
+    if (d.fusion === 'en cours') return `<p class="ou-doc">PDF complet de « ${esc(d.doc)} » en fabrication… (relis tes dossiers dans un moment)</p>`;
+    if (d.fusion) return `<p class="ou-doc err">PDF complet de « ${esc(d.doc)} » : ${esc(d.fusion)}</p>`;
+    return `<p class="ou-doc">« ${esc(d.doc)} » : ${d.valides}/${d.pages} pages validées. Le PDF complet se fera tout seul quand tout sera validé.</p>`;
+  }).join('');
+}
+async function ouvrirLecteur(fichier, n, titre) {
+  const s = $('#lecteur'), z = $('#le-pages'); $('#le-titre').textContent = titre; z.innerHTML = ''; s.hidden = false; $('#le-titre').focus({preventScroll: true});
+  for (let k = 0; k < n; k++) {
+    const d = document.createElement('div'); d.className = 'le-page'; d.textContent = `Page ${k + 1}…`; z.appendChild(d);
+    try {
+      const r = await mcp.callTool(SERVEUR, 'lire_scan', {fichier, page: k, cote: 2000}), im = (r.content || []).find(c => c.type === 'image');
+      if (!im) throw {message: 'image absente'};
+      const u = URL.createObjectURL(b64blob(im.data, im.mimeType)); d.innerHTML = `<img alt="Page ${k + 1} de ${esc(titre)}" src="${u}">`;
+    } catch (e) {
+      d.innerHTML = `Page ${k + 1} non chargée (${esc(e.message || e.code || 'erreur')}). <button type="button" class="btn btn-encre" data-re="${k}">Recharger</button>`;
+    }
+    if (s.hidden) return;
+  }
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.ou-final'); if (b) ouvrirLecteur(b.dataset.f, +b.dataset.n, `PDF complet : ${b.dataset.t}`);
+});
+function majListe(M) {
+  majDocs(M);
+  const o = $('#ouvert'), F = M.fiches, corr = F.filter(f => f.statut === 'corr').length, pages = F.reduce((s, f) => s + f.nb, 0);
+  o.querySelector('.ou-meta').innerHTML = F.length ? `${pl(F.length, 'fiche')} <span class="et">★</span> ${pl(pages, 'page')}${corr ? ` <span class="et">★</span> ${corr} à corriger` : ''}` : '';
+  o.querySelector('.ou-liste').innerHTML = F.map((f, i) => `<li style="--i:${i}"><button type="button" data-i="${i}"><span class="et" aria-hidden="true">★</span><span class="ou-t"><span>${esc(f.titre)}</span><span class="ou-pts" aria-hidden="true"></span></span><span class="ou-p">${f.nb} p.</span><span class="st ${STATUTS[f.statut][1]}">${STATUTS[f.statut][0]}</span></button></li>`).join('');
+}
+function cacherOuvert() { const o = $('#ouvert'), t = ++jeton; o.classList.remove('vu'); $('#voile').hidden = true; setTimeout(() => { if (t === jeton) o.hidden = true; }, RM ? 0 : 230); }
+async function ouvrirMatiere(M, instant) {
+  if (st.occupe || st.niv !== 1) return; st.occupe = true; st.niv = 2; st.ma = M; majHash(); majFil();
+  document.body.classList.add('niv2'); M.el.classList.add('ouverte'); placer(M.el, {...M.etal, r: 0});
+  await camera(cadrer(rectM(M.etal), 9), instant ? 0 : 950);
+  montrerOuvert(M); majFil(); st.occupe = false;
+}
+async function fermerMatiere(instant) {
+  if (st.occupe || st.niv !== 2) return; st.occupe = true; const M = st.ma;
+  cacherOuvert(); if (!instant) await attendre(170);
+  document.body.classList.remove('niv2'); M.el.classList.remove('ouverte'); placer(M.el, M.etal);
+  await camera(cadrer(st.an.bbox, 3.4), instant ? 0 : 850);
+  st.niv = 1; st.ma = null; majHash(); majFil(); if (!instant) M.el.focus({preventScroll: true});
+  st.occupe = false;
+}
+async function remonterTout() { if (st.niv === 2) await fermerMatiere(); await fermerAnnee(); }
+async function allerA(A, M) {
+  if (st.occupe) return;
+  if (st.niv === 2 && st.ma !== M) await fermerMatiere();
+  if (st.niv === 1 && st.an !== A) await fermerAnnee();
+  if (A && !st.niv) await ouvrirAnnee(A);
+  if (M && st.niv === 1 && st.an === A) await ouvrirMatiere(M);
+}
+let tt;
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('vu'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('vu'), 3400); }
+
+/* ---------- Évènements ---------- */
+$('main').addEventListener('click', e => {
+  if (e.target.closest('.note-btn')) { lireDossiers(); return; }
+  if (st.niv === 0) { const an = e.target.closest('.annee'), A = an && ANNEES.find(B => B.el === an); if (A) ouvrirAnnee(A); return; }
+  if (st.niv !== 1) return;
+  const ma = e.target.closest('.matiere.etalee'), M = ma && st.an.matieres.find(N => N.el === ma);
+  if (M) ouvrirMatiere(M); else fermerAnnee();
+});
+const activer = e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.annee,.matiere.etalee,.au-sol')) { e.preventDefault(); e.target.click(); } };
+monde.addEventListener('keydown', activer); $('#sol').addEventListener('keydown', activer);
+$('#sol').addEventListener('click', e => { if (e.target.closest('.au-sol')) remonterTout(); });
+$('#voile').addEventListener('click', () => fermerMatiere());
+$('#fil').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.hasAttribute('aria-current')) return; +b.dataset.n === 0 ? remonterTout() : fermerMatiere(); });
+$('#ouvert').addEventListener('click', e => { const b = e.target.closest('.ou-liste button'); if (b && st.ma) ouvrirAtelier(st.ma.fiches[+b.dataset.i]); });
+document.addEventListener('keydown', e => { if (!$('#atelier').hidden) { if (e.key === 'Escape') { e.preventDefault(); fermerAtelier(); } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); enregistrer('corr'); } return; } if (e.key === 'Escape') { if (st.niv === 2) fermerMatiere(); else if (st.niv === 1) fermerAnnee(); } });
+addEventListener('hashchange', () => { const v = decodeURIComponent(location.hash.slice(1)); if (v === st.hash) return; const {A, M} = lireHash(v); allerA(A || null, M || null); });
+
+function relayout() {
+  document.body.classList.add('fige');
+  calculer(); appliquer();
+  if (st.niv) {
+    const A = st.an; A.matieres.forEach(M => placer(M.el, st.ma === M ? {...M.etal, r: 0} : M.etal));
+    if (A.clone) A.clone.remove(); const c = cloner(A), R = repos(A); c.style.transform = T(R.x, R.y, R.r, 0, 0, R.s); c.classList.add('au-sol');
+  }
+  camera(st.niv === 2 ? cadrer(rectM(st.ma.etal), 9) : st.niv ? cadrer(st.an.bbox, 3.4) : ID, 0);
+  if (st.niv === 2) posOuvert(st.ma);
+  requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove('fige')));
+}
+let rz;
+addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(function essai() { if (st.occupe) rz = setTimeout(essai, 300); else relayout(); }, 140); });
+
+/* ---------- Dossiers locaux : serveur MCP « ocr-fiches » lancé par Claude Desktop ---------- */
+const SERVEUR = 'host:ocr-fiches', OUTIL = 'arborescence', VIDE = "Aucun dossier pour l'instant";
+let NOTE = {texte: VIDE, bouton: false}, attente = null, signature = '', mcp = null;
+const hsh = t => [...t].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+const FORMES_A = ['triangle', 'cercle', 'etoile'], AIM_F = ['rond', 'carre', 'hexagone', 'triangle', 'etoile'], AIM_C = ['rose', 'jaune', 'lilas', 'ciel', 'menthe', 'bonbon'];
+const MOTS = [[/panel/i, 'grille'], [/s[ée]rie|temporel|arma/i, 'onde'], [/[ée]conom[ée]tr|r[ée]gress|mco/i, 'droite'], [/proba/i, 'des'], [/stat|estimat|inf[ée]rence/i, 'cloche'], [/machine|learning|apprentissage|\bml\b/i, 'arbre'], [/\bia\b|g[ée]n[ée]rati|llm|nlp|deep/i, 'etincelle'], [/sas|python|programm|code|sql|\br\b/i, 'code'], [/scor|cr[ée]dit|risque|financ/i, 'jauge'], [/micro|macro|[ée]conomie|march[ée]/i, 'croix'], [/alg[èe]bre|matri|lin[ée]aire/i, 'matrice'], [/donn[ée]es|acp|analyse|factor/i, 'nuage']];
+const icone = n => (MOTS.find(([r]) => r.test(n)) || [0, ['des', 'cloche', 'nuage', 'etincelle'][hsh(n) % 4]])[1];
+const habiller = a => a.annees.map((y, i) => ({id: y.id, label: y.label || y.id, nom: y.nom || '', forme: FORMES_A[i % 3], aimant: [AIM_F[hsh(y.id) % 5], AIM_C[(hsh(y.id) >> 3) % 6]],
+  matieres: (y.matieres || []).map(m => ({id: m.id, nom: m.nom, icone: icone(m.nom), aimant: [AIM_F[hsh(m.nom) % 5], AIM_C[(hsh(m.nom) >> 4) % 6]], fiches: (m.fiches || []).map(f => ({titre: f.titre, nom: f.nom || f.titre, dossier: f.dossier || null, pdf: f.pdf && f.pdf.fichier ? f.pdf : null, pages: Array.isArray(f.pages) ? f.pages : [], nb: Array.isArray(f.pages) ? f.pages.length : (f.pages || 0), statut: STATUTS[f.statut] ? f.statut : 'scan'})), documents: Array.isArray(m.documents) ? m.documents : []}))}));
+function charger(liste, note) {
+  const sig = JSON.stringify(liste), changeNote = note.texte !== NOTE.texte || note.bouton !== NOTE.bouton;
+  if (st.niv || st.occupe) { attente = [liste, note]; return; }
+  NOTE = note;
+  if (sig !== signature) {
+    signature = sig; ANNEES = liste; construire(); relayout(); ouvrirHash();
+  } else if (changeNote) relayout();
+}
+function recevoir(r) {
+  let a = r && (r.payload || r.structuredContent || r.structured_content);
+  if (!a && r && Array.isArray(r.content) && r.content[0] && r.content[0].text) { try { a = JSON.parse(r.content[0].text); } catch (e) {} }
+  if (a && a.result && !a.annees) a = a.result;
+  if (!a || !Array.isArray(a.annees)) return surErreur({code: 'tool_error', message: 'réponse inattendue du serveur local'});
+  if (!a.existe) return charger(EXEMPLES, {texte: `Dossier introuvable : ${a.racine}. Vérifie FICHES_RACINE dans la configuration de Claude Desktop.`, bouton: false});
+  profilServeur = typeof a.profil === 'string' ? a.profil : '';
+  EXTRA = Array.isArray(a.exemples) ? a.exemples : [];
+  if (a.base && typeof a.base === 'object') BASE_C = {exemples: [], lexique: [], journal: [], ...a.base};
+  if (Array.isArray(a.runs)) RUNS_SRV = a.runs;
+  const liste = habiller(a);
+  if (!liste.length) return charger(EXEMPLES, {texte: `Aucun dossier d'année dans ${a.racine} : crée par exemple « M2 - Master 2 ESA ».`, bouton: false});
+  const heure = new Date(r.cache ? r.cache.storedAt : Date.now()).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'});
+  charger(liste, {texte: `Tes dossiers ★ ${a.racine.split(/[\\/]/).filter(Boolean).pop()} ★ lus à ${heure}`, bouton: false});
+}
+function surErreur(e) {
+  const c = e && e.code, reel = ANNEES !== EXEMPLES;
+  if (c === 'cancelled') return charger(ANNEES, {texte: reel ? NOTE.texte : 'Clique sur le bouton pour que le tableau lise tes dossiers.', bouton: !reel});
+  if (c === 'approval_required' || c === 'not_in_manifest' || c === 'consent_required')
+    return charger(EXEMPLES, {texte: 'Le tableau a besoin de ton accord pour lire tes dossiers.', bouton: true});
+  if (c === 'server_unavailable' || c === 'upstream_error' || c === 'rate_limited')
+    return charger(ANNEES, {texte: reel ? 'Tes dossiers ★ serveur local injoignable, nouvel essai dans une minute' : VIDE, bouton: false});
+  if (c === 'tool_error') return charger(ANNEES, {texte: `Le serveur local a renvoyé une erreur : ${e.message}`, bouton: false});
+  if (c === 'server_not_connected') return charger(EXEMPLES, {texte: 'Ouvre ce tableau dans Claude Desktop, avec le serveur local « ocr-fiches », pour voir tes dossiers.', bouton: false});
+  charger(EXEMPLES, {texte: `Lecture impossible (${c || 'erreur'}${e && e.message ? ' : ' + e.message : ''})`, bouton: false});
+}
+let hashApplique = false;
+function ouvrirHash() {
+  if (hashApplique) return; hashApplique = true;
+  const d = lireHash(decodeURIComponent(location.hash.slice(1)));
+  if (d.A) ouvrirAnnee(d.A, true).then(() => d.M && ouvrirMatiere(d.M, true));
+}
+function lireDossiers() { if (mcp) { mcp.callTool(SERVEUR, OUTIL, null).then(recevoir, surErreur); envoyerRuns(); } }
+let premierClic = true;
+addEventListener('click', e => { if (premierClic && mcp && !e.target.closest('.note-btn')) { premierClic = false; lireDossiers(); } }, true);
+(async () => {
+  try { mcp = window.claude && window.claude.use ? await window.claude.use('mcp') : null; } catch (e) { mcp = null; }
+  if (!mcp) { charger(ANNEES, {texte: "Pas d'accès à tes outils locaux : ce tableau n'est pas ouvert dans Claude Desktop, ou l'accès n'a pas été accordé (mcp indisponible).", bouton: false}); return ouvrirHash(); }
+  mcp.watchTool(SERVEUR, OUTIL, null, ev => ev.type === 'data' ? recevoir(ev.result) : surErreur(ev.error), {cache: {staleTime: 15000, gcTime: 604800000}, refetchInterval: 60000});
+})();
+
+
+/* ---------- Suivi des runs : appels à Claude, jetons estimés, coût équivalent API ---------- */
+const TARIFS = {quick: [0.10, 0.50, 'Haiku 5.5'], default: [2, 10, 'Sonnet 5.5'], complex: [4, 20, 'Opus 5.5']};   // $ par million de jetons (entrée, sortie)
+let RUNS_SRV = [];
+const RUNS_CLE = 'ocr-runs-attente';
+const enAttente = () => { try { return JSON.parse(localStorage.getItem(RUNS_CLE) || '[]'); } catch (e) { return RUNS_MEM; } };
+let RUNS_MEM = [];
+function garderAttente(l) { RUNS_MEM = l; try { localStorage.setItem(RUNS_CLE, JSON.stringify(l.slice(-3000))); } catch (e) {} }
+const estTexte = t => Math.ceil(String(t || '').length / 3.2);
+const TOK_IMG = new WeakMap();
+async function estImages(imgs) {
+  let n = 0;
+  for (const b of imgs || []) {
+    if (!TOK_IMG.has(b)) { let v = 1600; try { const bm = await createImageBitmap(b); v = Math.round(Math.min(bm.width * bm.height, 1.2e6) / 750); bm.close && bm.close(); } catch (e) {} TOK_IMG.set(b, v); }
+    n += TOK_IMG.get(b);
+  }
+  return n;
+}
+function noter(o) {
+  const F = AT.F || {};
+  const l = enAttente(); l.push({id: Math.random().toString(36).slice(2, 10) + Date.now().toString(36), run: AT.runId || '', t: Date.now(), fiche: F.nom || '', dossier: F.dossier || '', ...o});
+  garderAttente(l);
+}
+let envoiRuns = null;
+function envoyerRuns() {      // à appeler sur un clic : Claude Desktop refuse les appels d'outils trop loin d'un clic
+  const l = enAttente(); if (!l.length || !mcp || envoiRuns) return envoiRuns;
+  envoiRuns = mcp.callTool(SERVEUR, 'enregistrer_tex', {dossier: '', nom: '_runs', corps: '', runs: l.map(x => JSON.stringify(x)).join('\n')})
+    .then(r => { const p = r.payload || {}; if (p.runs_ok) { const ids = new Set(l.map(x => x.id)); RUNS_SRV = RUNS_SRV.concat(l); garderAttente(enAttente().filter(x => !ids.has(x.id))); } })
+    .catch(() => {}).finally(() => { envoiRuns = null; });
+  return envoiRuns;
+}
+function tousRuns() { const vus = new Set(), out = []; for (const x of RUNS_SRV.concat(enAttente())) { if (x && x.id && !vus.has(x.id)) { vus.add(x.id); out.push(x); } } return out.sort((a, b) => a.t - b.t); }
+const cout = x => { const r = TARIFS[x.tierOk || x.tier] || TARIFS.complex; return ((x.in || 0) * r[0] + (x.out || 0) * r[1]) / 1e6; };
+const nbFr = (n, d = 0) => Number(n).toLocaleString('fr-FR', {minimumFractionDigits: d, maximumFractionDigits: d});
+const kTok = n => n >= 1e6 ? nbFr(n / 1e6, 2) + ' M' : n >= 1e4 ? nbFr(n / 1e3, 0) + ' k' : nbFr(n);
+const dollars = v => v < 0.01 && v > 0 ? '< 0,01 $' : nbFr(v, 2) + ' $';
+const etapeDe = e => /moiti/i.test(e) ? 'Lecture en moitiés (pages denses)' : /^Suite/.test(e) ? 'Suite d’une réponse coupée' : /^Relecture/.test(e) ? 'Relecture' : /^Correction/.test(e) ? 'Correction LaTeX' : 'Lecture de la page';
+function bilan(appels) {
+  const b = {n: appels.length, in: 0, out: 0, c: 0, ko: 0};
+  appels.forEach(x => { b.in += x.in || 0; b.out += x.out || 0; b.c += cout(x); if (!x.ok) b.ko++; });
+  return b;
+}
+function tuile(titre, b, extra) {
+  return `<div class="su-tuile"><h3>${titre}</h3><div class="su-gros">${kTok(b.in + b.out)} <small>jetons</small></div><p>${nbFr(b.n)} appel${b.n > 1 ? 's' : ''} à Claude${b.ko ? ` (${b.ko} raté${b.ko > 1 ? 's' : ''})` : ''}</p><p>entrée ${kTok(b.in)} ★ sortie ${kTok(b.out)}</p><p><strong>${dollars(b.c)}</strong> en équivalent API${extra || ''}</p></div>`;
+}
+function dessinerSuivi() {
+  const tout = tousRuns(), appels = tout.filter(x => x.type !== 'run'), maintenant = Date.now();
+  const z = $('#su-corps');
+  if (!appels.length) { z.innerHTML = '<p class="su-vide">Aucun run enregistré pour l’instant : lance « Transcrire » sur une fiche, chaque appel à Claude sera compté ici.</p>'; return; }
+  const h5 = appels.filter(x => maintenant - x.t < 5 * 3600e3), j7 = appels.filter(x => maintenant - x.t < 7 * 864e5);
+  const debut5 = h5.length ? new Date(h5[0].t) : null;
+  let h = `<div class="su-tuiles">${tuile('5 dernières heures', bilan(h5), debut5 ? `<br>1er appel à ${debut5.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}` : '')}${tuile('7 derniers jours', bilan(j7))}${tuile('Depuis le début', bilan(appels))}</div>`;
+  h += `<p class="su-note">Ton abonnement Pro ne donne pas de compteur de jetons : ses limites se comptent sur une session de 5 h et sur la semaine, et tout ce que tu fais dans Claude (chat, Desktop, Code) puise dans la même réserve. Le pourcentage réel est dans Claude ▸ Réglages ▸ Utilisation. Ce tableau montre la part prise par l’OCR seul.</p>`;
+  const parEtape = {}; appels.forEach(x => { const e = etapeDe(x.etape || ''); (parEtape[e] = parEtape[e] || []).push(x); });
+  const lignes = Object.entries(parEtape).map(([e, l]) => [e, bilan(l)]).sort((a, b) => b[1].c - a[1].c), max = Math.max(...lignes.map(l => l[1].c), 1e-9);
+  h += `<h3 class="su-h">Où partent les jetons</h3><div class="su-barres">${lignes.map(([e, b]) => `<span>${e}</span><div class="su-barre" style="width:${(100 * b.c / max).toFixed(1)}%"></div><span class="n">${nbFr(b.n)} appels ★ ${kTok(b.in + b.out)} ★ ${dollars(b.c)}</span>`).join('')}</div>`;
+  const runs = new Map(); tout.forEach(x => { const k = x.run || x.id; if (!runs.has(k)) runs.set(k, {appels: [], fin: null}); x.type === 'run' ? runs.get(k).fin = x : runs.get(k).appels.push(x); });
+  const liste = [...runs.values()].filter(r => r.appels.length).sort((a, b) => b.appels[0].t - a.appels[0].t).slice(0, 30);
+  h += `<h3 class="su-h">Derniers runs</h3><table class="su-table"><thead><tr><th>Quand</th><th>Fiche</th><th class="num opt">Pages</th><th class="num">Appels</th><th class="num">Jetons</th><th class="num">Équiv. API</th><th class="num opt">Durée</th><th>Résultat</th></tr></thead><tbody>${liste.map(r => {
+    const b = bilan(r.appels), f = r.fin, d0 = new Date(r.appels[0].t), dur = f && f.ms ? f.ms : r.appels[r.appels.length - 1].t - r.appels[0].t + (r.appels[r.appels.length - 1].ms || 0);
+    const res = !f ? '<span class="su-av">interrompu</span>' : f.echecs && f.echecs.length ? `<span class="su-ko">page${f.echecs.length > 1 ? 's' : ''} ${f.echecs.join(', ')} non lue${f.echecs.length > 1 ? 's' : ''}</span>` : f.aVerifier && f.aVerifier.length ? `<span class="su-av">lignes à vérifier p. ${f.aVerifier.join(', ')}</span>` : '<span class="su-ok">complet</span>';
+    return `<tr><td>${d0.toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit'})} ${d0.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}</td><td>${esc(r.appels[0].fiche || '?')}</td><td class="num opt">${f ? f.pages : '?'}</td><td class="num">${b.n}</td><td class="num">${kTok(b.in + b.out)}</td><td class="num">${dollars(b.c)}</td><td class="num opt">${Math.max(1, Math.round(dur / 60000))} min</td><td>${res}</td></tr>`;
+  }).join('')}</tbody></table>`;
+  const attente = enAttente().length;
+  h += `<p class="su-pied">Estimations : environ 3,2 caractères par jeton, une image ≈ largeur × hauteur / 750 jetons (plafonnée à 1 600). La réflexion interne du mode « précis » n’est pas comptée : le coût réel est plus élevé. Équivalent API au tarif public : mode précis = ${TARIFS.complex[2]} (${TARIFS.complex[0]} $ / ${TARIFS.complex[1]} $ par million de jetons en entrée / sortie), rapide = ${TARIFS.default[2]} (${TARIFS.default[0]} $ / ${TARIFS.default[1]} $). Journal complet sur ton PC : Fiches/_runs_ocr.jsonl${attente ? ` ★ ${attente} appel${attente > 1 ? 's' : ''} pas encore écrit${attente > 1 ? 's' : ''} sur le disque (ce sera fait au prochain clic)` : ''}.</p>`;
+  z.innerHTML = h;
+}
+function ouvrirSuivi() { envoyerRuns(); dessinerSuivi(); const s = $('#suivi'); s.hidden = false; $('#su-titre').focus({preventScroll: true}); if (envoiRuns) envoiRuns.then(dessinerSuivi); }
+function fermerSuivi() { $('#suivi').hidden = true; $('#suivi-btn').focus({preventScroll: true}); }
+$('#suivi-btn').addEventListener('click', ouvrirSuivi);
+$('#su-fermer').addEventListener('click', fermerSuivi);
+$('#suivi').addEventListener('click', e => { if (e.target.id === 'suivi') fermerSuivi(); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#suivi').hidden) { e.stopPropagation(); fermerSuivi(); } }, true);
+
+/* ---------- Qualité de l'OCR : taux d'erreur relevé à chaque validation ---------- */
+function dessinerQualite() {
+  const J = (BASE_C.journal || []).filter(j => isFinite(j.cer)), z = $('#qu-corps');
+  const pc = v => nbFr(v * 100, 1) + ' %';
+  if (!J.length) { z.innerHTML = '<p class="su-vide">Aucune page validée mesurée pour l’instant. Le taux d’erreur se mesure quand tu valides une page transcrite : c’est la part des caractères que tu as dû corriger.</p>'; return; }
+  const moy = l => l.reduce((s, j) => s + j.cer, 0) / l.length, debut = J.slice(0, 5), fin = J.slice(-5);
+  let h = `<div class="su-tuiles"><div class="su-tuile"><h3>Taux d’erreur moyen</h3><div class="su-gros">${pc(moy(J))}</div><p>sur ${pl(J.length, 'page validée')}</p></div>`;
+  h += `<div class="su-tuile"><h3>5 dernières pages</h3><div class="su-gros">${pc(moy(fin))}</div><p>${J.length > 5 ? `5 premières : ${pc(moy(debut))}` : 'tendance visible à partir de 6 pages'}</p></div>`;
+  h += `<div class="su-tuile"><h3>Base de connaissance</h3><div class="su-gros">${(BASE_C.lexique || []).length} <small>erreurs apprises</small></div><p>${(BASE_C.exemples || []).filter(e => !e.ecarte).length} pages servent d’exemples${(BASE_C.exemples || []).some(e => e.ecarte) ? ` ★ ${(BASE_C.exemples || []).filter(e => e.ecarte).length} écartée(s) car elles faisaient monter les erreurs` : ''}</p></div></div>`;
+  const W = 640, H = 150, mx = Math.max(.05, ...J.map(j => j.cer)), pts = J.map((j, i) => [20 + (J.length === 1 ? 300 : i * (W - 40) / (J.length - 1)), H - 18 - j.cer / mx * (H - 36)]);
+  h += `<h3 class="su-h">Évolution, validation après validation</h3><svg class="qu-courbe" viewBox="0 0 ${W} ${H}" role="img" aria-label="Taux d'erreur de chaque page validée, dans l'ordre"><line x1="20" y1="${H - 18}" x2="${W - 20}" y2="${H - 18}" stroke="currentColor" opacity=".25"/><polyline points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="#FF4F9A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${pts.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="#FF4F9A"><title>${esc(J[i].nom)} : ${pc(J[i].cer)}</title></circle>`).join('')}<text x="22" y="14" font-size="12" fill="currentColor" opacity=".7">${pc(mx)}</text><text x="22" y="${H - 4}" font-size="12" fill="currentColor" opacity=".7">0 %</text></svg>`;
+  const parM = {}; J.forEach(j => { const m = j.dossier.split('/').pop(); (parM[m] = parM[m] || []).push(j); });
+  h += `<h3 class="su-h">Par matière</h3><div class="su-barres">${Object.entries(parM).map(([m, l]) => `<span>${esc(m)}</span><div class="su-barre" style="width:${(100 * moy(l) / mx).toFixed(1)}%"></div><span class="n">${pc(moy(l))} ★ ${pl(l.length, 'page')}</span>`).join('')}</div>`;
+  const L = (BASE_C.lexique || []).slice(0, 15);
+  if (L.length) h += `<h3 class="su-h">Erreurs les plus fréquentes (rappelées à l’OCR)</h3><table class="su-table"><thead><tr><th>L’OCR avait lu</th><th>Version validée</th><th class="num">Fois</th></tr></thead><tbody>${L.map(e => `<tr><td><code>${esc(e.lu)}</code></td><td><code>${esc(e.juste)}</code></td><td class="num">${e.n}</td></tr>`).join('')}</tbody></table>`;
+  h += `<h3 class="su-h">Dernières validations</h3><table class="su-table"><thead><tr><th>Quand</th><th>Page</th><th class="num">Exemples</th><th class="num">Erreur</th></tr></thead><tbody>${J.slice(-15).reverse().map(j => `<tr><td>${esc(j.date)}</td><td>${esc(j.nom)}</td><td class="num">${j.nb_exemples}</td><td class="num">${pc(j.cer)}</td></tr>`).join('')}</tbody></table>`;
+  h += `<p class="su-pied">Taux d’erreur = caractères corrigés entre la sortie de l’OCR et la page validée, divisés par la longueur de la page validée. Une page validée sans rien changer compte 0 %. Une page d’exemple qui, après 3 utilisations, fait nettement plus d’erreurs que la moyenne est écartée toute seule.</p>`;
+  z.innerHTML = h;
+}
+function ouvrirQualite() { dessinerQualite(); $('#qualite').hidden = false; $('#qu-titre').focus({preventScroll: true}); }
+$('#qualite-btn').addEventListener('click', ouvrirQualite);
+$('#qu-fermer').addEventListener('click', () => { $('#qualite').hidden = true; $('#qualite-btn').focus({preventScroll: true}); });
+$('#le-fermer').addEventListener('click', () => { $('#lecteur').hidden = true; });
+['qualite', 'lecteur'].forEach(id => $('#' + id).addEventListener('click', e => { if (e.target.id === id) $('#' + id).hidden = true; }));
+addEventListener('keydown', e => { if (e.key !== 'Escape') return; for (const id of ['lecteur', 'qualite']) if (!$('#' + id).hidden) { e.stopPropagation(); $('#' + id).hidden = true; } }, true);
+
+/* ---------- Atelier : scan, OCR par Claude, correction ---------- */
+const PROFIL_DEFAUT = String.raw`# MES NOTATIONS - profil d'écriture de Jarod
+# Envoyé à l'OCR avec chaque scan. Mis à jour avec les pages de calibrage (20/11/2026).
+# Format : ce que j'écris à la main  ->  comment le transcrire
+
+# Abréviations (on garde ce qui est écrit)
+mot terminé par ° (quantificat°, fonct°, solut°)  ->  on garde le ° : quantificat°   (° = « ion »)
+
+# Le signe ° en maths
+° en haut d'un symbole mathématique (β°_j)  ->  exposant 0 : \beta_j^0
+° après un nombre (90°)                      ->  degré
+
+# Chiffres et lettres
+mon 2, surtout en exposant, ressemble à un λ (s², σ², R², -2 ln L)  ->  c'est un 2 ; un vrai λ est rare
+mon λ ressemble à un N ou un Λ                                      ->  \lambda
+le chapeau est un grand Λ posé au-dessus de la lettre               ->  \hat{\beta}
+mon y ressemble à un g (y = Xβ + ε)                                  ->  y
+mon t en indice ressemble à un T (y_t, ε_t, θ_{t+1})                ->  t
+mon α peut ressembler à un a, mon η à un m, mon Q à un α, mon B à un β
+
+# Symboles
+Σ (somme) ressemble à un ξ ou à une accolade, avec ses bornes   ->  \sum
+∫ est un trait presque droit, ∬ deux traits                      ->  \int, \iint
+V à double barre (variance) ressemble à ∇                         ->  \mathbb{V} ; ∇ seulement pour le gradient (∇_θ)
+N calligraphique (loi normale) ressemble à un W                   ->  \mathcal{N}
+L calligraphique (vraisemblance) peut ressembler à un d bouclé    ->  \mathcal{L}
+> et ≥ ressemblent à 7 et 7/                                       ->  >, \geq
+∩ et ∪ ressemblent à n et u (A n B)                               ->  \cap, \cup
+∈ peut ressembler à ε                                              ->  \in ; l'epsilon reste \varepsilon
+→ est un trait qui finit par un petit v ; => et <=>               ->  \to, \Rightarrow, \Leftrightarrow`;
+const CONSIGNES = String.raw`Tu transcris en LaTeX une page manuscrite de fiche de révision (étudiant en économétrie et statistique appliquée).
+Réponds uniquement avec le LaTeX de la page : pas de préambule, pas de \begin{document}, pas de bloc de code, aucun commentaire.
+Règles :
+1. Fidèle : recopie exactement ce qui est écrit, fautes et abréviations comprises. Ne reformule pas, ne complète pas, ne corrige pas les maths.
+2. Respecte l'ordre de lecture de la page.
+3. Maths : $...$ en ligne, \[...\] centré, align* sur plusieurs lignes ; LaTeX standard (amsmath, amssymb).
+4. Titre de la fiche et titres des parties : \titre{...} (jamais \section), en recopiant la numérotation écrite.
+5. Listes : itemize ou enumerate, quel que soit le tiret dessiné.
+6. Étiquette écrite à la main : Déf -> definition, Thm -> theoreme, Prop -> propriete, Méthode -> methode, Ex -> exemple, Rq -> remarque, Attention ou ! -> attention, Démo -> demo ; titre éventuel entre crochets : \begin{definition}[Estimateur MCO]. Bloc juste encadré -> encadre.
+7. Marques : \souligne{...} souligné, \surligne{...} surligné, \entoure{...} mot ou formule entouré, \couleur{rouge|bleu|vert|rose|violet|orange|noir}{...} pour un texte d'une autre couleur que l'encre principale.
+8. Schéma, graphe, dessin ou smiley -> \dessin[x1,y1,x2,y2]{description courte}, où (x1,y1) est le coin haut-gauche et (x2,y2) le coin bas-droit de la zone du dessin, en pourcentage de la largeur et de la hauteur de l'image (entiers de 0 à 100). La zone englobe tout le dessin et ses annotations, mais pas le texte autour. Jamais de \dessin à l'intérieur d'un \titre ou d'un \couleur : mets-le sur sa propre ligne. Si du texte est écrit À CÔTÉ du dessin (à sa gauche ou à sa droite), garde cette mise en page : \begin{acote}[x1,y1,x2,y2]{description courte} le texte qui est à côté du dessin \end{acote} ; le texte au-dessus ou en dessous reste en dehors. Tableau -> tabular.
+9. Mot raturé : ne l'écris pas. Mot illisible : \illisible{supposition} ou \illisible{}.
+10. Note ajoutée dans la marge ou sur le côté -> \marge{...}.
+11. LaTeX qui compile : chaque { a sa }, chaque $ est refermé sur la même ligne, chaque \begin{x} a son \end{x}, pas de ligne vide à l'intérieur d'une accolade. Seulement des commandes standard (amsmath, amssymb) et les macros ci-dessus ; _ et ^ uniquement en maths.
+12. Transcris toute la page, du haut jusqu'en bas, sans jamais écrire « … » à la place d'un passage.
+13. Retours à la ligne : respecte ceux du scan. Une formule écrite sur plusieurs lignes, ou de plus de 60 caractères environ, va dans \begin{multline*} ... \\ ... \end{multline*} (ou aligned), coupée aux mêmes endroits que sur la feuille, avant un =, un + ou un −. Jamais une longue formule dans $...$ : mets-la en display.
+
+Profil d'écriture de l'auteur (ses abréviations et les signes qu'il trace de façon ambiguë) :`;
+let profilServeur = '', SAMPLE = null, SAMPLE_IMG = false, EXTRA = [], BASE_C = {exemples: [], lexique: [], journal: []};
+const NB_EXEMPLES = 2;
+const CACHE_EX = new Map();
+const AT = {A: null, M: null, F: null, pages: [], cur: 0, sale: false, enCours: false, ctrl: null, serveur: false, vue: 'code'};
+const at = q => $('#atelier ' + q), ed = () => $('#at-tex');
+const b64blob = (d, t) => { const b = atob(d), u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return new Blob([u], {type: t || 'image/jpeg'}); };
+async function normaliser(f) {
+  let bmp; try { bmp = await createImageBitmap(f, {imageOrientation: 'from-image'}); } catch (e) { bmp = await createImageBitmap(f); }
+  const k = Math.min(1, 1568 / Math.max(bmp.width, bmp.height)), c = document.createElement('canvas');
+  c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k); c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  return new Promise(r => c.toBlob(r, 'image/jpeg', .88));
+}
+function etat(t, err) { const e = at('.at-etat'); e.textContent = t; e.classList.toggle('err', !!err); }
+function confirme(b, texte) {
+  if (b.dataset.arme) { delete b.dataset.arme; return true; }
+  b.dataset.arme = '1'; b.dataset.txt = b.textContent; b.textContent = texte;
+  setTimeout(() => { if (b.dataset.arme) { delete b.dataset.arme; b.textContent = b.dataset.txt; } }, 4000); return false;
+}
+function majBoutons() {
+  const pret = AT.pages.some(p => p.blob), vide = !ed().value.trim(), ocr = $('#at-ocr');
+  if (!ocr.dataset.arme) ocr.textContent = AT.enCours ? 'Arrêter' : 'Transcrire';
+  ocr.classList.toggle('btn-rose', !AT.enCours); ocr.classList.toggle('btn-encre', AT.enCours);
+  ocr.disabled = !AT.enCours && !(SAMPLE && SAMPLE_IMG && pret);
+  $('#at-save').hidden = $('#at-ok').hidden = !AT.serveur;
+  $('#at-save').disabled = $('#at-ok').disabled = AT.enCours || vide;
+  $('#at-copier').disabled = vide;
+  majPdfUI();
+}
+function majOnglets() {
+  at('.at-onglets').innerHTML = AT.pages.length > 1 ? AT.pages.map((p, i) => `<button type="button" data-p="${i}" aria-pressed="${i === AT.cur}" class="${p.etat === 'erreur' ? 'err' : ''}" title="${esc(p.nom)}">p. ${i + 1}</button>`).join('') : '';
+}
+function majImage() {
+  const z = at('.at-image'), p = AT.pages[AT.cur];
+  if (p && p.url) { z.innerHTML = `<img src="${p.url}" alt="Scan : ${esc(p.nom)}">`; return; }
+  if (p) { z.innerHTML = p.etat === 'erreur' ? `<div class="at-vide"><p>${(p.erreur || '').includes('clic') ? 'Claude Desktop attend un clic pour lire ce scan.' : 'Scan illisible par le serveur local : ' + esc(p.erreur || '')}</p><button type="button" class="btn btn-rose" data-rel="1">Recharger le scan</button></div>` : '<p class="at-vide">Chargement du scan…</p>'; return; }
+  z.innerHTML = `<div class="at-vide"><p>${!(AT.F && AT.F.dossier) ? "Fiche d'exemple : importe la photo d'une page pour essayer l'OCR." : mcp ? "Le tableau n'a pas encore accès à tes scans : importe la photo de la page." : 'Ouvre le tableau dans Claude Desktop pour afficher ce scan, ou importe sa photo.'}</p><label class="at-import btn btn-rose"><input type="file" accept="image/*" multiple id="at-fichier"><span>Choisir des photos</span></label></div>`;
+}
+async function chargerPages(F) {
+  for (let i = 0; i < AT.pages.length; i++) {
+    if (AT.F !== F) return;
+    await chargerPage(i);
+    if (AT.pages[i] && AT.pages[i].etat === 'erreur' && AT.F === F) await chargerPage(i);   // un seul nouvel essai
+  }
+}
+async function chargerPage(i) {
+  const p = AT.pages[i], F = AT.F;
+  try {
+    const r = await mcp.callTool(SERVEUR, 'lire_scan', {fichier: p.fichier, page: p.page});
+    const b = (r.content || []).find(c => c.type === 'image');
+    if (!b) throw {code: 'tool_error', message: 'pas d’image dans la réponse'};
+    if (AT.F !== F) return;
+    p.blob = b64blob(b.data, b.mimeType); p.url = URL.createObjectURL(p.blob); p.etat = 'ok';
+  } catch (e) {
+    if (AT.F !== F) return;
+    if ((e.code === 'not_in_manifest' || e.code === 'bad_request') && AT.serveur) { AT.serveur = false; AT.pages = []; AT.cur = 0; majOnglets(); majImage(); majBoutons(); etat("Le tableau n'a pas encore accès à tes scans : importe la photo de la page pour l'essayer."); return; }
+    p.etat = 'erreur'; p.erreur = e.code === 'cancelled' ? 'clic nécessaire' : e.code === 'server_not_connected' ? 'serveur local non lancé.' : (e.message || e.code || ''); }
+  if (i === AT.cur) majImage(); majOnglets(); majBoutons();
+}
+function ouvrirAtelier(F) {
+  if (!F) return;
+  AT.pages.forEach(p => p.url && URL.revokeObjectURL(p.url));
+  Object.assign(AT, {A: st.an, M: st.ma, F, verif: undefined, ok: new Map(), reprise: false, cur: 0, sale: false, enCours: false, serveur: !!(mcp && F.dossier)});
+  AT.pages = AT.serveur ? F.pages.map(p => ({nom: p.fichier.split('/').pop() + (p.page ? ` (p. ${p.page + 1})` : ''), fichier: p.fichier, page: p.page, blob: null, url: null, etat: 'attente'})) : [];
+  at('h2').textContent = F.titre; at('.at-info').textContent = `${AT.M.nom} ★ ${AT.A.label} ★ ${STATUTS[F.statut][0]}`;
+  ed().value = ''; ed().readOnly = false; AT.pdfCle = null; AT.pdfV = 0; $('#at-propose').hidden = true; at('.at-pdf').innerHTML = '';
+  vue(F.pdf && AT.serveur ? 'pdf' : 'code');
+  majOnglets(); majImage(); majBoutons();
+  etat(!SAMPLE ? "L'OCR passe par Claude : ouvre ce tableau sur claude.ai ou dans Claude Desktop." : !SAMPLE_IMG ? "Ici, Claude ne peut pas recevoir d'image : l'OCR est indisponible." : F.dossier && !AT.serveur ? 'Serveur local non joignable : ouvre le tableau dans Claude Desktop.' : AT.serveur ? (F.statut === 'scan' ? 'Clique sur « Transcrire » : Claude lit chaque page puis tu corriges à côté du scan.' : 'Chargement de la transcription enregistrée…') : '');
+  const s = $('#atelier'); s.hidden = false; requestAnimationFrame(() => s.classList.add('vu')); at('h2').focus({preventScroll: true});
+  if (!AT.serveur) return;
+  AT.chargement = chargerPages(F);
+  if (F.statut === 'scan' && F.dossier) setTimeout(() => reprendreBrouillon(F), 50);
+  if (F.statut !== 'scan') mcp.callTool(SERVEUR, 'lire_tex', {dossier: F.dossier, nom: F.nom}).then(r => {
+    const t = r.payload || {}; if (AT.F !== F || ed().value.trim()) return;
+    if (reprendreBrouillon(F)) return;
+    if (t.existe) { ed().value = t.corps || ''; majBoutons(); if (AT.vue === 'apercu') apercu(); etat('Transcription enregistrée chargée : corrige-la à côté du scan.'); }
+    else etat('Clique sur « Transcrire » : Claude lit chaque page puis tu corriges à côté du scan.');
+  }, e => AT.F === F && e.code !== 'not_in_manifest' && e.code !== 'bad_request' && etat(`Impossible de lire la transcription : ${e.message || e.code}`, true));
+}
+function fermerAtelier() {
+  const b = $('#at-retour');
+  if ((AT.sale || AT.enCours) && AT.serveur && !confirme(b, AT.enCours ? 'Arrêter et fermer ?' : 'Fermer sans enregistrer ?')) return;
+  if (AT.ctrl) AT.ctrl.abort();
+  b.textContent = '← Retour aux fiches';
+  const s = $('#atelier'); s.classList.remove('vu');
+  setTimeout(() => { s.hidden = true; AT.pages.forEach(p => p.url && URL.revokeObjectURL(p.url)); AT.pages = []; (AT.pdfUrls || []).forEach(u => URL.revokeObjectURL(u)); AT.pdfUrls = []; AT.pdfCle = null; }, RM ? 0 : 250);
+  const i = AT.M ? AT.M.fiches.indexOf(AT.F) : -1, el = i >= 0 && $(`#ouvert .ou-liste button[data-i="${i}"]`); if (el) el.focus({preventScroll: true});
+  AT.F = null;
+}
+function vue(v) {
+  if (v === 'pdf' && !(AT.F && AT.F.pdf && AT.serveur)) v = 'code';
+  AT.vue = v; ['pdf', 'code', 'apercu'].forEach(k => $('#at-v-' + k).setAttribute('aria-pressed', v === k));
+  ed().hidden = v !== 'code'; at('.at-apercu').hidden = v !== 'apercu'; at('.at-pdf').hidden = v !== 'pdf';
+  at('.at-corps').classList.toggle('pdf-seul', v === 'pdf');
+  if (v === 'apercu') apercu(); if (v === 'pdf') afficherPdf();
+}
+/* PDF fabriqué par le serveur local (XeLaTeX) : lecture dans l'atelier */
+let pdfSeq = 0;
+async function afficherPdf() {
+  const F = AT.F, z = at('.at-pdf'), pdf = F && F.pdf; if (!pdf || !mcp) return;
+  const cle = pdf.fichier + '|' + (pdf.a_jour ? 1 : 0) + '|' + (AT.pdfV || 0);
+  if (AT.pdfCle === cle) return;
+  AT.pdfCle = cle; const n = ++pdfSeq;
+  (AT.pdfUrls || []).forEach(u => URL.revokeObjectURL(u)); AT.pdfUrls = [];
+  z.innerHTML = `<div class="at-pdfbar"><span>${pdf.a_jour ? 'PDF fabriqué à partir de ta transcription.' : 'Ce PDF date d’avant ta dernière modification.'}</span><button type="button" class="at-mini" data-a="modifier">✎ Modifier</button>${pdf.a_jour ? '' : '<button type="button" class="at-mini rose" data-a="refaire">Refaire le PDF</button>'}</div><div class="at-pdf-pages"></div>`;
+  const box = z.querySelector('.at-pdf-pages');
+  for (let i = 0; i < pdf.pages; i++) {
+    const fig = document.createElement('div'); fig.className = 'at-pdf-page'; fig.textContent = `Page ${i + 1} en cours de chargement…`; box.append(fig);
+    try {
+      const r = await mcp.callTool(SERVEUR, 'lire_scan', {fichier: pdf.fichier, page: i, cote: 2000});
+      if (n !== pdfSeq) return;
+      const b = (r.content || []).find(c => c.type === 'image'); if (!b) throw new Error('pas d’image');
+      const url = URL.createObjectURL(b64blob(b.data, b.mimeType)); AT.pdfUrls.push(url);
+      const img = new Image(); img.alt = `Page ${i + 1} du PDF`; img.src = url; fig.replaceChildren(img);
+    } catch (e) {
+      if (n !== pdfSeq) return;
+      if (e && e.code === 'cancelled') { AT.pdfCle = null; fig.innerHTML = '<span>Claude Desktop attend un clic pour lire le PDF.</span> <button type="button" class="at-mini rose" data-a="recharger">Afficher le PDF</button>'; return; }
+      fig.textContent = `Page ${i + 1} illisible : ${e.message || e.code || 'erreur'}`;
+    }
+  }
+}
+function majPdfUI() {
+  const F = AT.F; if (!F) return;
+  $('#at-v-pdf').hidden = !(F.pdf && AT.serveur);
+  const b = $('#at-pdf-btn'); b.hidden = !AT.serveur; b.textContent = F.pdf ? 'Refaire le PDF' : 'Faire le PDF';
+  b.disabled = AT.enCours || (F.statut === 'scan' && !ed().value.trim());
+}
+const messageCourt = m => String(m || '').split('\n').filter(Boolean).slice(0, 3).join(' ').slice(0, 260);
+async function faireLePdf() {
+  if (!AT.serveur || AT.enCours || !AT.F || !mcp) return;
+  const F = AT.F, corps = ed().value.replace(/^[ \t]*…[ \t]*$/gm, '').trim(), modifie = AT.sale || F.statut === 'scan';
+  if (!corps) return etat('Rien à mettre en PDF.', true);
+  envoyerRuns(); $('#at-propose').hidden = true; etat('Je fabrique le PDF… (la première fois, cela peut prendre une minute)');
+  const btns = ['#at-pdf-btn', '#at-save', '#at-ok', '#at-ocr'].map($); btns.forEach(b => b.disabled = true);
+  try {
+    const statut = F.statut === 'propre' ? 'propre' : 'corr';
+    const r = await mcp.callTool(SERVEUR, 'enregistrer_tex', {dossier: F.dossier, nom: F.nom, corps: modifie ? corps : '', statut, source: F.pages[0] ? F.pages[0].fichier : '', pdf: true});
+    const p = r.payload || {};
+    if (modifie) { AT.sale = false; F.statut = p.statut === 'propre' ? 'propre' : 'corr'; at('.at-info').textContent = `${AT.M.nom} ★ ${AT.A.label} ★ ${STATUTS[F.statut][0]}`; if (st.ma === AT.M) majListe(AT.M); }
+    if (p.corps) ed().value = p.corps;
+    if (p.pdf_ok && p.pdf) {
+      F.pdf = p.pdf; AT.pdfCle = null; AT.pdfV = (AT.pdfV || 0) + 1; vue('pdf'); etat(p.message ? `PDF créé ★ ${messageCourt(p.message)}` : `PDF créé ★ ${p.pdf.fichier}`, !!p.message);
+      mcp.invalidate(SERVEUR, OUTIL).catch(() => {});
+    } else etat(`Le PDF n'a pas pu être fabriqué : ${messageCourt(p.message) || 'erreur inconnue'}`, true);
+  } catch (e) {
+    const c = e && e.code;
+    etat(c === 'cancelled' ? 'Création du PDF refusée dans Claude Desktop.' : c === 'approval_required' ? 'Claude Desktop attend ton accord : réessaie et accepte.' : c === 'server_not_connected' ? 'Serveur local injoignable : ouvre le tableau dans Claude Desktop.' : `Le PDF n'a pas pu être fabriqué${e && e.message ? ' : ' + messageCourt(e.message) : ''}.`, true);
+  } finally { majBoutons(); }
+}
+const nettoyer = t => { let x = String(t || '').replace(/^\s*```[a-z]*\s*\n?/i, '').replace(/\n?```\s*$/, ''); const m = x.match(/\\begin\{document\}([\s\S]*?)(\\end\{document\}|$)/); return (m ? m[1] : x).trim(); };
+const consigne = (i, n) => `${CONSIGNES}\n${(profilServeur || PROFIL_DEFAUT).trim()}${rappelLexique()}\n\nPage ${i + 1} sur ${n} de la fiche « ${AT.F.titre} » (${AT.M.nom}). Transcris l'image jointe.`;
+
+/* ---------- Exemples corrigés : pages déjà validées jointes à la demande d'OCR ---------- */
+/* ---------- Brouillon automatique : une transcription non enregistrée n'est jamais perdue ---------- */
+const cleBrouillon = F => 'ocr-brouillon:' + F.dossier + '/' + F.nom;
+function garderBrouillon() {
+  const F = AT.F; if (!F || !F.dossier) return;
+  try { localStorage.setItem(cleBrouillon(F), JSON.stringify({corps: ed().value, brut: AT.brut || '', ex: AT.exIds || [], nbEx: AT.nbEx || 0, t: Date.now()})); } catch (e) {}
+}
+function oublierBrouillon(F) { try { localStorage.removeItem(cleBrouillon(F)); } catch (e) {} }
+function lireBrouillon(F) { try { return JSON.parse(localStorage.getItem(cleBrouillon(F)) || 'null'); } catch (e) { return null; } }
+let minuteBrouillon = null;
+function brouillonPlusTard() { clearTimeout(minuteBrouillon); minuteBrouillon = setTimeout(() => { if (AT.sale && !AT.enCours) garderBrouillon(); }, 1500); }
+function reprendreBrouillon(F) {
+  const b = lireBrouillon(F); if (!b || !b.corps || !b.corps.trim() || AT.F !== F) return false;
+  ed().value = b.corps; AT.brut = b.brut || null; AT.exIds = b.ex || []; AT.nbEx = b.nbEx || 0; AT.sale = true; majBoutons(); if (AT.vue === 'apercu') apercu();
+  etat(`Brouillon non enregistré du ${new Date(b.t).toLocaleString('fr-FR', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})} repris : enregistre-le ou valide-le.`);
+  return true;
+}
+function candidatsExemples() {
+  /* classés par le serveur (jamais essayés d'abord, puis les meilleurs ; ceux qui dégradent sont écartés) ; même matière en premier */
+  const F = AT.F, l = (BASE_C.exemples || []).filter(e => !e.ecarte && !(e.dossier === F.dossier && e.nom === F.nom));
+  return l.map((e, i) => ({e, r: (e.dossier === F.dossier ? 0 : 1) * 1000 + i})).sort((a, b) => a.r - b.r).map(x => x.e);
+}
+/* LaTeX d'une page d'exemple : la k-ième page (repères « %% page: »), sans les lignes mises de côté ni les commentaires */
+function pageExemple(corps, k) {
+  const morceaux = String(corps).split(/^(?=%%\s*page:)/m).filter(m => m.replace(/^%%.*$/gm, '').trim());
+  const c = morceaux[Math.min(k || 0, morceaux.length - 1)] || '';
+  return c.split('\n').filter(l => !/À VÉRIFIER|\[ligne à vérifier\]/.test(l) && !/^\s*%/.test(l)).join('\n').replace(/\\clearpage/g, '').trim();
+}
+async function chargerExemples(n) {
+  if (!n || !mcp || !AT.serveur) return [];
+  const sortie = [];
+  for (const e of candidatsExemples()) {
+    if (sortie.length >= n) break;
+    if (!CACHE_EX.has(e.id)) {
+      try {
+        const [t, im] = await Promise.all([mcp.callTool(SERVEUR, 'lire_tex', {dossier: e.dossier, nom: e.nom}), mcp.callTool(SERVEUR, 'lire_scan', {fichier: e.fichier, page: e.page})]);
+        const corps = pageExemple((t.payload && t.payload.corps) || '', e.indice), img = (im.content || []).find(c => c.type === 'image');
+        CACHE_EX.set(e.id, corps.length > 80 && img ? {id: e.id, nom: e.nom, corps, blob: b64blob(img.data, img.mimeType)} : null);
+      } catch (err) { CACHE_EX.set(e.id, null); }
+    }
+    if (CACHE_EX.get(e.id)) sortie.push(CACHE_EX.get(e.id));
+  }
+  return sortie;
+}
+/* Erreurs déjà faites par l'OCR sur ton écriture (apprises de tes corrections), rappelées à chaque lecture */
+function rappelLexique() {
+  const l = (BASE_C.lexique || []).slice(0, 40);
+  if (!l.length) return '';
+  return "\n\nErreurs que tu as déjà faites sur cette écriture (à gauche ce que tu avais lu, à droite la bonne version, avec le contexte). Vérifie ces cas sur l'image, sans les appliquer à l'aveugle :\n" + l.map(e => `« ${e.lu} » -> « ${e.juste} »${e.n > 1 ? ` (${e.n} fois)` : ''}`).join('\n');
+}
+const avecExemples = (base, ex) => !ex.length ? base : base.replace(/Transcris l'image jointe\.$/, `Exemples déjà corrigés par l'auteur : les ${ex.length} premières images jointes sont des pages d'exemple, dans l'ordre, chacune suivie ici de sa transcription validée. Imite exactement ses conventions (macros, abréviations, mise en forme). La DERNIÈRE image est la page à transcrire ; ne retranscris pas les exemples.\n\n${ex.map((e, i) => `=== Exemple ${i + 1} (image ${i + 1}) : ${e.nom} ===\n${e.corps}\n=== fin de l'exemple ${i + 1} ===`).join('\n\n')}\n\nTranscris uniquement la DERNIÈRE image.`);
+/* Taux d'erreur par caractères entre la sortie de l'OCR et la version corrigée */
+function cer(brut, juste) {
+  const n = t => t.replace(/^%%\s*page:.*$/gm, '').replace(/\\clearpage/g, '').replace(/\s+/g, ' ').trim();
+  const a = n(brut), b = n(juste); if (!b.length || a.length > 9000 || b.length > 9000) return null;
+  let prec = Array.from({length: b.length + 1}, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prec[j] + 1, cur[j - 1] + 1, prec[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prec = cur;
+  }
+  return prec[b.length] / b.length;
+}
+/* Répare la structure LaTeX (même logique que le serveur) : accolades, $, \[ \], \begin/\end */
+function equilibrer(corps) {
+  const FER = {'{': '}', '$': '$', '$$': '$$', '\\[': '\\]', '\\(': '\\)'}, OUV = {'}': '{', '\\]': '\\[', '\\)': '\\('};
+  const fermant = x => x.startsWith('env:') ? '\\end{' + x.slice(4) + '}' : FER[x];
+  const JET = /\\\\|\\[{}$%&#_]|\\(begin|end)\s*\{([^{}]*)\}|\\\[|\\\]|\\\(|\\\)|\$\$|[{}$]/g;
+  const pile = [], sortie = [];
+  const fermerDepuis = k => { const x = pile.slice(k).reverse().map(fermant).join(''); pile.length = k; return x; };
+  for (const ligne of String(corps).split('\n')) {
+    if (!ligne.trim()) {
+      const k = pile.findIndex(e => !e.startsWith('env:'));
+      if (k >= 0) { const aj = fermerDepuis(k); let d = -1; sortie.forEach((l, i) => { if (l.trim()) d = i; }); if (d < 0) sortie.push(aj); else sortie[d] += aj; }
+      sortie.push(ligne); continue;
+    }
+    const m = ligne.match(/(^|[^\\])%/), cut = m ? m.index + m[1].length : -1;
+    const code = cut >= 0 ? ligne.slice(0, cut) : ligne, com = cut >= 0 ? ligne.slice(cut) : '';
+    let res = '', i = 0, j; JET.lastIndex = 0;
+    while ((j = JET.exec(code))) {
+      res += code.slice(i, j.index); i = JET.lastIndex; const t = j[0]; let cible;
+      if (j[1] === 'begin') { pile.push('env:' + j[2].trim()); res += t; continue; }
+      if (j[1] === 'end') cible = 'env:' + j[2].trim();
+      else if (OUV[t]) cible = OUV[t];
+      else if (t === '$' || t === '$$') { if (!pile.length || pile[pile.length - 1] !== t) { pile.push(t); res += t; continue; } cible = t; }
+      else if (t === '{' || t === '\\[' || t === '\\(') { pile.push(t); res += t; continue; }
+      else { res += t; continue; }
+      if (pile.includes(cible)) { while (pile[pile.length - 1] !== cible) res += fermant(pile.pop()); pile.pop(); res += t; }
+    }
+    res += code.slice(i);
+    const k = pile.findIndex(e => e === '$' || e === '\\(');
+    if (k >= 0) res += fermerDepuis(k);
+    sortie.push(res + com);
+  }
+  if (pile.length) sortie.push(pile.slice().reverse().map(fermant).join(''));
+  return sortie.join('\n');
+}
+/* Défauts de contenu (la structure, elle, est réparée par equilibrer) */
+function defauts(tex) {
+  const t = String(tex || ''), pb = [];
+  if (t.replace(/%.*$/gm, '').replace(/\\[a-zA-Z]+/g, '').replace(/[{}$\s]/g, '').length < 30) pb.push('texte vide ou presque');
+  if (/^[ \t]*(…|\.\.\.)[ \t]*$/m.test(t)) pb.push('passage remplacé par « … »');
+  if (/LECTURE ÉCHOUÉE/.test(t)) pb.push('marque d’échec');
+  return pb;
+}
+/* Découpe une page en moitié haute / basse (avec 10 % de recouvrement) pour les pages trop denses */
+async function couper(blob, bas) {
+  const bm = await createImageBitmap(blob), h = bm.height, y0 = bas ? Math.floor(h * .45) : 0, y1 = bas ? h : Math.ceil(h * .55);
+  const c = document.createElement('canvas'); c.width = bm.width; c.height = y1 - y0;
+  c.getContext('2d').drawImage(bm, 0, y0, bm.width, y1 - y0, 0, 0, bm.width, y1 - y0);
+  return new Promise(r => c.toBlob(r, 'image/jpeg', .92));
+}
+/* Compilation d'essai par le serveur local (sans rien écrire). null si indisponible. */
+async function verifierLatex(corps) {
+  if (!AT.serveur || AT.verif === false || !AT.F) return null;
+  try {
+    const r = await mcp.callTool(SERVEUR, 'enregistrer_tex', {dossier: AT.F.dossier, nom: '_verification', corps, verifier: true});
+    const p = r.payload || {};
+    if (!p.verifie || p.fatal) { AT.verif = false; return null; }
+    AT.verif = true; return p;
+  } catch (e) { AT.verif = false; return null; }
+}
+async function transcrire() {
+  if (AT.enCours) { if (AT.ctrl) AT.ctrl.abort(); return; }
+  const b = $('#at-ocr'); if (!SAMPLE || !SAMPLE_IMG) return;
+  const reprise = AT.ok && AT.ok.size && AT.reprise;
+  if (!reprise) AT.ok = new Map();
+  if (!reprise && ed().value.trim() && !confirme(b, 'Remplacer le texte actuel ?')) return;
+  if (AT.serveur) {
+    etat('Je charge toutes les pages du scan…'); b.disabled = true;
+    try { if (AT.chargement) await AT.chargement; for (let i = 0; i < AT.pages.length; i++) if (!AT.pages[i].blob) await chargerPage(i); } finally { majBoutons(); }
+    const manque = AT.pages.map((p, i) => p.blob ? 0 : i + 1).filter(Boolean);
+    if (manque.length) return etat(`Il manque ${manque.length > 1 ? 'les pages' : 'la page'} ${manque.join(', ')} du scan${AT.pages[manque[0] - 1].erreur ? ' (' + AT.pages[manque[0] - 1].erreur + ')' : ''} : réessaie dans un instant.`, true);
+  }
+  const P = AT.pages.filter(p => p.blob); if (!P.length) return etat("Aucune page à lire.", true);
+  envoyerRuns(); AT.runId = 'r' + Date.now().toString(36); const tRun = Date.now();
+  AT.enCours = true; AT.ctrl = new AbortController(); ed().readOnly = true; vue('code'); majBoutons();
+  const faits = [], echecs = [], coupees = [], aVerifier = [], sep = '\n\\clearpage\n', marque = P.length > 1 || AT.serveur;
+  try {
+    etat('Je prépare les exemples corrigés…');
+    const ex = await chargerExemples(NB_EXEMPLES); AT.nbEx = ex.length; AT.exIds = ex.map(e => e.id);
+    for (let k = 0; k < P.length; k++) {
+      const p = P[k], tete = marque ? `%% page: ${p.nom}\n` : '';
+      if (AT.ok.has(p.nom)) { faits.push(AT.ok.get(p.nom)); ed().value = faits.join(sep); continue; }
+      const avant = faits.length ? faits.join(sep) + sep : '', lib = `page ${k + 1} sur ${P.length}`;
+      AT.cur = AT.pages.indexOf(p); majOnglets(); majImage(); ed().value = avant + tete + '…';
+      const fatal = e => AT.ctrl.signal.aborted || (e && (e.code === 'rate_limited' || e.code === 'not_granted'));
+      /* un appel à Claude : 7 min max, texte affiché au fil de l'eau */
+      const appel = async (txt, images, phase, deja, tier, muet) => {
+        const c = new AbortController(), stop = () => c.abort(), t0 = Date.now(); let recu = false;
+        AT.ctrl.signal.addEventListener('abort', stop);
+        const tmo = setTimeout(() => c.abort(), 420000), tic = setInterval(() => { if (!recu) etat(`${phase} de la ${lib} : ça peut prendre quelques minutes, c'est normal… ${Math.round((Date.now() - t0) / 1000)} s`); }, 1000);
+        const niv = tier || 'complex', tIn = estTexte(txt) + await estImages(images);
+        try {
+          const r = await SAMPLE(txt, {images, modelTier: niv, cache: false, signal: c.signal, onText: ({text}) => { recu = true; if (muet) return; ed().value = avant + tete + (deja ? deja + '\n' : '') + nettoyer(text); ed().scrollTop = ed().scrollHeight; }});
+          noter({etape: phase, page: k + 1, tier: niv, tierOk: r.modelTierApplied || niv, in: tIn, out: estTexte(r.text), img: images.length, ms: Date.now() - t0, ok: true, coupe: !!r.truncated});
+          return r;
+        } catch (e) { noter({etape: phase, page: k + 1, tier: niv, in: tIn, out: estTexte(e && e.text), img: images.length, ms: Date.now() - t0, ok: false, code: (e && e.code) || 'erreur'}); throw e; }
+        finally { clearTimeout(tmo); clearInterval(tic); AT.ctrl && AT.ctrl.signal.removeEventListener('abort', stop); }
+      };
+      /* lecture complète d'une image : si la réponse est coupée, on demande la suite */
+      const lecture = async (img, exs, txt, phase, deja, tier) => {
+        let r = await appel(txt, [...exs.map(e => e.blob), img], phase, deja, tier), t = nettoyer(r.text);
+        for (let s = 0; r.truncated && s < 2; s++) {
+          r = await appel(`${consigne(k, P.length)}\n\nLa transcription de cette image a été coupée. Voici ce qui est déjà écrit :\n=== début ===\n${t}\n=== fin du début ===\nContinue EXACTEMENT après le dernier mot écrit, jusqu'en bas de l'image, sans rien répéter. Réponds uniquement avec la suite.`, [img], 'Suite de la lecture', (deja ? deja + '\n' : '') + t, tier);
+          t += '\n' + nettoyer(r.text);
+        }
+        if (r.truncated) throw {code: 'tronque'};
+        const d = defauts(t); if (d.length) throw {code: 'defaut', message: d.join(', ')};
+        return t;
+      };
+      let tex = null;
+      /* 1) page entière : avec les exemples, puis sans */
+      for (const [i, exs] of [ex, []].entries()) {
+        if (tex !== null) break;
+        etat(`Claude lit la ${lib}${i ? ' (2e essai, sans exemples)' : exs.length ? ` avec ${exs.length} exemple${exs.length > 1 ? 's' : ''} corrigé${exs.length > 1 ? 's' : ''}` : ''}…`);
+        try { tex = await lecture(p.blob, exs, avecExemples(consigne(k, P.length), exs), 'Lecture', '', 'complex'); }
+        catch (e) { if (fatal(e)) throw e; ed().value = avant + tete + '…'; if (e && e.code === 'tronque') { etat(`Page ${k + 1} trop dense pour une seule lecture : je la lis en deux moitiés.`, true); break; } etat(`Page ${k + 1} : ${e && e.message ? e.message : 'lecture interrompue'}, nouvel essai…`, true); }
+      }
+      /* 2) page trop dense : lecture en deux moitiés (haut puis bas) */
+      if (tex === null) {
+        const moities = [];
+        for (const bas of [false, true]) {
+          const img = await couper(p.blob, bas), deja = moities.join('\n');
+          const txt = consigne(k, P.length) + (bas
+            ? `\n\nL'image jointe est la MOITIÉ BASSE de cette page. Le haut est déjà transcrit et se termine par :\n=== fin du haut ===\n${deja.split('\n').slice(-12).join('\n')}\n=== fin ===\nLe haut de l'image recouvre une partie de ce passage : ne le répète pas, commence juste après et va jusqu'en bas de la page.`
+            : `\n\nL'image jointe est la MOITIÉ HAUTE de cette page. Transcris-la en entier ; si la dernière ligne tout en bas est coupée, ne l'écris pas.`);
+          let t = null;
+          for (const tier of ['complex', 'complex', 'default']) {
+            etat(`Page dense : Claude lit la moitié ${bas ? 'basse' : 'haute'} de la ${lib}…`);
+            try { t = await lecture(img, [], txt, `Lecture (moitié ${bas ? 'basse' : 'haute'})`, deja, tier); break; }
+            catch (e) { if (fatal(e)) throw e; }
+          }
+          if (t === null) break;
+          moities.push(recaler(t, bas));
+        }
+        if (moities.length === 2) tex = moities.join('\n');
+      }
+      if (tex === null) { echecs.push(k + 1); faits.push(tete + '%% LECTURE ÉCHOUÉE : relance « Transcrire » (seule cette page sera refaite)'); ed().value = faits.join(sep); continue; }
+      /* 2 bis) dessins sans zone : on demande où ils sont sur la page, pour les découper dans le scan */
+      const sansZone = [...tex.matchAll(/\\dessin\s*\{/g)];
+      if (sansZone.length) {
+        try {
+          etat(`Je repère ${sansZone.length > 1 ? 'les ' + sansZone.length + ' dessins' : 'le dessin'} de la ${lib}…`);
+          const descs = sansZone.map((m, i) => { let p = m.index + m[0].length, d = 1; const a = p; while (p < tex.length && d) { if (tex[p] === '\\') { p += 2; continue; } d += tex[p] === '{' ? 1 : tex[p] === '}' ? -1 : 0; p++; } return `${i + 1}. ${tex.slice(a, p - 1)}`; });
+          const r4 = await appel(`Sur l'image de cette page manuscrite, repère ces dessins ou schémas :\n${descs.join('\n')}\nPour chacun, donne la zone qui l'englobe entièrement (avec ses annotations, sans le texte autour) : coin haut-gauche (x1,y1) et coin bas-droit (x2,y2), en pourcentage de la largeur et de la hauteur de l'image, entiers de 0 à 100.\nRéponds uniquement avec un tableau JSON, un élément par dessin dans le même ordre : [[x1,y1,x2,y2], ...]`, [p.blob], 'Repérage des dessins', '', 'default', true);
+          const zones = JSON.parse((r4.text.match(/\[[\s\S]*\]/) || ['[]'])[0]);
+          let n = 0;
+          tex = tex.replace(/\\dessin\s*\{/g, m => { const z = zones[n++]; return Array.isArray(z) && z.length === 4 && z.every(v => isFinite(v)) && z[2] > z[0] && z[3] > z[1] ? `\\dessin[${z.map(v => Math.round(v)).join(',')}]{` : m; });
+        } catch (e) { if (fatal(e)) throw e; }
+      }
+      /* 3) relecture : Claude compare sa transcription à l'image et corrige */
+      try {
+        etat(`Claude relit la ${lib} et corrige ses erreurs…`);
+        const r2 = await appel(`${consigne(k, P.length)}\n\nVoici une transcription de cette page. Compare-la à l'image, ligne par ligne et formule par formule. Corrige chaque erreur (symbole mal lu, indice ou exposant faux, mot oublié ou inventé, couleur ou entourage manquant) et ajoute tout ce qui manque. Garde les coordonnées [x1,y1,x2,y2] des \\dessin (corrige-les seulement si la zone est fausse). Ne reformule rien. Réponds avec la transcription COMPLÈTE corrigée de la page, sans commentaire.${ex.length ? `\nPour les conventions de l'auteur, voici des pages qu'il a validées (extraits) :\n${ex.map(e => e.corps.slice(0, 2500)).join('\n---\n')}` : ''}\n=== transcription ===\n${tex}\n=== fin ===`, [p.blob], 'Relecture', '', 'complex');
+        const t2 = nettoyer(r2.text);
+        if (!r2.truncated && !defauts(t2).length && t2.length >= tex.length * 0.85) tex = garderZones(tex, t2);
+      } catch (e) { if (fatal(e)) throw e; }
+      /* 4) structure réparée, puis compilation d'essai sur ton PC ; les erreurs sont corrigées par Claude */
+      tex = equilibrer(tex);
+      let v = await verifierLatex(tex);
+      for (let rep = 0; v && v.erreurs && v.erreurs.length && rep < 2; rep++) {
+        etat(`Page ${k + 1} : ${v.erreurs.length} erreur${v.erreurs.length > 1 ? 's' : ''} LaTeX, Claude les corrige…`, true);
+        try {
+          const num = tex.split('\n').map((l, i) => `${i + 1}| ${l}`).join('\n');
+          const r3 = await appel(`${consigne(k, P.length)}\n\nCette transcription de la page ne compile pas avec XeLaTeX. Erreurs (numéro de ligne : message) :\n${v.erreurs.map(e => `- ligne ${e.ligne} : ${e.message} (${e.extrait})`).join('\n')}\nCorrige UNIQUEMENT ces lignes (commande inconnue -> commande standard ou macro autorisée ; _ ou ^ hors maths -> mets la formule entre $...$ ; & ou \\\\ mal placés -> retire-les), en t'aidant de l'image. Ne change rien d'autre. Réponds avec la transcription COMPLÈTE corrigée, sans les numéros de ligne.\n=== transcription numérotée ===\n${num}\n=== fin ===`, [p.blob], 'Correction LaTeX', '', 'complex');
+          const t3 = garderZones(tex, equilibrer(nettoyer(r3.text).replace(/^\s*\d+\|\s?/gm, '')));
+          if (!r3.truncated && !defauts(t3).length && t3.length >= tex.length * 0.85) { tex = t3; v = await verifierLatex(tex); }
+        } catch (e) { if (fatal(e)) throw e; break; }
+      }
+      if (v && v.corps && v.erreurs && v.erreurs.length) { tex = v.corps; aVerifier.push(k + 1); }   // dernières lignes fautives mises de côté, visibles
+      AT.ok.set(p.nom, tete + tex); faits.push(tete + tex); ed().value = faits.join(sep);
+    }
+    if (faits.length !== P.length) throw new Error('pages manquantes');
+    AT.reprise = echecs.length > 0;
+    if (echecs.length) etat(`${echecs.length > 1 ? 'Pages' : 'Page'} ${echecs.join(', ')} non lue${echecs.length > 1 ? 's' : ''} (délai dépassé ou erreur) : relance « Transcrire » (seules les pages ratées sont refaites), ou remplis-la à la main (repère %% LECTURE ÉCHOUÉE).`, true);
+    AT.sale = true; AT.brut = faits.join(sep); AT.tier = 'complex'; garderBrouillon();
+    if (!echecs.length && aVerifier.length) etat(`Transcription terminée. Page${aVerifier.length > 1 ? 's' : ''} ${aVerifier.join(', ')} : quelques lignes mises de côté (repère « À VÉRIFIER » dans le LaTeX), corrige-les à la main.`, true);
+    else if (!echecs.length) etat(AT.serveur ? 'Transcription terminée : corrige-la à côté du scan, puis « Enregistrer » ou « Valider ★ ».' : 'Transcription terminée : « Copier le LaTeX » pour la garder.');
+  } catch (e) {
+    if (faits.length) { ed().value = faits.join(sep); AT.sale = true; }
+    const c = e && e.code;
+    etat(c === 'cancelled' || (e && e.name === 'AbortError') ? 'Lecture arrêtée.' : c === 'not_granted' ? "Claude n'est pas autorisé pour ce tableau." : c === 'rate_limited' ? "Limite d'utilisation de Claude atteinte : réessaie dans un moment." : `La lecture a échoué${c ? ' (' + c + ')' : ''}.`, true);
+  } finally { noter({type: 'run', pages: P.length, echecs, aVerifier, ms: Date.now() - tRun, arrete: !!(AT.ctrl && AT.ctrl.signal.aborted)}); envoyerRuns(); AT.enCours = false; AT.ctrl = null; ed().readOnly = false; majBoutons(); }
+}
+const titreTex = t => { const i = t.indexOf('\\titre{'); if (i < 0) return null; let d = 0, o = ''; for (const c of t.slice(i + 6)) { if (c === '{') { d++; if (d === 1) continue; } else if (c === '}') { d--; if (d === 0) break; } o += c; } return o.replace(/\\couleur\{[^}]*\}/g, '').replace(/\\[A-Za-z]+/g, '').replace(/[{}]/g, '').replace(/\s+/g, ' ').trim() || null; };
+async function enregistrer(statut) {
+  if (!AT.serveur || AT.enCours || !AT.F) return;
+  const corps = ed().value.replace(/^[ \t]*…[ \t]*$/gm, '').trim(), F = AT.F; if (!corps) return etat('Rien à enregistrer.', true);
+  etat('Enregistrement…'); $('#at-save').disabled = $('#at-ok').disabled = true;
+  try {
+    const taux = statut === 'propre' && AT.brut ? cer(AT.brut, corps) : null;
+    const meta = taux == null ? '' : `cer=${taux.toFixed(3)}; exemples=${AT.nbEx || 0}; ex=${(AT.exIds || []).join('|')}; lecture=complex`;
+    const r = await mcp.callTool(SERVEUR, 'enregistrer_tex', {dossier: F.dossier, nom: F.nom, corps, statut, source: F.pages[0] ? F.pages[0].fichier : '', ...(meta ? {meta} : {}), ...(statut === 'propre' && AT.brut ? {brut: AT.brut} : {})});
+    AT.dernierCer = taux; if (taux != null) AT.brut = null;
+    const p = r.payload || {}, t = titreTex(corps);
+    if (p.corps && p.corps !== corps) ed().value = p.corps;
+    oublierBrouillon(F);
+    F.statut = p.statut === 'propre' ? 'propre' : 'corr'; if (t) F.titre = t;
+    if (F.pdf) F.pdf = {...F.pdf, a_jour: false};
+    AT.sale = false; at('h2').textContent = F.titre; at('.at-info').textContent = `${AT.M.nom} ★ ${AT.A.label} ★ ${STATUTS[F.statut][0]}`;
+    if (st.ma === AT.M) majListe(AT.M);
+    etat(F.statut === 'propre' ? `Validée ★ ${p.chemin || ''}${AT.dernierCer != null ? ` ★ erreur de l'OCR : ${(AT.dernierCer * 100).toFixed(1)} % des caractères` : ''}` : `Enregistrée, à corriger ★ ${p.chemin || ''}`);
+    mcp.invalidate(SERVEUR, OUTIL).catch(() => {});
+    $('#at-propose').hidden = F.statut !== 'propre';
+    if (p.fusion) setTimeout(() => toast(`Toutes les pages sont validées : le PDF complet se fabrique dans le dossier PDF de la matière.`), 1200);
+  } catch (e) {
+    const c = e && e.code;
+    etat(c === 'cancelled' ? 'Enregistrement refusé dans Claude Desktop.' : c === 'approval_required' ? "Claude Desktop attend ton accord pour écrire dans tes dossiers : réessaie et accepte." : c === 'server_not_connected' ? 'Serveur local injoignable : ouvre le tableau dans Claude Desktop.' : c === 'tool_error' ? `Le serveur local a refusé : ${e.message}` : "L'enregistrement n'a peut-être pas abouti : vérifie le dossier _ocr avant de réessayer.", true);
+  } finally { majBoutons(); }
+}
+
+/* Aperçu : rendu approximatif du LaTeX de fiche.sty, maths par MathJax */
+let mjPret = null;
+function chargerMathJax() {
+  if (mjPret) return mjPret;
+  window.MathJax = {tex: {inlineMath: [['$', '$']], displayMath: [['\\[', '\\]']], macros: {entoure: ['\\fbox{#1}', 1], souligne: ['\\underline{#1}', 1], illisible: ['{#1}', 1]}}, svg: {fontCache: 'global'}, startup: {typeset: false}, options: {enableMenu: false}};
+  const src = ['https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js', 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js'];
+  mjPret = new Promise((ok, ko) => { const essai = i => { const sc = document.createElement('script'); sc.src = src[i]; sc.async = true; sc.onload = () => window.MathJax.startup.promise.then(ok, ko); sc.onerror = () => i + 1 < src.length ? essai(i + 1) : ko(new Error('MathJax')); document.head.append(sc); }; essai(0); });
+  return mjPret;
+}
+const ENVS = {definition: ['Déf', 'def'], theoreme: ['Théorème', 'thm'], propriete: ['Propriété', 'prop'], methode: ['Méthode', 'meth'], exemple: ['Ex', 'ex'], remarque: ['Rq', 'rq'], attention: ['Attention', 'att'], demo: ['Démo', 'demo'], encadre: ['', 'enc']};
+const COUL_R = {rouge: '#E5383B', bleu: '#3D6DE0', vert: '#2FA37A', rose: '#FF4F9A', violet: '#7B5CD6', orange: '#F08A24', noir: '#2B2440'};
+const CMD = {titre: [1, a => `<h3 class="r-titre">${a}</h3>`], section: [1, a => `<h4 class="r-sec">${a}</h4>`], 'section*': [1, a => `<h4 class="r-sec">${a}</h4>`], subsection: [1, a => `<h5 class="r-ssec">${a}</h5>`], 'subsection*': [1, a => `<h5 class="r-ssec">${a}</h5>`],
+  souligne: [1, a => `<u>${a}</u>`], underline: [1, a => `<u>${a}</u>`], surligne: [1, a => `<mark>${a}</mark>`], entoure: [1, a => `<span class="r-ent">${a}</span>`], textbf: [1, a => `<b>${a}</b>`], textit: [1, a => `<i>${a}</i>`], emph: [1, a => `<i>${a}</i>`], text: [1, a => a], mbox: [1, a => a],
+  couleur: [2, (c, a, brut) => `<span style="color:${COUL_R[brut[0].trim()] || 'inherit'}">${a}</span>`], dessin: [1, a => `<div class="r-dessin">✎ Dessin : ${a}</div>`], illisible: [1, a => `<span class="r-ill">${a || ''}<sup>?</sup></span>`], marge: [1, a => `<div class="r-marge">✎ ${a}</div>`]};
+const IGNORE = new Set(['clearpage', 'newpage', 'noindent', 'medskip', 'smallskip', 'bigskip', 'centering', 'hline', 'par', 'quad', 'qquad']);
+function lireArg(s, i, o = '{', f = '}') {
+  while (s[i] === ' ' || s[i] === '\n') i++;
+  if (s[i] !== o) return [null, i];
+  let n = 0, j = i;
+  for (; j < s.length; j++) { if (s[j] === '\\') { j++; continue; } if (s[j] === o) n++; else if (s[j] === f && --n === 0) break; }
+  return [s.slice(i + 1, j), j + 1];
+}
+function enHTML(s, M) {
+  let out = '', i = 0;
+  while (i < s.length) {
+    const c = s[i];
+    if (c === '\u0003') { const j = s.indexOf('\u0003', i + 1), m = M[+s.slice(i + 1, j)]; out += m.bloc ? `<div class="mb">${esc(m.tex)}</div>` : `<span class="mi">${esc(m.tex)}</span>`; i = j + 1; continue; }
+    if (c === '\u0001') { const j = s.indexOf('\u0002', i); out += `<div class="r-saut">${esc(s.slice(i + 1, j))}</div>`; i = j + 1; continue; }
+    if (c === '\u0004') { out += '<span class="r-par"></span>'; i++; continue; }
+    if (c === '\\') {
+      const m = /^\\([A-Za-z]+\*?|.)/.exec(s.slice(i)); if (!m) { i++; continue; } const nom = m[1]; i += m[0].length;
+      if (nom === 'begin' || nom === 'end') {
+        const [env, j] = lireArg(s, i); i = j; if (env === null) continue;
+        if (nom === 'begin' && env === 'tabular') {
+          const [, j2] = lireArg(s, i); const fin = s.indexOf('\\end{tabular}', j2), corps = s.slice(j2, fin < 0 ? s.length : fin);
+          out += '<table>' + corps.split(/\\\\/).map(l => l.replace(/\\hline/g, '').trim()).filter(Boolean).map(l => '<tr>' + l.split('&').map(c2 => `<td>${enHTML(c2, M)}</td>`).join('') + '</tr>').join('') + '</table>';
+          i = fin < 0 ? s.length : fin + 13; continue;
+        }
+        if (env === 'acote') {
+          if (nom === 'end') { out += '</div></div>'; continue; }
+          const [box, j0] = lireArg(s, i, '[', ']'); if (box !== null) i = j0; const [d, j1] = lireArg(s, i); if (d !== null) i = j1;
+          const ok = box && /^\s*[-\d.]+\s*(,\s*[-\d.]+\s*){3}$/.test(box), xs = ok ? box.split(',').map(Number) : [0, 0, 0, 0], droite = ok && (xs[0] + xs[2]) / 2 >= 50;
+          out += `<div class="r-cote${droite ? ' r-cote-d' : ''}"><div class="r-dessin${ok ? ' r-img' : ''}"${ok ? ` data-box="${esc(box.replace(/\s/g, ''))}" data-desc="${esc(d || '')}"` : ''}>✎ Dessin : ${enHTML(d || '', M)}</div><div class="r-cote-t">`; continue;
+        }
+        if (env === 'itemize' || env === 'enumerate') { out += nom === 'begin' ? (env === 'itemize' ? '<ul>' : '<ol>') : (env === 'itemize' ? '</ul>' : '</ol>'); continue; }
+        if (ENVS[env]) {
+          if (nom === 'end') { out += '</div>'; continue; }
+          const [t, j3] = lireArg(s, i, '[', ']'); if (t !== null) i = j3;
+          const [lab, cl] = ENVS[env], titre = t ? enHTML(t, M) : '';
+          out += `<div class="r-b r-${cl}">${lab || titre ? `<span class="r-lab">★ ${lab}${lab && titre ? ' : ' : ''}${titre}</span>` : ''}`; continue;
+        }
+        out += `<span class="r-inc">${nom === 'begin' ? '' : '/'}${esc(env)}</span>`; continue;
+      }
+      if (nom === 'item') { out += '<li>'; continue; }
+      if (nom === '\\') { out += '<br>'; continue; }
+      if (nom === 'dessin') { const [box, j0] = lireArg(s, i, '[', ']'); if (box !== null) i = j0; const [d, j1] = lireArg(s, i); if (d !== null) i = j1;
+        out += box && /^\s*[-\d.]+\s*(,\s*[-\d.]+\s*){3}$/.test(box) ? `<div class="r-dessin r-img" data-box="${esc(box.replace(/\s/g, ''))}" data-desc="${esc(d || '')}">✎ Dessin : ${enHTML(d || '', M)}</div>` : `<div class="r-dessin">✎ Dessin : ${enHTML(d || '', M)}</div>`; continue; }
+      if (CMD[nom]) { const [n, f] = CMD[nom], brut = []; for (let k = 0; k < n; k++) { const [a, j] = lireArg(s, i); if (a === null) break; brut.push(a); i = j; } out += f(...brut.map(a => enHTML(a, M)), brut); continue; }
+      if (IGNORE.has(nom)) continue;
+      if (/^[%&_#{}$ ]$/.test(nom)) { out += esc(nom); continue; }
+      out += `<span class="r-inc">\\${esc(nom)}</span>`; continue;
+    }
+    if (c === '{' || c === '}') { i++; continue; }
+    out += c === '~' ? '&nbsp;' : esc(c); i++;
+  }
+  return out;
+}
+function texVersHTML(src) {
+  const M = [], ph = (tex, bloc) => { M.push({tex, bloc}); return `\u0003${M.length - 1}\u0003`; };
+  let s = src.replace(/^%%\s*page:\s*(.*)$/gm, (_, f) => `\u0001${f}\u0002`).replace(/(^|[^\\])%.*$/gm, '$1');
+  s = s.replace(/\\begin\{(align|equation|gather|multline)(\*?)\}([\s\S]*?)\\end\{\1\2\}/g, (_, e, x, b) => ph(e === 'equation' ? `\\[${b}\\]` : `\\[\\begin{${e === 'align' ? 'aligned' : 'gathered'}}${b}\\end{${e === 'align' ? 'aligned' : 'gathered'}}\\]`, true))
+       .replace(/\\\[([\s\S]*?)\\\]/g, m => ph(m, true)).replace(/\$\$([\s\S]*?)\$\$/g, (_, b) => ph(`\\[${b}\\]`, true))
+       .replace(/\\\(([\s\S]*?)\\\)/g, (_, b) => ph(`$${b}$`)).replace(/\$((?:\\.|[^$\\])+)\$/g, m => ph(m));
+  s = s.replace(/\n[ \t]*\n\s*/g, '\u0004').replace(/\n/g, ' ');
+  return enHTML(s, M);
+}
+function decouper(src) {
+  const L = src.split('\n'), B = []; let cur = [], prof = 0, dd = false, i = 0;
+  const n = (c, r) => (c.match(r) || []).length;
+  while (i < L.length) {
+    const l = L[i];
+    if (!l.trim() && prof <= 0 && !dd && cur.length) {
+      let j = i; const sep = []; while (j < L.length && !L[j].trim()) { sep.push(L[j]); j++; }
+      B.push({txt: cur.join('\n'), sep: '\n' + sep.join('\n') + (j < L.length ? '\n' : '')}); cur = []; i = j; continue;
+    }
+    cur.push(l); const c = l.replace(/(^|[^\\])%.*$/, '$1');
+    prof += n(c, /\\begin\{/g) - n(c, /\\end\{/g) + n(c, /\\\[/g) - n(c, /\\\]/g);
+    if (n(c, /\$\$/g) % 2) dd = !dd;
+    i++;
+  }
+  if (cur.length) B.push({txt: cur.join('\n'), sep: ''});
+  return B;
+}
+const blocHTML = b => b.txt.trim() ? texVersHTML(b.txt) : '<p class="at-vide-bloc">(vide)</p>';
+/* Si une relecture ou une correction a perdu les zones des dessins, on les remet (dans l'ordre) */
+function garderZones(ancien, neuf) {
+  const zones = [...String(ancien).matchAll(/\\dessin\s*(\[[^\]]*\])/g)].map(m => m[1]);
+  if (!zones.length) return neuf;
+  const deja = [...String(neuf).matchAll(/\\dessin\s*\[/g)].length;
+  let n = deja;
+  return String(neuf).replace(/\\dessin\s*\{/g, m => n < zones.length ? `\\dessin${zones[n++]}{` : m);
+}
+/* Coordonnées d'un \dessin lu sur une demi-page -> coordonnées sur la page entière */
+function recaler(t, bas) {
+  return t.replace(/\\dessin\s*\[\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\]/g, (_, a, b, c, d) => {
+    const y = v => Math.round((bas ? 45 : 0) + parseFloat(v) * .55);
+    return `\\dessin[${a},${y(b)},${c},${y(d)}]`;
+  });
+}
+/* Aperçu : la zone du dessin est découpée dans le scan de sa page */
+async function remplirDessins(z) {
+  let cour = null;
+  for (const el of z.querySelectorAll('.r-saut, .r-img')) {
+    if (el.classList.contains('r-saut')) { cour = el.textContent.trim(); continue; }
+    if (el.dataset.fait) continue;
+    const p = (cour && AT.pages.find(q => q.nom === cour)) || (AT.pages.length === 1 ? AT.pages[0] : null);
+    if (!p || !p.blob) continue;
+    try {
+      const [x1, y1, x2, y2] = el.dataset.box.split(',').map(Number), bm = await createImageBitmap(p.blob), W = bm.width, H = bm.height;
+      const bx = Math.max(0, (x1 - 2) / 100 * W), by = Math.max(0, (y1 - 2) / 100 * H), bw = Math.min(W, (x2 + 2) / 100 * W) - bx, bh = Math.min(H, (y2 + 2) / 100 * H) - by;
+      if (bw < 10 || bh < 10) continue;
+      const c = document.createElement('canvas'); c.width = Math.round(bw); c.height = Math.round(bh);
+      c.getContext('2d').drawImage(bm, bx, by, bw, bh, 0, 0, c.width, c.height);
+      el.innerHTML = `<img alt="${esc(el.dataset.desc || 'dessin')}" src="${c.toDataURL('image/jpeg', .9)}" style="max-width:${Math.max(25, Math.min(100, (x2 - x1) * 1.15))}%">`;
+      el.classList.add('r-img-ok'); el.dataset.fait = '1';
+    } catch (e) {}
+  }
+}
+async function dessiner(el) {
+  remplirDessins(el.closest('.at-apercu') || el);
+  try { await chargerMathJax(); MathJax.typesetClear([el]); await MathJax.typesetPromise([el]); }
+  catch (e) { if (el.classList.contains('at-apercu') && !el.querySelector('.r-inc')) el.insertAdjacentHTML('afterbegin', '<p class="r-inc">Les formules ne peuvent pas être dessinées ici : elles restent en LaTeX.</p>'); }
+}
+async function apercu() {
+  const z = at('.at-apercu'), tex = ed().value;
+  if (!tex.trim()) { z.innerHTML = '<p class="at-vide">Rien à afficher pour l’instant.</p>'; AT.blocs = []; return; }
+  AT.blocs = decouper(tex);
+  z.innerHTML = '<p class="at-aide">Clique sur un passage pour le modifier.</p>' + AT.blocs.map((b, i) => `<div class="bl" data-i="${i}" tabindex="0" role="button" aria-label="Modifier ce passage">${blocHTML(b)}</div>`).join('');
+  await dessiner(z);
+}
+function majSource() { ed().value = AT.blocs.map(b => b.txt + b.sep).join(''); AT.sale = true; majBoutons(); brouillonPlusTard(); }
+async function fermerBloc(el, ta) {
+  const i = +el.dataset.i, b = AT.blocs[i];
+  if (!b) return;
+  el.classList.remove('edit'); el.innerHTML = blocHTML(b); await dessiner(el);
+}
+function ouvrirBloc(el) {
+  if (el.classList.contains('edit')) return;
+  const i = +el.dataset.i, b = AT.blocs[i]; if (!b) return;
+  el.classList.add('edit');
+  const ta = document.createElement('textarea'); ta.className = 'bl-ta'; ta.spellcheck = false; ta.value = b.txt; ta.setAttribute('aria-label', 'LaTeX de ce passage');
+  const ajuste = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 4 + 'px'; };
+  ta.addEventListener('input', () => { b.txt = ta.value; majSource(); ajuste(); });
+  ta.addEventListener('blur', () => fermerBloc(el, ta));
+  ta.addEventListener('keydown', e => { if (e.key === 'Escape' || ((e.ctrlKey || e.metaKey) && e.key === 'Enter')) { e.preventDefault(); e.stopPropagation(); ta.blur(); } });
+  el.replaceChildren(ta); ajuste(); ta.focus();
+}
+at('.at-apercu').addEventListener('click', e => { const el = e.target.closest('.bl'); if (el) ouvrirBloc(el); });
+at('.at-apercu').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('bl')) { e.preventDefault(); ouvrirBloc(e.target); } });
+$('#at-retour').addEventListener('click', fermerAtelier);
+$('#at-ocr').addEventListener('click', transcrire);
+$('#at-save').addEventListener('click', () => enregistrer('corr'));
+$('#at-ok').addEventListener('click', () => enregistrer('propre'));
+$('#at-copier').addEventListener('click', () => { const t = ed().value; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('LaTeX copié.'), () => { ed().hidden = false; vue('code'); ed().select(); toast('Copie bloquée : le texte est sélectionné, fais Ctrl+C.'); }); });
+$('#at-v-pdf').addEventListener('click', () => vue('pdf'));
+$('#at-v-code').addEventListener('click', () => vue('code'));
+$('#at-pdf-btn').addEventListener('click', faireLePdf);
+$('#at-propose-oui').addEventListener('click', faireLePdf);
+$('#at-propose-non').addEventListener('click', () => { $('#at-propose').hidden = true; });
+at('.at-pdf').addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (!b) return; if (b.dataset.a === 'modifier') vue('code'); else if (b.dataset.a === 'recharger') { AT.pdfCle = null; afficherPdf(); } else faireLePdf(); });
+$('#at-v-apercu').addEventListener('click', () => vue('apercu'));
+ed().addEventListener('input', () => { AT.sale = true; majBoutons(); brouillonPlusTard(); });
+at('.at-onglets').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { AT.cur = +b.dataset.p; majOnglets(); majImage(); } });
+at('.at-image').addEventListener('click', e => { if (e.target.closest('[data-rel]')) { (async () => { for (let i = 0; i < AT.pages.length; i++) if (!AT.pages[i].blob) await chargerPage(i); })(); return; } if (e.target.tagName === 'IMG') e.currentTarget.classList.toggle('zoom'); });
+
+/* Largeur et taille de la transcription */
+{
+  const corps = at('.at-corps'), po = $('#at-poignee'), box = $('#atelier');
+  const largeur = p => { p = borne(20, p, 80); corps.style.setProperty('--g1', p + 'fr'); corps.style.setProperty('--g2', (100 - p) + 'fr'); $('#at-large').setAttribute('aria-pressed', p <= 32); return p; };
+  let pct = largeur(46);
+  const depuis = x => { const r = corps.getBoundingClientRect(); pct = largeur((x - r.left) / r.width * 100); };
+  po.addEventListener('pointerdown', e => { po.setPointerCapture(e.pointerId); po.classList.add('on'); depuis(e.clientX); });
+  po.addEventListener('pointermove', e => { if (po.hasPointerCapture(e.pointerId)) depuis(e.clientX); });
+  po.addEventListener('pointerup', e => { po.releasePointerCapture(e.pointerId); po.classList.remove('on'); });
+  po.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { pct = largeur(pct - 4); e.preventDefault(); } else if (e.key === 'ArrowRight') { pct = largeur(pct + 4); e.preventDefault(); } });
+  $('#at-large').addEventListener('click', () => { pct = largeur(pct <= 32 ? 46 : 28); });
+  let zt = 1; const taille = v => { zt = borne(.8, v, 2); box.style.setProperty('--zt', zt.toFixed(2)); };
+  $('#at-moins').addEventListener('click', () => taille(zt - .15));
+  $('#at-plus').addEventListener('click', () => taille(zt + .15));
+}
+at('.at-image').addEventListener('change', async e => {
+  if (e.target.id !== 'at-fichier') return;
+  const fs = [...e.target.files].filter(f => f.type.startsWith('image/')); if (!fs.length) return;
+  etat('Préparation des photos…');
+  for (const f of fs) { try { const b = await normaliser(f); AT.pages.push({nom: f.name, blob: b, url: URL.createObjectURL(b), etat: 'ok'}); } catch (err) { etat(`Photo illisible : ${f.name}`, true); } }
+  AT.cur = 0; majOnglets(); majImage(); majBoutons();
+  if (AT.pages.length) etat(SAMPLE && SAMPLE_IMG ? `${pl(AT.pages.length, 'page')} prête${AT.pages.length > 1 ? 's' : ''} : clique sur « Transcrire ».` : "L'OCR passe par Claude : ouvre ce tableau sur claude.ai ou dans Claude Desktop.", !(SAMPLE && SAMPLE_IMG));
+});
+(async () => {
+  try { SAMPLE = window.claude && window.claude.use ? await window.claude.use('sample') : null; if (SAMPLE) { const l = await SAMPLE.limits(); SAMPLE_IMG = !!(l && l.images); } }
+  catch (e) { SAMPLE = null; }
+  if (!$('#atelier').hidden) majBoutons();
+})();
+
+construire(); calculer(); appliquer(); majFil();
+requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove('fige')));
+setTimeout(ouvrirHash, 2500);
+if (document.fonts) document.fonts.ready.then(() => dispatchEvent(new Event('resize')));
+}
+</script>
+</body>
+</html>

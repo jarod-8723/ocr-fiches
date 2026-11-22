@@ -1,0 +1,9 @@
+# Serveur (MCP pour Claude Desktop) et cœur commun
+mcp>=1.11
+pillow>=10
+pypdfium2>=4
+# pillow-heif   # si tu scannes en .heic
+
+# Application locale avec clé API
+anthropic>=0.40
+streamlit>=1.35
